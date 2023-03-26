@@ -2,8 +2,8 @@
 
 - [Introducción](./introduccion.md)
 - [Sistema Operativo](./sistema_operativo.md)
-- [Procesos](./procesos.md)
-- [API de un sistema operativo](./api.md)
+- [Procesos y API del SO](./procesos_y_api.md)
+- [Intercomunicación Entre Procesos](./ipc.md)
 - [Scheduling](./scheduling.md)
 - [Sincronización entre procesos](./sincro_entre_procesos.md)
 - [Sincronización](./sincronizacion.md)
