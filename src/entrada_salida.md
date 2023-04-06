@@ -116,14 +116,20 @@ sector deseado.
 Tenemos algunos esquemas:
 
 - FIFO
-  - problema: estoy moviendo la cabeza de un lado a otro, a menos que los pedidos "se porten bien".
+  - problema: estoy moviendo la cabeza de un lado a otro, a menos que los
+    pedidos "se porten bien".
 - Shortest Seek Time First (SSTF)
-  - idea: atiendo como próximo al pedido más cercano a la posición actual de la cabeza (o sea es un algoritmo goloso)
+  - idea: atiendo como próximo al pedido más cercano a la posición actual de la
+    cabeza (o sea es un algoritmo goloso)
   - si bien mejora el tiempo de respuesta, puede producit inanición
 - **Algoritmo scan o del ascensor**
-  - idea: ir primero en un sentido, atendiendo los pedidos en el camino. Luego vuelvo y hago lo mismo.
-  - es una mejora, aunque si me piden un sector por donde acaba de pasar la cabeza tardo muuuuucho.
+  - idea: ir primero en un sentido, atendiendo los pedidos en el camino. Luego
+    vuelvo y hago lo mismo.
+  - es una mejora, aunque si me piden un sector por donde acaba de pasar la
+    cabeza tardo muuuuucho.
   - además no es tan uniforme (predecible) el tiempo de espera
+- **C-Scan**: igual a scan pero al llegar al final vuelve al principio sin
+  atender otros pedidos (asume que el disco es una lista circular)
 
 ```admonish info title="Nota"
 En la práctica ninguno de estos algoritmos se usan al 100%, suele ser una mezcla entre estos, prioridades, caches, etc.
@@ -307,4 +313,53 @@ Podemos resumir en la siguiente tabla las distintas versiones (las más usadas e
   - como RAID 5 pero agrega un segundo bloque de paridad también distribuido, puede soportar la rotura de hasta 2 discos
   - No hay diferencia sustancial vs RAID 5 respecto del espacio desperdiciado (en la práctica se suele usar RAID 5 + hot spare)
 
+## Miscelaneos
 
+### RAM como dispositivo
+
+Es posible crear **RAM Drives**, que consisten en separar una porción de la
+DRAM del sistema y presentarlo al resto del sistema como si fuera otro
+dispositivo de almacenamiento. Por qué tendría sentido hacer esto? Si bien el
+SO usa caches y buffers para por ejemplo optimizar operaciones de I/O, esto le
+permite **al usuario** guardar data en la memoria usando operaciones con
+archivos. Si bien los dispositivos NVM (ej: SSD) son rápidos, la ram sigue
+siendo mucho más rápido.
+
+### Flujo de un pedido de lectura/escritura a disco
+
+1. Cuando un proceso necesita **I/O** llama a una syscall del sistema
+   operativo. La syscall tiene varios parámetros:
+
+- tipo de operación (Input o Output)
+- el file descriptor indicando el archivo sobre el que se opera
+- la dirección de memoria de donde transferir
+- la cantidad de data a transferir
+
+2. Si el disco y su controlador están disponibles, el pedido se atiende
+   inmediatamente. Si no, los pedidos se guardan en una cola de pendientes para
+   ese disco. Como vimos antes, el scheduler de I/O puede ordenar esa cola con
+   fines de mejorar la performance.
+
+```admonish info
+En el pasado, era necesario especificar el track y qué cabeza del HDD usar, y
+los algoritmos de scheduling de disco eran más complejos. Hoy en día mediante
+el uso de LBAs (Logical Block Addresses) incluso el SO es abstraido de lo que
+en realidad pasa en la memoria. Sin embargo, se sigue asumiendo que LBAs
+cercanas significan accesos cercanos (físicamente hablando). Por lo tanto sigue
+teniendo sentido tener consideraciones como:
+
+- lecturas/escrituras en bloque
+- fairness
+- timeliness
+```
+
+### El **deadline scheduler** de linux
+
+Los algoritmos que vimos de scheduling de I/O tienen una desventaja muy grande,
+y es que pueden producir inanición. Linux para resolver esto implementó el
+**deadline scheduler**. 
+
+Este scheduler mantiene 4 colas, dos de lectura y dos de escritura. La primera
+cola es aquella ordenada por LBA (implementando en cierta forma un C-Scan), y
+la segunda es una FIFO a la que se mandan todos aquellos pedidos que superan el
+tiempo límite configurado (500ms por default).
