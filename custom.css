@@ -1,3 +1,14 @@
 img[src*="#floating"] {
   float: right;
 }
+
+img[src*="#center"] {
+  display: block;
+  margin: auto;
+}
+
+img[src*="#halfcenter"] {
+  width: 50%;
+  display: block;
+  margin: auto;
+}
