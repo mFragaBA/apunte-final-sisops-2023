@@ -1,5 +1,6 @@
 img[src*="#floating"] {
   float: right;
+  margin-left: 10px;
 }
 
 img[src*="#center"] {
