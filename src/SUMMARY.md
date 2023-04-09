@@ -13,7 +13,7 @@
 - [Sistemas Distribuidos](./sistemas_distribuidos.md)
 - [Sistemas Distribuidos - parte II](./sistemas_distribuidos_II.md)
 - [Protección y Seguridad](./proteccion_y_seguridad.md)
-- [Virtualización](./Virtualizacion.md)
+- [Virtualización](./virtualizacion.md)
 - [Microkernels](./microkernels.md)
 - [Miscelaneos](./misc.md)
   - [Design of a General Purpose Memory Allocator for the 4.3BSD UNIX Kernel](./memory_allocator_bsd.md)
