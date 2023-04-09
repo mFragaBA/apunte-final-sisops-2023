@@ -1,0 +1,402 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Sistemas Distribuidos - Notas Final Sistemas Operativos 2023</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./mdbook-admonish.css">
+        <link rel="stylesheet" href="././mdbook-admonish.css">
+        <link rel="stylesheet" href="./custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduccion.html"><strong aria-hidden="true">1.</strong> Introducción</a></li><li class="chapter-item expanded "><a href="sistema_operativo.html"><strong aria-hidden="true">2.</strong> Sistema Operativo</a></li><li class="chapter-item expanded "><a href="procesos_y_api.html"><strong aria-hidden="true">3.</strong> Procesos y API del SO</a></li><li class="chapter-item expanded "><a href="ipc.html"><strong aria-hidden="true">4.</strong> Intercomunicación Entre Procesos</a></li><li class="chapter-item expanded "><a href="scheduling.html"><strong aria-hidden="true">5.</strong> Scheduling</a></li><li class="chapter-item expanded "><a href="sincro_entre_procesos.html"><strong aria-hidden="true">6.</strong> Sincronización entre procesos</a></li><li class="chapter-item expanded "><a href="sincronizacion.html"><strong aria-hidden="true">7.</strong> Sincronización</a></li><li class="chapter-item expanded "><a href="administracion_de_memoria.html"><strong aria-hidden="true">8.</strong> Administración de Memoria</a></li><li class="chapter-item expanded "><a href="entrada_salida.html"><strong aria-hidden="true">9.</strong> Entrada/Salida</a></li><li class="chapter-item expanded "><a href="sistemas_de_archivos.html"><strong aria-hidden="true">10.</strong> Sistemas de Archivos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos.html" class="active"><strong aria-hidden="true">11.</strong> Sistemas Distribuidos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos_II.html"><strong aria-hidden="true">12.</strong> Sistemas Distribuidos - parte II</a></li><li class="chapter-item expanded "><a href="proteccion_y_seguridad.html"><strong aria-hidden="true">13.</strong> Protección y Seguridad</a></li><li class="chapter-item expanded "><a href="virtualizacion.html"><strong aria-hidden="true">14.</strong> Virtualización</a></li><li class="chapter-item expanded "><a href="microkernels.html"><strong aria-hidden="true">15.</strong> Microkernels</a></li><li class="chapter-item expanded "><a href="misc.html"><strong aria-hidden="true">16.</strong> Miscelaneos</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory_allocator_bsd.html"><strong aria-hidden="true">16.1.</strong> Design of a General Purpose Memory Allocator for the 4.3BSD UNIX Kernel</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Notas Final Sistemas Operativos 2023</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="sistemas-distribuidos"><a class="header" href="#sistemas-distribuidos">Sistemas Distribuidos</a></h1>
+<p>A los ojos de la materia, un sistema distribuido es un conjunto de recursos conectados que interactúan. Esto puede ser:</p>
+<ul>
+<li>Varias máquinas conectadas por red</li>
+<li>Un procesador con varias memorias</li>
+<li>Varios procesadores que comparten una (o más) memoria(s).</li>
+</ul>
+<p>Una extensión a esa definición que a mi me gusta es que el sistema distribuido <strong>hacia afuera se comporta como si fuese &quot;un único recurso&quot;</strong></p>
+<p>Qué ventajas nos puede traer un sistema distribuido vs. el esquema que veníamos usando?</p>
+<ul>
+<li>Paralelismo: ojo, esto no siempre ocurre. Ej: cualquier sistema de cómputo
+paralelo. Mando un algoritmo paralelo a correr en 4 máquinas y que en una &quot;se
+junte&quot; el resultado.</li>
+<li>Replicación: esta está muy bien. Como es el caso de bitcoin, que se caiga un
+nodo, dos nodos, veinte nodos no me tira el sistema.</li>
+<li>Descentralización: No quiero un único punto de falla. O tampoco quiero que el
+sistema lo rija una única entidad.</li>
+</ul>
+<p>Qué desventajas puede tener un sistema distribuido?</p>
+<ul>
+<li>La sincronización es difícil</li>
+<li>Mantener coherencia es difícil</li>
+<li>muy rara vez se comparte clock lo cual nos restringe a no necesariamente
+poder confiar en timestamps o heartbeats. A menos que tengas toda la papa y
+seas como google que compra relojes atómicos.</li>
+<li>Muchas veces cada &quot;participante&quot; tiene una visión parcial de todo lo que ocurre</li>
+</ul>
+<h2 id="sistemas-distribuidos-mediante-memoria-compartida"><a class="header" href="#sistemas-distribuidos-mediante-memoria-compartida">Sistemas distribuidos mediante memoria compartida</a></h2>
+<p>Por HW:</p>
+<ul>
+<li>UMA</li>
+<li>NUMA</li>
+<li>Híbrida</li>
+</ul>
+<p>Por SW:</p>
+<ul>
+<li>Estructurada
+<ul>
+<li>Memoria asociativa</li>
+<li>Arrays distribuidos</li>
+</ul>
+</li>
+<li>No estructurada
+<ul>
+<li>Memoria virtual global.</li>
+<li>Memoria virtual particionada por localidad</li>
+</ul>
+</li>
+</ul>
+<h2 id="cuando-no-hay-memoria-compartida"><a class="header" href="#cuando-no-hay-memoria-compartida">Cuando no hay memoria compartida</a></h2>
+<p>Como dijimos, no tener clocks hace las cosas difíciles. Pero <strong>no tener clock y
+memoria compartida</strong> hace las cosas muuuucho muy difícil. De todos modos hay
+algunas alternativas:</p>
+<ul>
+<li>Telnet (sólo para conectarse a otro equipo)</li>
+</ul>
+<p><img src="./img/rpc.png#floating" alt="" /></p>
+<ul>
+<li>RPC
+<ul>
+<li>permite a los programas hacer *<em>procedure calls</em> de manera remota, también enviar datos.</li>
+<li>existen bibliotecas que ocultan al programador los detalles de la comunicación</li>
+<li>importante: es un mecanismo <strong>sincrónico</strong></li>
+</ul>
+</li>
+</ul>
+<p>Para generalizar un poco, estos métodos tienen en común la forma de cooperación
+de solicitar un servicio a otro. El otro servicio no tiene un rol activo además
+de proveer el servicio. Estas arquitecturas son las que se conocen como
+<strong>cliente/servidor</strong>.</p>
+<h2 id="mecanismos-asincrónicos"><a class="header" href="#mecanismos-asincrónicos">Mecanismos asincrónicos</a></h2>
+<p>Hasta ahora vimos:</p>
+<ul>
+<li>con memoria compartida</li>
+<li>con cliente/servidor (sincrónico)</li>
+</ul>
+<p>Ahora veamos las formas de comunicación asincrónica:</p>
+<ul>
+<li>RPC asincrónico en sus distintos colores:
+<ul>
+<li>Promises</li>
+<li>Futures</li>
+<li>Otros(?)</li>
+</ul>
+</li>
+<li>Pasaje de mensajes (<code>send</code> / <code>receive</code>)</li>
+</ul>
+<p>Pasaje de mensajes es el mecanismo más general, ya que no asume nada más allá
+de tener un canal de comunicación. Este modelo si bien simple, viene con una
+serie de problemas a considerar:</p>
+<ul>
+<li>encoding/decoding de los datos</li>
+<li>la comunicación puede ser muy lenta</li>
+<li>se pueden perder mensajes (TCP/IP atenúa mucho la posibilidad de que esto suceda)</li>
+<li>enviar mensajes puede tener un costo económico</li>
+<li>Los nodos pueden morir</li>
+<li>La red se puede partir</li>
+</ul>
+<p>Los últimos dos problemas los vamos a ignorar pero son mucho muy reales llevado a la práctica.</p>
+<p>Aparece también la noción de <strong>complejidad medida sobre la cantidad de mensajes que intercambian</strong>.</p>
+<pre><code class="language-admonish info title=&quot;Conjetura de Brewer&quot;">En un entorno distribuido no se puede tener a la vez consistencia,
+disponibilidad y tolerancia a fallas todas al mismo tiempo. A lo sumo 2 de las
+3.
+
+Esto de hecho fue demostrado en 2002 por Seth Gilbert y Nancy Lynch con lo cual
+es un teorema más que una conjetura, pero como teorema se lo conoce como el CAP
+theorem.
+</code></pre>
+<h2 id="locks-en-entornos-distribuidos"><a class="header" href="#locks-en-entornos-distribuidos">Locks en entornos distribuidos</a></h2>
+<p>En entornos distribuidos no tenemos un <code>TestAndSet</code> atómico. Es por eso que tenemos que buscar alternativas. Podemos distinguir a grandes rasgos dos enfoques:</p>
+<ul>
+<li>Un enfoque centralizado, en donde tenemos un nodo que hace de coordinador entre los recursos.
+<ul>
+<li>Poco resiliente, hay un punto único de falla</li>
+<li>El coordinador se transforma en un cuello de botella del procesamiento y la capacidad de la red (no siempre)</li>
+<li>Tengo que recurrir al coordinador (que puede estar lejos), para acceder a un recurso que puede estar al lado mio.</li>
+</ul>
+</li>
+<li>Un enfoque distribuido en donde los procesos &quot;negocian&quot; recursos</li>
+</ul>
+<h2 id="locks-descentralizados"><a class="header" href="#locks-descentralizados">Locks descentralizados</a></h2>
+<p>La analogía que usamos para esto es el &quot;canto guerra pri&quot;. El tema es que en un
+entorno distribuido, saber quién cantó pri es difícil. Quién gana? El que
+primero mandó el mensaje? El que logró que la mayoría reciba su mensaje? Si hay
+empate, elijo del te timestamp más chico? Cómo comparo tiempstamps si es
+difícil coordinar clocks?</p>
+<p>Esto último nos lo responde nuestro queridísimo amigo Leslie Lamport, que dice
+que nos tendría que... something something un huevo something sincronizar
+relojes. Lo importante es saber si un evento ocurre antes que otro o no. Para
+eso se define el siguiente orden parcial entre eventos:</p>
+<ul>
+<li>Si dentro de un proceso, \( A \) sucede antes que \( B \), entonces \( A \rightarrow B \).</li>
+<li>Si \( E \) es el envío de un mensaje y \( R \) su recepción, \( E \rightarrow R \), aunque sucedan en distintos procesos.</li>
+<li>Es transitiva (si \( A \rightarrow B \) y \( B \rightarrow C \), entonces \( A \rightarrow C \)).</li>
+<li>Si no vale ni \( A \rightarrow B \) ni \( B \rightarrow A \), entonces \( A \) y \( B \) son concurrentes.</li>
+</ul>
+<h3 id="implementación"><a class="header" href="#implementación">Implementación</a></h3>
+<ul>
+<li>Cada procesador tiene un reloj (lo único importante es que sea monótono
+creciente)</li>
+<li>Cada mensaje lleva el ts del reloj</li>
+<li>Como la recepción siempre es posterior al envío, cuando se recibe un mensaje
+en tiempo <code>t</code> mayor al tiempo de nuestro reloj, actualizo nuestro reloj al
+tiempo <code>t + 1</code>.</li>
+<li>Lo único que falta resolver son los empates, que al ser concurrentes la
+resolución puede ser arbitraria (por ejemplo, decido por PID)</li>
+</ul>
+<h2 id="acuerdo-bizantino"><a class="header" href="#acuerdo-bizantino">Acuerdo Bizantino</a></h2>
+<p>Es el perfecto ejemplo de que cuando puede haber pérdida de mensajes es difícil ponerse de acuerdo.</p>
+<blockquote>
+<p>La idea del problema bizantino es que dos generales en campamentos de
+distintas ubicaciones se quieren poner de acuerdo para atacar una ciudad.
+Para eso, uno manda un mensajero (pero ojo, puede ser interceptado por la
+gente de la ciudad y ser asesinado) que le dice la hora de ataque al otro
+general. El otro general va a responderle, o bien estando de acuerdo con la
+hora o proponiendo otra. El problema está que cuando uno responde no tiene
+forma de saber que la respuesta llegó a menos que el otro le responda, pero
+en ese caso el otro no puede estar seguro de que éste recibió el mensaje.</p>
+</blockquote>
+<h3 id="formalización"><a class="header" href="#formalización">Formalización</a></h3>
+<p>Dados:</p>
+<ul>
+<li>Potenciales <strong>fallas en la comunicación</strong></li>
+<li>Valores: \( V = \lbrace 0, 1 \rbrace \)</li>
+<li>Inicio: Todo proceso \( i \) arranca con algún \( \text{init}(i) \in V \)</li>
+</ul>
+<p>Se busca:</p>
+<ul>
+<li>Acuerdo: Para todo \( i \neq j \), \( \text{decide}(i) = \text{decide}(j) \)</li>
+<li>Validez: Existe algún \( i \) tal que \( \text{decide}(i) = \text{init}(i) \)</li>
+<li>Terminación: Todo \( i \) termina en un número finito de transiciones (WAIT-FREEDOM)</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Teorema&quot;">Teorema: No existe ningún algoritmo para resolver el problema de consenso en este escenario
+</code></pre>
+<h3 id="variante-1"><a class="header" href="#variante-1">Variante #1</a></h3>
+<p>No hay errores de comunicación, pero los procesos pueden dejar de funcionar. En este caso pedimos que los procesos que no fallen terminen en un número finito de transiciones. En ese caso consenso se puede resolver con \( \mathcal{O}((k + 1) * N^2) \) mensajes.</p>
+<h3 id="variante-2"><a class="header" href="#variante-2">Variante #2</a></h3>
+<p>En este caso lo que suponemos es que los procesos no son confiables (es como si reemplazaran al mensajero por uno de la ciudad). Se puede resolver consenso bizantino para \( n \) procesos y \( k \) fallas si y sólo si \( n &gt; 3 * k \) (falla menos de un tercio de los nodos) y la conectividad es mayor que \( 2 * k \).</p>
+<h2 id="scheduling-en-sistemas-distribuidos"><a class="header" href="#scheduling-en-sistemas-distribuidos">Scheduling en sistemas distribuidos</a></h2>
+<ul>
+<li>local: (lo que ya vimos). Le doy el procesador a un proceso listo</li>
+<li>global: asigno un proceso a algún procesador/recurso. Ej: un load balancer ponele recibiendo requests</li>
+</ul>
+<p>Cuando es global, comparto la carga entre procesadores/equipos:</p>
+<ul>
+<li>cuando es estática, determino el procesador al crear el proceso (o recibir el request)</li>
+<li>cuando es dinámico asigno durante la ejecución el procesador (puede requerir migrar, lo cual es caro)
+<ul>
+<li>puedo triggerear la migración cuando un procesador está muy cargado (sender initiated) o cuando está muy libro (work stealing)</li>
+</ul>
+</li>
+</ul>
+<p>La política de scheduling se va a encargar de:</p>
+<ul>
+<li>Transferencia: cuándo hay que migrar un proceso</li>
+<li>Selección: elegir qué proceso migrar</li>
+<li>Ubicación: saber dónde migrar un proceso</li>
+<li>Info: cómo se difunde el estado del scheduler (los procesadores, las tareas, etc.)</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="sistemas_de_archivos.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="sistemas_distribuidos_II.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="sistemas_de_archivos.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="sistemas_distribuidos_II.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

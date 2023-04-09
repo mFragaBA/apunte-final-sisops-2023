@@ -1,0 +1,382 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Procesos y API del SO - Notas Final Sistemas Operativos 2023</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./mdbook-admonish.css">
+        <link rel="stylesheet" href="././mdbook-admonish.css">
+        <link rel="stylesheet" href="./custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduccion.html"><strong aria-hidden="true">1.</strong> Introducción</a></li><li class="chapter-item expanded "><a href="sistema_operativo.html"><strong aria-hidden="true">2.</strong> Sistema Operativo</a></li><li class="chapter-item expanded "><a href="procesos_y_api.html" class="active"><strong aria-hidden="true">3.</strong> Procesos y API del SO</a></li><li class="chapter-item expanded "><a href="ipc.html"><strong aria-hidden="true">4.</strong> Intercomunicación Entre Procesos</a></li><li class="chapter-item expanded "><a href="scheduling.html"><strong aria-hidden="true">5.</strong> Scheduling</a></li><li class="chapter-item expanded "><a href="sincro_entre_procesos.html"><strong aria-hidden="true">6.</strong> Sincronización entre procesos</a></li><li class="chapter-item expanded "><a href="sincronizacion.html"><strong aria-hidden="true">7.</strong> Sincronización</a></li><li class="chapter-item expanded "><a href="administracion_de_memoria.html"><strong aria-hidden="true">8.</strong> Administración de Memoria</a></li><li class="chapter-item expanded "><a href="entrada_salida.html"><strong aria-hidden="true">9.</strong> Entrada/Salida</a></li><li class="chapter-item expanded "><a href="sistemas_de_archivos.html"><strong aria-hidden="true">10.</strong> Sistemas de Archivos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos.html"><strong aria-hidden="true">11.</strong> Sistemas Distribuidos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos_II.html"><strong aria-hidden="true">12.</strong> Sistemas Distribuidos - parte II</a></li><li class="chapter-item expanded "><a href="proteccion_y_seguridad.html"><strong aria-hidden="true">13.</strong> Protección y Seguridad</a></li><li class="chapter-item expanded "><a href="virtualizacion.html"><strong aria-hidden="true">14.</strong> Virtualización</a></li><li class="chapter-item expanded "><a href="microkernels.html"><strong aria-hidden="true">15.</strong> Microkernels</a></li><li class="chapter-item expanded "><a href="misc.html"><strong aria-hidden="true">16.</strong> Miscelaneos</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory_allocator_bsd.html"><strong aria-hidden="true">16.1.</strong> Design of a General Purpose Memory Allocator for the 4.3BSD UNIX Kernel</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Notas Final Sistemas Operativos 2023</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="procesos"><a class="header" href="#procesos">Procesos</a></h1>
+<p>Un programa podemos definirlo como un texto escrito en un lenguaje de programación, o bien dicho código compilado a lenguaje máquina. Es <strong>estático</strong>. Ahora, cuando ese programa se ejecuta, pasamos a tener un <strong>proceso</strong>. Un proceso es la contracara dinámica del programa. </p>
+<p>El estado de un proceso está representado por:</p>
+<ul>
+<li>los registros</li>
+<li>la memoria del proceso
+<ul>
+<li>stack</li>
+<li>heap (o data section). En realidad el silverschatz lo separa en
+<ul>
+<li>data section: variables globales</li>
+<li>heap: memoria dinámica</li>
+</ul>
+</li>
+<li>el área de text: donde se almacena el código</li>
+</ul>
+</li>
+</ul>
+<p>Justamente los procesos son dinámicos ya que cambian su estado a medida que el programa ejecuta. Podemos entonces armar un diagrama de estados de un proceso:</p>
+<p><img src="./img/diagrama_estados_proceso.png" alt="diagrama de estados de un proceso" /></p>
+<ul>
+<li><strong>new</strong>: el proceso se está creando</li>
+<li><strong>running</strong>: se están ejecutando instrucciones</li>
+<li><strong>waiting</strong>: el proceso está esperando por un evento (I/O o recepción de alguna señal)</li>
+<li><strong>ready</strong>: el proceso está en espera de ser asignado a un procesador</li>
+<li><strong>terminated</strong>: el proceso terminó la ejecución</li>
+</ul>
+<h2 id="modelo-de-procesos"><a class="header" href="#modelo-de-procesos">Modelo de procesos</a></h2>
+<p>El modelo de procesos que consideramos es un modelo de <strong>procesos
+secuenciales</strong>. Esto quiere decir que cada proceso piensa que tiene un
+único CPU propio. Sin embargo, en la realidad no es así. Como
+mencionamos anteriormente, la técnica de <strong>multiprogramación</strong> surgió
+como técnica para aprovechar el tiempo ocioso de ejecución de otros
+programas (ej: tienen que esperar I/O). Esto, junto a las ideas de
+<strong>timesharing</strong> (repartir el tiempo de procesador) caracterizan a este
+modelo, en donde si bien cada proceso cree que está asignado a un CPU
+de manera exclusiva, en realidad el sistema operativo es el encargado
+de asignara y retirar del cpu a los distintos procesos.</p>
+<p>Ahora, si un proceso tiene un estado, pero no está constantemente en ejecución y tampoco es necesario que ejecute sobre el mismo CPU, necesitamos guardar en algún lado si estado. Cada proceso se representa en el sistema operativo con un <strong>PCB</strong> (process control block). Una PCB contiene:</p>
+<ul>
+<li>El estado actual del proceso</li>
+<li>El PC</li>
+<li>Registros del CPU (incluye flags del procesador): junto con el PC, es necesario guardar explícitamente la data cuando ocurren interrupciones.</li>
+<li>info para el scheduler, por ejemplo la prioridad del proceso</li>
+<li>info de manejo de memoria</li>
+<li>accounting info: estadísticas de tiempo de cómputo</li>
+<li>status de IO: tiene la lista de dispositivos de I/O asignados al proceso, los archivos abiertos, etc.</li>
+</ul>
+<h2 id="threads"><a class="header" href="#threads">Threads</a></h2>
+<p>Una limitación de este modelo de cómputo es que asume que todo programa tiene un único flujo de ejecución. Sin embargo, la mayoría de programas realizxan varias tareas a la vez. Es por esto que se extiende este concepto de proceso para permitir que un proceso tenga varios <strong>threads de ejecución</strong>. En architecturas multicore cobra más importancia todavía porque en un core pueden correr varios threads en paralelo. En los sistemas que cuentan con PCB y threads, la PCB se extiende para que tenga información sobre cada thread. No solo eso, si no que en la práctica crear threads es menos costoso que crear nuevos procesos.</p>
+<h2 id="Árbol-de-procesos"><a class="header" href="#Árbol-de-procesos">Árbol de Procesos</a></h2>
+<ul>
+<li>Los procesos están organizados jerárquicamente, como un árbol.</li>
+<li>Cuando el SO comienza, lanza un proceso que se suele llamar init o systemd</li>
+<li>Cada proceso puede lanzar procesos hijos:
+<ul>
+<li><code>fork()</code> es una llamada al sistema que crea un proceso igual al actual</li>
+<li>el resultado es el PID del proceso hijo</li>
+<li>el padre puede suspender la ejecución hasta que un proceso (p ej. el proceso hijo) termine conociendo su PID con la syscall <code>wait()</code></li>
+<li>cuando el proceso hijo termina, el código de estado indicado por el hijo se le devuelve al padre.</li>
+<li>el proceso hijo puede, o bien seguir ejecutando lo mismo que el proceso padre, o bien ejecutar algo distinto. Para eso puede usar la syscall <code>exec()</code> para reemplazar su código binario por otro.</li>
+</ul>
+</li>
+</ul>
+<p><img src="./img/arbol_de_procesos.png" alt="árbol de procesos" /></p>
+<p>Por ejemplo, cuando lanzamos un programa desde la shell, el proceso de la shell hace un llamado a <code>fork()</code> y el proceso hijo hace <code>exec()</code> del programa que se desea ejecutar. El proceso de la shell espera hasta que el proceso hijo termine.</p>
+<pre><code class="language-admonish warning title=&quot;Cuidado&quot;">Esto es una simplificación de lo que en realidad ocurre en una shell hoy en día
+</code></pre>
+<pre><code class="language-admonish info title=&quot;pstree&quot;">pstree es un comando que muestra los procesos actuales en forma de árbol. Si recibe un PID como parámetro, muestra el árbol a partir de ese proceso. Para más info `man pstree`
+</code></pre>
+<h2 id="actividades-de-un-proceso"><a class="header" href="#actividades-de-un-proceso">Actividades de un proceso</a></h2>
+<p>Vimos los distintos estados que puede tener un proceso en ejecución. Cuando un proceso está en ejecución, puede:</p>
+<ul>
+<li>hacer operaciones entre registros y direcciones de memoria</li>
+<li>llamadas al sistema operativo o <em>syscalls</em> (las vemos más adelante)</li>
+<li>I/O (por lo general mediante llamadas al sistema operativo) (las vemos más adelante)</li>
+</ul>
+<p>Como mencionamos antes, un proceso no está todo el tiempo en ejecución (Uno si no podría esperar a que termine, pero y si el proceso se &quot;cuelga&quot;?). La pregunta es entonces por cuánto tiempo ejecuta? Ese tiempo lo llamamos <strong>quantum</strong>. En general hay 2 formas de administrar ese tiempo:</p>
+<ul>
+<li><strong>cooperation</strong>: los procesos son los que &quot;voluntariamente&quot; detienen su ejecución para dar tiempo a otros procesos.</li>
+<li><strong>preemption</strong>: los procesos tienen un tiempo limitado para ejecutar, y cuando este acaba el sistema operativo pasa el proceso al estado <em>waiting</em> y asigna el CPU a otro proceso. Lo importante de esto es que el proceso en ningún momento puede decidir si se puede quedar o no con un poco más de tiempo de CPU.
+<ul>
+<li>este es el estándar de hoy día, y para implementarlo el SO se cuelga de la interrupción del reloj.</li>
+</ul>
+</li>
+</ul>
+<p>Pero en este segundo caso surgen las preguntas:</p>
+<ul>
+<li>cómo decide el OS a quién le toca y cuánto tiempo tiene?</li>
+<li>qué significa hacer que otro proceso se ejecute?</li>
+</ul>
+<h2 id="el-scheduler"><a class="header" href="#el-scheduler">El Scheduler</a></h2>
+<p>Para responder las preguntas anteriores aparece el <strong>scheduler</strong>, un módulo del sistema operativo cuya función es decidir a qué proceso le corresponde ejecutar en cada momento.</p>
+<p>Cuando el scheduler tiene que cambiar el programa que se ejecura en la CPU, primero tiene que:</p>
+<ol>
+<li>guardar los registros</li>
+<li>guardar el IP</li>
+<li>si es un programa nuevo, cargarlo en memoria</li>
+<li>cargar los registros correspondientes</li>
+<li>poner el nuevo IP</li>
+<li>algunas cosas extra que se explican más adelante</li>
+</ol>
+<pre><code class="language-admonish info text=&quot;PCB y PCT&quot;">Para los pasos 1 y 2 usamos la PCB mencionada anteriormente, pero además tenemos una estructura más que es la PCT (Process Control Table), que en resumidas cuerntas es un diccionario / array de PCBs.
+</code></pre>
+<p>Esta serie de pasos se la conoce como <em>cambio de contexto</em> o <strong>context switch</strong> y no es gratis, por lo que el scheduler tiene que optimizar el tiempo que está haciendo <em>context switch</em>.</p>
+<p><img src="./img/context_switch_1.png" alt="ejemplo de context switch" /></p>
+<h2 id="actividades-de-un-proceso---syscalls"><a class="header" href="#actividades-de-un-proceso---syscalls">Actividades de un proceso - syscalls</a></h2>
+<ul>
+<li>Un proceso también puede hacer llamadas al sistema (<code>fork()</code>, <code>exec()</code>, etc.)</li>
+<li>Desde el punto de vista del código, es un llamado a función (linkeada dinámicamente). Muchas veces incluso ni vemos la syscall propia, si no que los lenguajes nos abstraen de dichas actividades.
+<ul>
+<li>esto de todos modos es más costoso que ejecutar código, ya que requiere de una interrupción, y a veces cambios de contexto.</li>
+<li>Por ejemplo, cuando uno en C++ hace <code>cout &lt;&lt; &quot;Hola Mundo\n&quot;;</code> por detrás está realizando llamadas al sistema para escribir por salida estándar.</li>
+</ul>
+</li>
+<li>En todos los casos se tiene que llamar a kernel (en linux se hace mediante una interrupción al handler <code>0x80</code>, ahora directamente <code>syscall</code>), y en varios casos es necesario cambiar el nivel de privilegio, contexto, interrupciones, etc.</li>
+</ul>
+<p>Ejemplo usando syscall write (en x86-64):</p>
+<pre><code class="language-x86asm">global start
+
+section .text
+start:
+  mov rax, 1      ; write
+  mov rdi, 1      ; stdout
+  mov rsi, msg
+  mov rdx, 13
+  syscall
+
+  mov rax, 0x60   ; exit
+  mov rdi, 0
+  syscall
+
+section .data
+
+msg:    db   &quot;Hello, world!&quot;
+</code></pre>
+<p>El mismo ejemplo en C:</p>
+<pre><code class="language-c">#include &lt;unistd.h&gt;
+
+int main(int argc, char* argv[]) {
+    write(1, &quot;Hello, world!\n&quot;, 14);
+    return 0;
+}
+</code></pre>
+<h2 id="api-del-so"><a class="header" href="#api-del-so">API del SO</a></h2>
+<p>Las syscalls proveen una interfaz a los servicios del OS, también conocido como API del OS.</p>
+<pre><code class="language-admonish info text=&quot;Syscalls&quot;">se pueden ver las llamadas al sistema operativo disponibles usando el comando `man syscalls`
+</code></pre>
+<p>Existe hoy en día un estándar para la API de los OS basados en unix, llamado <strong>POSIX</strong> (<strong>P</strong>ortable <strong>O</strong>perating <strong>S</strong>ystem <strong>I</strong>nfertace; <strong>X</strong>: UNIX). Define algunos servicios core que debe brindar el OS:</p>
+<ul>
+<li>Creación y manejo de procesos</li>
+<li>Pipes (lo vemos más adelante)</li>
+<li>Señales</li>
+<li>Operaciones de archivos y directorios</li>
+<li>Excepciones</li>
+<li>Errores del bus.</li>
+<li>Biblioteca C</li>
+<li>Instrucciones de E/S y de control de dispositivo (ioctl).</li>
+</ul>
+<h2 id="io"><a class="header" href="#io">I/O</a></h2>
+<p>Por último, mencionamos que dentro de las cosas que un proceso puede hacer, una es operaciones de I/O (Entrada y Salida).</p>
+<p>Si hay algo que caracterizan las entradas de I/O es que <strong>son muy lentas</strong>. Entonces, cuando un proceso necesita hacer I/O tiene algunas opciones:</p>
+<ul>
+<li>quedarse esperando (<strong>busy waiting</strong>) </li>
+<li><strong>polling</strong> (que el proceso consulte cada tanto si la operación se completó o no) (es como una forma de busy waiting, pero tranquilamente el proceso puede hacer algo más mientras consulta a ver si terminó la I/O)</li>
+<li><strong>interrupciones</strong>: cuando pedís I/O te saco y te vuelvo recién a meter cuando se completó la operación</li>
+<li>Otras que no vemos</li>
+</ul>
+<pre><code class="language-admonish info text=&quot;Multiprogramación desde el código&quot;">Además, podemos caracterizar en 2 el tipo de operaciones (aplica a I/O) pero puede ser en general:
+
+- **bloqueante**: hago el &quot;inicio de la operación&quot; (ya sea con una syscall o no) y el proceso no recibe de vuelta el control/ se bloquea hasta que la operación termina
+- **no bloqueante**: hago la syscall, y retorna de inmediato. Sin embargo, no significa que la operación terminó. Si no que tengo que enterarme de alguna manera que la operación terminó.
+
+En otros contextos también se usa la idea de bloqueante vs no bloqueante para esa idea de me bloqueo hasta que termina una operación vs. consulto yo a ver cuándo termina y mientras tanto hago algo más.
+</code></pre>
+<p>Si recordamos, en la PCB se guardaba el estado de un proceso. Pero además de eso también se guarda información relevante para el scheduler como la prioridad del proceso y la lista de recursos por los que está esperando.</p>
+<h2 id="señales"><a class="header" href="#señales">Señales</a></h2>
+<p>Es un mecanismo presente en los sistemas POSIX que permiten notificar a un proceso la ocurrencia de un evento. Un proceso tiene al igual que el SO, handlers para las distintas señales. Cuando recibe una, la ejecución del proceso se detiene y se ejecuta el handler correspondiente.
+Algunas señales conocidas son <code>SIGINT</code>, <code>SIGKILL</code>, <code>SIGSEGV</code>, <code>SIGSTOP</code>, entre otras.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="sistema_operativo.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="ipc.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="sistema_operativo.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="ipc.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

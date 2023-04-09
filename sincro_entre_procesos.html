@@ -1,0 +1,521 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Sincronización entre procesos - Notas Final Sistemas Operativos 2023</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./mdbook-admonish.css">
+        <link rel="stylesheet" href="././mdbook-admonish.css">
+        <link rel="stylesheet" href="./custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduccion.html"><strong aria-hidden="true">1.</strong> Introducción</a></li><li class="chapter-item expanded "><a href="sistema_operativo.html"><strong aria-hidden="true">2.</strong> Sistema Operativo</a></li><li class="chapter-item expanded "><a href="procesos_y_api.html"><strong aria-hidden="true">3.</strong> Procesos y API del SO</a></li><li class="chapter-item expanded "><a href="ipc.html"><strong aria-hidden="true">4.</strong> Intercomunicación Entre Procesos</a></li><li class="chapter-item expanded "><a href="scheduling.html"><strong aria-hidden="true">5.</strong> Scheduling</a></li><li class="chapter-item expanded "><a href="sincro_entre_procesos.html" class="active"><strong aria-hidden="true">6.</strong> Sincronización entre procesos</a></li><li class="chapter-item expanded "><a href="sincronizacion.html"><strong aria-hidden="true">7.</strong> Sincronización</a></li><li class="chapter-item expanded "><a href="administracion_de_memoria.html"><strong aria-hidden="true">8.</strong> Administración de Memoria</a></li><li class="chapter-item expanded "><a href="entrada_salida.html"><strong aria-hidden="true">9.</strong> Entrada/Salida</a></li><li class="chapter-item expanded "><a href="sistemas_de_archivos.html"><strong aria-hidden="true">10.</strong> Sistemas de Archivos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos.html"><strong aria-hidden="true">11.</strong> Sistemas Distribuidos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos_II.html"><strong aria-hidden="true">12.</strong> Sistemas Distribuidos - parte II</a></li><li class="chapter-item expanded "><a href="proteccion_y_seguridad.html"><strong aria-hidden="true">13.</strong> Protección y Seguridad</a></li><li class="chapter-item expanded "><a href="virtualizacion.html"><strong aria-hidden="true">14.</strong> Virtualización</a></li><li class="chapter-item expanded "><a href="microkernels.html"><strong aria-hidden="true">15.</strong> Microkernels</a></li><li class="chapter-item expanded "><a href="misc.html"><strong aria-hidden="true">16.</strong> Miscelaneos</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory_allocator_bsd.html"><strong aria-hidden="true">16.1.</strong> Design of a General Purpose Memory Allocator for the 4.3BSD UNIX Kernel</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Notas Final Sistemas Operativos 2023</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="sincronización-entre-procesos"><a class="header" href="#sincronización-entre-procesos">Sincronización entre procesos</a></h1>
+<p>Intro bla bla... <a href="http://www.cs.columbia.edu/~junfeng/10fa-e6998/papers/concurrency-bugs.pdf">PAPER Shan Lu et al. Learning from Mistakes - A Comprehensive Study on Real World Concurrency Bug Characteristics. ASPLOS'08</a></p>
+<h2 id="sección-crítica-crit"><a class="header" href="#sección-crítica-crit">Sección Crítica (CRIT)</a></h2>
+<p>Es un cacho de código tal que:</p>
+<ul>
+<li>sólo hay (o debería haber) un proceso a la vez en CRIT.</li>
+<li>todo proceso que esté esperando entrar a CRIT va a entrar eventualmente.</li>
+<li>Ningún proceso fuera de CRIT puede bloquear a otro.</li>
+</ul>
+<p>A nivel código se implementa con dos llamados: uno para entrar y otro para salir de la CRIT. Si implementamos exitosamente secciones críticas, los procesos pueden compartir datos sin tosquearse.</p>
+<h2 id="implementando-secciones-críticas"><a class="header" href="#implementando-secciones-críticas">Implementando secciones críticas</a></h2>
+<p>Una alternativa es usar <strong>locks</strong>. Son como booleanos compartidos. Cuando entro a la CRIT lo pongo en 1, al salir en 0. Si está en 1 espero a que tenga un 0.</p>
+<pre><code class="language-admonish warning text=&quot;no todo es tan simple&quot;">El problema de que el scheduler nos cague puede seguir ocurriendo (primero checkeo el bool, después me suspenden el proceso). Por lo general nos remitimos a soluciones que usan el HW.
+</code></pre>
+<h2 id="tas"><a class="header" href="#tas">TAS</a></h2>
+<p>El Hw suele proveer alguna instrucción que permite settear atómicamente el valor de un booleano/entero en 1. Nosotros la vamos a llamar <code>TestAndSet</code>.</p>
+<pre><code>fn TestAndSet(variable) {
+  old_value = variable.value
+  variable.value = 1
+  return old_value
+}
+</code></pre>
+<p>Pero además toda la operación se realiza de forma atómica, o sea de forma indivisible sin importar que tengamos varias CPUs.</p>
+<pre><code class="language-admonish info title=&quot;TestAndSet en x86&quot;">En x86 tenés la operación `bts` que te permite settear el flag de carry y un bit de un registro. Y esa operación si se le agrega el prefijo `lock` hace que se ejecute de manera atómica. O sea `lock bts &lt;registro&gt; &lt;nro_de_bit&gt;`
+</code></pre>
+<h2 id="usando-tas"><a class="header" href="#usando-tas">Usando TAS</a></h2>
+<pre><code>boolean lock;
+
+while(TRUE) {
+  while (TestAndSet(&amp;lock)) {
+    // devuelve true si estaba lockeado. No hago nada
+  }
+
+  // devolvió FALSE, estoy en la sección crítica (recordar que después del check pasa a ser TRUE el valor del lock);
+  // hago lo que necesite la sección crítica
+
+  // salgo de la sección crítica
+  lock = FALSE;
+
+  // acá puedo hacer todo lo que no tenga sección crítica
+}
+</code></pre>
+<pre><code class="language-admonish info title=&quot;Observación&quot;">Durante el while interno no hace nada, pero está comiendo \&lt;\&lt;MUCHO\&gt;\&gt; CPU (busy wait)
+</code></pre>
+<h2 id="alternativa-sleep"><a class="header" href="#alternativa-sleep">Alternativa: Sleep</a></h2>
+<p>Una alternativa podría ser agregar un sleep adentro del while. Y cuando falla el intento de obtener el lock suspender el proceso durante un tiempo. La cuestión es cuánto tiempo? </p>
+<ul>
+<li>Si es mucho, pierdo tiempo (y alguien puede &quot;robarme el lugar&quot;).</li>
+<li>Si es poco, sigo desperdiciando CPU (menos que antes though).</li>
+<li>Y si le pido al SO que me deje seguir cuando esté liberado el lock?</li>
+</ul>
+<h2 id="problemas-con-sleep-problema-del-productor-consumidor"><a class="header" href="#problemas-con-sleep-problema-del-productor-consumidor">Problemas con sleep: Problema del Productor-Consumidor</a></h2>
+<ul>
+<li>Un proceso mete elementos a un buffer (Productor), otro los retira (Consumidor).</li>
+<li>Nuevamente hay <strong>contención</strong> de recursos. Pero además hay un problema adicional, qué pasa si 
+<ul>
+<li>se llenó el buffer y el productor quiere meter cosas</li>
+<li>se vació el buffer y el consumidor quiere sacar cosas</li>
+<li>En ambos casos la respuesta es esperar</li>
+</ul>
+</li>
+</ul>
+<p>Seguro que busy waiting nos alcanza, y si usamos <em>sleep/wakeup</em>?</p>
+<p>De vuelta estamos atados a la traza de ejecución. Como el chequeo de
+la capacidad del buffer y el sleep/wakeup no es atómico de por sí,
+puede pasar que el consumidor reciba el wakeup antes de usar el
+sleep, y después haga el sleep. Si por ejemplo el buffer es de un
+único elemento, puede pasar que se cuelgue el sistema.</p>
+<h2 id="semáforos-la-true-way"><a class="header" href="#semáforos-la-true-way">Semáforos: la true way</a></h2>
+<p>Un semáforo es una variable entera con las siguientes características:</p>
+<ul>
+<li>se puede inicializar con cualquier valor</li>
+<li>tiene 2 operaciones:
+<ul>
+<li><code>wait()</code></li>
+<li><code>signal()</code></li>
+</ul>
+</li>
+<li><code>wait(s): while (s &lt;= 0) sleep(); s--;</code></li>
+<li><code>signal(s): s++; if (X espera por s) wakeup(X)</code></li>
+<li>Ambas se implementan de forma tal que su ejecución sea atómica (sin interrupciones en realidad)</li>
+<li>Caso particular: <code>mutex = lock = semáforo inicializado en 1</code></li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Productor-Consumidor con semáforos&quot;">Una posible implementación del mismo problema anterior pero usando semáforos:
+
+    semaforo mutex = 1;
+    semaforo llenos = 0;
+    semaforo vacios = N; // Capacidad del buffer
+
+    fn productor() {
+      while(true) {
+        item = producir_item();
+
+        // Entrando a zona crítica
+        wait(vacios);
+        wait(mutex);
+
+        agregar(item, buffer);
+        cant++;
+
+        signal(mutex);
+        signal(llenos);
+      }    
+    }
+
+    fn consumidor() {
+        while(true) {
+          wait(llenos); // espero a que &quot;me despierten&quot;
+
+          wait(mutex); // acceso exclusivo al buffer
+          item = sacar(buffer);
+          cant--;
+
+          signal(mutex); // libero el buffer
+          signal(vacios); // incremento la &quot;capacidad del bufer&quot; trackeada por el semáforo. si estaba lleno (vacios = -1) ahora pasa a 0 y despierta al productor
+          hacer_algo(item); // zona no crítica
+        }
+      }
+</code></pre>
+<pre><code class="language-admonish warning title=&quot;Cuidado&quot;">Esto está muy lindo, pero **ojo**. Tan sólo invertir el orden de los `wait`/`signal` puede resultar en una situación en la que ambos se quedan esperando. Por ejemplo, si consumidor se implementara de la siguiente manera:
+
+    fn consumidor() {
+      wait(mutex);
+      wait(llenos);
+
+      // ... El resto igual
+    }  
+
+Imaginemos que :
+
+- el consumidor ejecuta primero y le toca hacer `wait(mutex)` (adquiere el mutex)
+- luego hace `wait(llenos);` y se queda esperando porque por ahora está en 0
+- luego ejecuta el productor, y hace `wait(vacios)` exitosamente pero al hacer `wait(mutex)` se va a quedar esperando porque el mutex ya estaba bloqueado por el consumidor.
+
+Esta situación en la que se da una dependencia de recursos cíclica entre procesos se llama **deadlock**, y es uno de los grandes problemas que surgen en la concurrencia manifestándose en todo tipo de sistemas.
+</code></pre>
+<h2 id="volviendo-al-siglo-21"><a class="header" href="#volviendo-al-siglo-21">Volviendo al siglo 21...</a></h2>
+<p>Hoy en día la mayoría de lenguajes de alto nivel proveen interfaces para implementar secciones críticas y manejo de concurrencia. Por ejemplo con:</p>
+<ul>
+<li>bool atómicos</li>
+<li>int atómico</li>
+<li>colas atómica</li>
+</ul>
+<h2 id="spin-locks"><a class="header" href="#spin-locks">Spin locks</a></h2>
+<p>Basándonos en el diseño que vimos de bools atómicos vamos a construir una serie de locks. El primero de ellos es el mutex llamado TASLock, o spin lock.</p>
+<pre><code>atomic&lt;bool&gt; reg;
+
+fn create() { reg.set(false); }
+fn lock() { while(reg.testAndSet()) {} }
+fn unlock() { reg.set(false); }
+</code></pre>
+<pre><code class="language-admonish warning title=&quot;Cuidado&quot;">`lock()` **no es atómico**
+</code></pre>
+<p>Ejemplo de uso:</p>
+<pre><code>TasLock mutex;
+
+int donar(int donacion) {
+    int res;
+
+    // inicia sección crítica
+    mutex.lock();
+    fondo += donacion;
+    mutex.unlock();
+    // Fin sección crítica
+
+    // inicio de otra sección crítica
+    mutex.lock();
+    res = ticket; ticket++;
+    mutex.unlock();
+    // Fin de la sección crítica
+
+    return res;
+}
+</code></pre>
+<p>Algunas observaciones sobre el TASLock:</p>
+<ul>
+<li>todo <code>lock()</code> necesita su <code>unlock()</code>, no hay que olvidárselo.</li>
+<li>usa busy waiting, ya dijimos que era menos malo.
+<ul>
+<li>esto igual depende, hay que comparar el overhead vs semáforos que tampoco son gratis</li>
+</ul>
+</li>
+<li>podemos minimizar el costo: en vez de usar <code>testAndSet()</code> de una, chequeás el valor de la variable antes de intentar (la operación es más barata).
+<ul>
+<li>Al implementar eso obtenemos un TTasLock</li>
+</ul>
+</li>
+</ul>
+<p>Ejemplo del TTasLock:</p>
+<pre><code>bool mutex;
+fn create() { mutex.set(false); }
+fn lock() {
+    while(true) {
+      while (mutex.get()) { // true == ta lockeado }
+      if (!mutex.testAndSet()) return; // si da falso =&gt; no estaba lockeado y yo obtuve el lock, si no vuelvo a loopear
+    }
+}
+fn unlock() { mutex.set(false); }
+</code></pre>
+<p>Surge la natural pregunta: <strong>Cuánto mejora?</strong></p>
+<p><img src="./img/ttas_lock_vs_taslock.png" alt="Comparando TasLock y TTasLock" /></p>
+<h2 id="otro-tipo-de-operaciones-atómicas"><a class="header" href="#otro-tipo-de-operaciones-atómicas">Otro tipo de operaciones atómicas</a></h2>
+<h3 id="entero-atómico"><a class="header" href="#entero-atómico">Entero atómico</a></h3>
+<pre><code>atomic int getAndInc() { //... }
+atomic int getAndAdd(int v) { //... }
+atomic int compareAndSwap(T u, T v) { //... } // Esta operación compara el contenido con u y si es igual lo cambia por v (devolviendo u)
+</code></pre>
+<h3 id="cola"><a class="header" href="#cola">Cola</a></h3>
+<pre><code>atomic enqueue(T item) { // Uso lock para asegurar acceso exclusivo; }
+atomic dequeue(T *pitem) { // Uso lock para asegurar acceso exclusivo; }
+</code></pre>
+<h2 id="locks-recursivos"><a class="header" href="#locks-recursivos">Locks recursivos</a></h2>
+<p>El siguiente código genera deadlock:</p>
+<pre><code>fn f() {
+  mutex.lock();
+  f();
+  mutex.unlock();
+}
+</code></pre>
+<p>El siguiente también, cuando cada proceso ejecuta la primer linea (cada uno adquiere un lock nomás):</p>
+<pre><code>fn proceso_1() {
+  mutexA.lock();
+  mutexB.lock();
+  // ...
+}
+
+fn proceso_2() {
+  mutexB.lock();
+  mutexA.lock();
+  // ...
+}
+</code></pre>
+<h3 id="solución-mutex-reentrante-o-recursivo"><a class="header" href="#solución-mutex-reentrante-o-recursivo">Solución: Mutex reentrante o recursivo</a></h3>
+<p>Esquema de implementación V1, un mutex con un atomic int:</p>
+<pre><code>int calls;
+atomic&lt;int&gt; mutex;
+
+fn create() { mutex.set(0); }
+fn wait() { while(!mutex.testAndSet(1)) {} }
+fn signal() { mutex.set(0) }
+</code></pre>
+<p>Esquema V2, ahora si reentrante:</p>
+<pre><code>int calls;
+atomic&lt;int&gt; owner;
+
+fn create() { owner.set(-1); calls = 0; }
+fn lock() {
+    if (owner.get() != self) {
+      while(owner.compareAndSwap(-1, self) != self) // en alguna call lo adquiere y en la siguiente el compareAndSwap devuelve self
+    }
+    calls++;
+}
+
+fn unlock() {
+    if (--calls == 0) owner.set(-1);
+}
+</code></pre>
+<p>Esquema V3, ahora si con local spinning:</p>
+<pre><code>int calls;
+atomic&lt;int&gt; owner;
+
+fn create() { owner.set(-1); calls = 0; }
+fn lock() {
+    while (true) {
+      while (owner.get() != -1 and owner.get != self) {}
+      if(owner.compareAndSwap(-1, self) == self) { break; }
+    }
+    calls++;
+}
+
+fn unlock() {
+    if (--calls == 0) owner.set(-1);
+}
+</code></pre>
+<h2 id="condiciones-de-coffman"><a class="header" href="#condiciones-de-coffman">Condiciones de Coffman</a></h2>
+<p>Postula una serie de condiciones necesarias para la existencia de un deadlock:</p>
+<ul>
+<li><strong>Exclusión mutua</strong>: Un recurso no puede estar asignado a más de un proceso.</li>
+<li><strong>Hold and wait</strong>: Los procesos que ya tienen algún recurso pueden solicitar otro.</li>
+<li><strong>No preemption</strong>: No hay mecanismo para quitarle los recursos a un proceso por la fuerza</li>
+<li><strong>Espera circular</strong>: tiene que haber un ciclo de N &gt;= 2 procesos tal que \(P_i\) espera un recurso que tiene \( P_{i+1} \)</li>
+</ul>
+<p>Uno puede plantear un modelo con un grafo bipartito en donde tengo:</p>
+<ul>
+<li>Los nodos son procesos y recursos</li>
+<li>agrego un eje de un nodo de proceso a uno de recurso si el proceso solicitó el recurso</li>
+<li>agrego un eje de un recurso a un proceso si el proceso adquirió el recurso</li>
+<li>bajo este modelo tener un ciclo en el grafo es equivalente a tener un deadlock</li>
+</ul>
+<h2 id="problemas-de-sincronización"><a class="header" href="#problemas-de-sincronización">Problemas de sincronización</a></h2>
+<p>Mencionamos 1 tipo explícito de problemas pero hay varios:</p>
+<ul>
+<li>Deadlock: ya lo vimos</li>
+<li>Race condition: el acceso concurrente a un mismo recurso nos puede dejar en un estado inválido.</li>
+<li>Starvation: también conocido como inanición, es cuando un proceso se &quot;consume todos los recursos&quot; y no le permite a otros &quot;avanzar&quot;. Por ejemplo, un proceso que siempre &quot;gana&quot; la zona crítica y los otros siempre tienen que esperar. Es un problema en sí mismo, cómo aseguro que todos los procesos eventualmente puedan acceder a la zona crítica si lo requieren?</li>
+</ul>
+<p>Para tratar estos problemas tenemos algunas herramientas, pero no hay un &quot;one size fits all&quot;:</p>
+<ul>
+<li>patrones de diseño (o sea usar lo que ya sabemos que anda bien y no tiene problemas de concurrencia)</li>
+<li>reglas de programación (ej: pido locks en X orden y los libero en Y orden)</li>
+<li>Prioridades: para evitar Starvation</li>
+<li>Protocolo (similar a patrones de diseño, uso cosas que se que funcionan y no reinvento la rueda)</li>
+</ul>
+<p>Para detectar estos problemas hay algunas técnicas aunque hasta el día de hoy no hay un algoritmo que pueda detectar <strong>cualquier</strong> tipo de problema de concurrencia:</p>
+<ul>
+<li>análisis de programas
+<ul>
+<li>estático</li>
+<li>dinámico (profiling por ejemplo)</li>
+</ul>
+</li>
+<li>en tiempo de ejecución
+<ul>
+<li>preventivo (antes de que ocurra)</li>
+<li>recuperación (deadlock recovery. Por ejemplo las bases de datos tienen que hacer esto y abortar transacciones)</li>
+</ul>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="scheduling.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="sincronizacion.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="scheduling.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="sincronizacion.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

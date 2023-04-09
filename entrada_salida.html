@@ -1,0 +1,569 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Entrada/Salida - Notas Final Sistemas Operativos 2023</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./mdbook-admonish.css">
+        <link rel="stylesheet" href="././mdbook-admonish.css">
+        <link rel="stylesheet" href="./custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduccion.html"><strong aria-hidden="true">1.</strong> Introducción</a></li><li class="chapter-item expanded "><a href="sistema_operativo.html"><strong aria-hidden="true">2.</strong> Sistema Operativo</a></li><li class="chapter-item expanded "><a href="procesos_y_api.html"><strong aria-hidden="true">3.</strong> Procesos y API del SO</a></li><li class="chapter-item expanded "><a href="ipc.html"><strong aria-hidden="true">4.</strong> Intercomunicación Entre Procesos</a></li><li class="chapter-item expanded "><a href="scheduling.html"><strong aria-hidden="true">5.</strong> Scheduling</a></li><li class="chapter-item expanded "><a href="sincro_entre_procesos.html"><strong aria-hidden="true">6.</strong> Sincronización entre procesos</a></li><li class="chapter-item expanded "><a href="sincronizacion.html"><strong aria-hidden="true">7.</strong> Sincronización</a></li><li class="chapter-item expanded "><a href="administracion_de_memoria.html"><strong aria-hidden="true">8.</strong> Administración de Memoria</a></li><li class="chapter-item expanded "><a href="entrada_salida.html" class="active"><strong aria-hidden="true">9.</strong> Entrada/Salida</a></li><li class="chapter-item expanded "><a href="sistemas_de_archivos.html"><strong aria-hidden="true">10.</strong> Sistemas de Archivos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos.html"><strong aria-hidden="true">11.</strong> Sistemas Distribuidos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos_II.html"><strong aria-hidden="true">12.</strong> Sistemas Distribuidos - parte II</a></li><li class="chapter-item expanded "><a href="proteccion_y_seguridad.html"><strong aria-hidden="true">13.</strong> Protección y Seguridad</a></li><li class="chapter-item expanded "><a href="virtualizacion.html"><strong aria-hidden="true">14.</strong> Virtualización</a></li><li class="chapter-item expanded "><a href="microkernels.html"><strong aria-hidden="true">15.</strong> Microkernels</a></li><li class="chapter-item expanded "><a href="misc.html"><strong aria-hidden="true">16.</strong> Miscelaneos</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory_allocator_bsd.html"><strong aria-hidden="true">16.1.</strong> Design of a General Purpose Memory Allocator for the 4.3BSD UNIX Kernel</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Notas Final Sistemas Operativos 2023</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="entradasalida"><a class="header" href="#entradasalida">Entrada/Salida</a></h1>
+<p>Nos vamos a concentrar en dispositivos de almacenamiento. Dentro de estos se incluyen:</p>
+<ul>
+<li>Discos Rígidos (hoy también discos sólidos).</li>
+<li>Unidades de cinta: principalmente usados para backup</li>
+<li>Discos removibles: cd, dvd, disquette, usb, etc.</li>
+<li>discos virtuales (también llamados NAS: Network Attached Storage): NFS, CIFS,
+DFS, AFS, Coda</li>
+<li>Storage Area Network (SAN): similar a Nas, tengo el almacenamiento en red pero los protocolos que usa son específicos para este tipo de datos.</li>
+</ul>
+<h2 id="subsistema-de-io-y-modelo"><a class="header" href="#subsistema-de-io-y-modelo">Subsistema de I/O y Modelo</a></h2>
+<p>Conceptualmente un dispositivo de I/O consta de dos partes:</p>
+<ul>
+<li>El dispositivo físico</li>
+<li>Un <strong>controlador del dispositivo</strong> (ojo, no son los drivers de software si no
+de hw) que interactúa con el SO mediante algún bus o registro.</li>
+</ul>
+<p>Al igual que con otros subsistemas, el sistema operativo mediante <strong>drivers</strong> logra abstraer detalles propios del dispositivo al usuario:</p>
+<p><img src="./img/io_subsystem.png#floating" alt="layout subsistema I/O" /></p>
+<ul>
+<li>Los drivers conocen las particularidades del HW con el que se comunican.</li>
+<li>Por lo general los drivers son provistos por el mismo fabricante de HW que el
+dispositivo.</li>
+<li>Distintos modelos de un mismo fabricante pueden usar distintos drivers.</li>
+<li>Por ejemplo, algo a considerar por un driver puede ser qué bit hay que leer
+para marcar el final de una operación.</li>
+<li>Tienen un impacto muy grande sobre el rendimiento del sistema:
+<ul>
+<li>corren en máximo privilegio (a.k.a te pueden hacer bosta todo el sistema)</li>
+<li>De ellos depende el rendimiento del I/O que como vimos es frecuentemente
+usado y fundamental para el rendimiento general del sistema.</li>
+</ul>
+</li>
+</ul>
+<h2 id="formas-de-io"><a class="header" href="#formas-de-io">Formas de I/O</a></h2>
+<p>Vemos 3 formas de implementar I/O (por lo general en la práctica están disponibles las 3):</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th>Polling</th><th>Interrupciones (o push)</th><th>DMA (acceso directo a memoria)</th></tr></thead><tbody>
+<tr><td>📄 Desc.</td><td>El driver periódicamente verifica si el dispositivo se comunicó</td><td>El dispositivo avisa mediante interrupciones</td><td>La CPU no interviene (por lo general para transferir grandes volúmenes de info)</td></tr>
+<tr><td>✅ Ventajas</td><td>Cambios de contexto predecibles</td><td>Eventos asincrónicos poco frecuentes</td><td>Cuando el controlador de DMA finaliza, interrupe a la CPU (1 vs varios para comunicarse en interrupciones)</td></tr>
+<tr><td>💀 Desventajas</td><td>Alto consumo de CPU</td><td>Cambios de contexto impredecibles</td><td>Necesitás el componente específico de HW (controlador de DMA)</td></tr>
+</tbody></table>
+</div>
+<h2 id="api-de-io"><a class="header" href="#api-de-io">API de I/O</a></h2>
+<p>Tenemos las syscalls:</p>
+<ul>
+<li><code>open()</code>/ <code>close()</code></li>
+<li><code>read()</code> / <code>write()</code></li>
+<li><code>seek()</code></li>
+</ul>
+<p>Ocultan bastante de la complejidad, aunque hay algunos detalles que se exponen (ej: si se obtiene acceso exclusivo al dispositivo o no)</p>
+<h2 id="tipos-de-dispositivos"><a class="header" href="#tipos-de-dispositivos">Tipos de dispositivos</a></h2>
+<p>Los dispositivos pueden separarse en 2 grupos:</p>
+<ul>
+<li><strong>char device</strong>: 
+<ul>
+<li>la info se transmite byte a byte, debido a eso no tienen acceso aleatorio y utilizan caches para mejorar la performance.</li>
+<li>ej: mouse, teclado, terminales, puerto serie.</li>
+</ul>
+</li>
+<li><strong>block device</strong>:
+<ul>
+<li>se transmite info en bloque, permite acceso aleatorio y en general usan un buffer.</li>
+<li>ej: disco rígido, memoria flash, cd rom</li>
+</ul>
+</li>
+</ul>
+<p>Si bien esta es una clasificación general, la comunicación con dispositivos tiene otras variables:</p>
+<ul>
+<li>Si es lectura, escritura o lecto-escritura</li>
+<li>Si es compartido o dedicado</li>
+<li>Si es sincrónico o asincrónico</li>
+<li>La velocidad de respuesta del dispositivo</li>
+</ul>
+<p>Parte del objetivo del SO y la api de I/O es ocultar la mayor cantidad de
+detalles posibles y a la vez brindar acceso consistente a toda la fauna de
+dispositivos.</p>
+<pre><code class="language-admonish info title=&quot;Dispositivos en Linux&quot; collapsible=true">Los dispoistivos en linux están representados por archivos y se ubican en el directorio `/dev`. En el siguiente ejemplo, podemos ver que el archivo contiene información del tipo de archivo (c para char device, b para block device):
+
+```bash
+ls -lh /dev
+crw-rw-rw-  1 root    wheel        0x9000001 Mar  5 12:06 cu.wlan-debug
+brw-r-----  1 root    operator     0x1000000 Mar  5 12:06 disk0
+brw-r-----  1 root    operator     0x1000001 Mar  5 12:06 disk0s1
+brw-r-----  1 root    operator     0x1000002 Mar  5 12:06 disk0s2
+brw-r-----  1 root    operator     0x1000003 Mar  5 12:06 disk0s3
+```
+</code></pre>
+<pre><code class="language-admonish info title=&quot;API de I/O en linux&quot;">En el caso de linux, bajo la premisa de que *&quot;todo es un archivo&quot;* se proveen funciones de alto nivel para acceso a archivos:
+
+- `fopen()`, `fclose()`
+- `fread()`, `fwrite()`: modo bloque
+- `fgetc()`, `fputc()`: modo char
+- `fgets()`, `fputs()`: modo char stream (ej: con esto puedo escribir en consola)
+- `fscanf()`, `fprintf()`: modo char con formato
+</code></pre>
+<h2 id="planificación-de-io"><a class="header" href="#planificación-de-io">Planificación de I/O</a></h2>
+<p>En el caso del disco, una de las claves para obtener un buen rendimiento es
+optimizar los accesos al mismo. Esto es porque el disco consiste de una cabeza
+que se mueve, y eso lleva tiempo. Si junto varios pedidos y los ordeno de
+manera tal que minimice la cantidad de movimientos voy a mejorar mucho la
+performance.</p>
+<p>La planificación de disco entronces se trata de cómo manejar la cola de pedidos
+de I/O para lograr el mejor rendimiento posible. Es un equilibrio entre ancho
+de banda, latencia rotacional y <strong>tiempo de búsqueda (seek time)</strong>, que es el
+tiempo necesario para que la cabeza se ubique sobre el cilindro que tiene el
+sector deseado.</p>
+<h3 id="políticas-de-scheduling-de-io-a-disco"><a class="header" href="#políticas-de-scheduling-de-io-a-disco">Políticas de scheduling de I/O a disco</a></h3>
+<p>Tenemos algunos esquemas:</p>
+<ul>
+<li>FIFO
+<ul>
+<li>problema: estoy moviendo la cabeza de un lado a otro, a menos que los
+pedidos &quot;se porten bien&quot;.</li>
+</ul>
+</li>
+<li>Shortest Seek Time First (SSTF)
+<ul>
+<li>idea: atiendo como próximo al pedido más cercano a la posición actual de la
+cabeza (o sea es un algoritmo goloso)</li>
+<li>si bien mejora el tiempo de respuesta, puede producit inanición</li>
+</ul>
+</li>
+<li><strong>Algoritmo scan o del ascensor</strong>
+<ul>
+<li>idea: ir primero en un sentido, atendiendo los pedidos en el camino. Luego
+vuelvo y hago lo mismo.</li>
+<li>es una mejora, aunque si me piden un sector por donde acaba de pasar la
+cabeza tardo muuuuucho.</li>
+<li>además no es tan uniforme (predecible) el tiempo de espera</li>
+</ul>
+</li>
+<li><strong>C-Scan</strong>: igual a scan pero al llegar al final vuelve al principio sin
+atender otros pedidos (asume que el disco es una lista circular)</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Nota&quot;">En la práctica ninguno de estos algoritmos se usan al 100%, suele ser una mezcla entre estos, prioridades, caches, etc.
+</code></pre>
+<h2 id="ssd"><a class="header" href="#ssd">SSD</a></h2>
+<p>Hoy en día prolifera el uso de discos de estado sólido (SSD). Si bien tienen notables ventajas (más resistentes, menor consumo, más silenciosos, mejor performance de lectura), también presenta sus propios problemas:</p>
+<ul>
+<li>durabilidad</li>
+<li>write amplification</li>
+</ul>
+<!-- TODO: expandir esto -->
+<h2 id="gestión-del-disco"><a class="header" href="#gestión-del-disco">Gestión del disco</a></h2>
+<h3 id="formateo"><a class="header" href="#formateo">Formateo</a></h3>
+<p>Consiste en poner por cada sector códigos para detección de errores,
+puntualmente un prefijo y un postfijo. Si al leer un sector, el prefijo y
+postfijo no tienen el valor esperado es porque el sector está dañado.</p>
+<h3 id="booteo"><a class="header" href="#booteo">Booteo</a></h3>
+<p>Las computadoras suelen tener un programa en ROM que carga algunos sectores del
+principio del disco, y los comienza a ejecutar (bootloader?). Dicho programa es
+muy pequeño y solamente sirve para cargar el OS, no es un OS en sí mismo.</p>
+<h3 id="manejo-de-bloques-dañados"><a class="header" href="#manejo-de-bloques-dañados">Manejo de bloques dañados</a></h3>
+<p>Hay distintas formas de atajarnos:</p>
+<ul>
+<li>por software, si hacemos que el sistema de archivos se encarge de la gestión
+de bloques dañados</li>
+<li>por hardware:
+<ul>
+<li>hay discos que vienen con sectores extra para reemplazar a los defectuosos.
+A veces algunos discos traen sectores extra en todos los cilindros</li>
+<li>cuando la controladora detecta un bloque dañado puede actualizar una tabla
+interna de remapeo para usar un sector distinto (esto puede interferir con
+las optimizaciones del scheduler de I/O)</li>
+</ul>
+</li>
+</ul>
+<h2 id="spooling-simultaneous-peripheral-operation-on-line"><a class="header" href="#spooling-simultaneous-peripheral-operation-on-line">Spooling (Simultaneous Peripheral Operation On-Line)</a></h2>
+<p>Spooling permite interactuar con dispositivos que requieren acceso dedicado sin
+bloquear al proceso que los necesita. El ejemplo más distintivo es el de la
+impresora. Cuando uno imprime, en lugar de bloquearse el proceso hasta tener
+acceso, se encola el trabajo en una cola específica y se tiene un proceso que
+se encarga de desencolarla a medida que la impresora (o el dispositivo en otros
+casos) se libera.</p>
+<pre><code class="language-admonish info title=&quot;Nota&quot;">En el caso de spooling, el usuario es consciente de que ocurre pero el kernel no.
+</code></pre>
+<h2 id="protección-de-la-información"><a class="header" href="#protección-de-la-información">Protección de la información</a></h2>
+<p>Vamos a ver algunas técnicas que podemos emplear para proteger nuestros datos.
+Muchas veces dependiendo del tipo de dato, del valor que le asignemos y el
+costo de mantenerlo vamos a optar por una u otra manera. Con proteger nuestros
+datos nos referimos a por ejemplo que el disco falle y se descomponga algún
+sector (o el disco entero), a que tengo una aplicación que está corriendo 24/7
+y tengo que tener tolerancia a fallas, etc. Las dos técnicas que vamos a ver son:</p>
+<ul>
+<li>copias de seguridad</li>
+<li>redundancia</li>
+</ul>
+<pre><code class="language-admonish note">En particular **la redundancia no nos protege de la modificación/eliminación
+accidental de la información**. Es por eso que se suelen combinar ambas técnicas.
+Hay casos sin embargo en donde ninguna de las técnicas nos salva (en algún
+momento corrompemos datos/archivos y nos damos cuenta tarde con varios backups
+encima). En esos casos los sistemas de archivos nos deberían brindar algunas
+protecciones para que eso no pase (o al menos no pase seguido).
+</code></pre>
+<h3 id="copias-de-seguridad"><a class="header" href="#copias-de-seguridad">Copias de seguridad</a></h3>
+<p>Hacer una <strong>copia de seguridad (backup)</strong> consiste en resguardar los datos
+(obviamente solo los importantes) en otro lado. Para grandes volúmenes de info,
+se suele hacer en cinta o discos duros (Si es algo hogareño podés hacerlo con
+el dispositivo de almacenamiento externo que te plazca). De vuelta, en caso de
+sistemas con mucha data, se suelen programar los backups para que se hagan de
+noche.</p>
+<p>Sin embargo, copiar <strong>todos</strong> los datos es muy caro. Por eso podemos implementar distintas estrategias:</p>
+<ul>
+<li>hacer una <strong>copia total</strong> con cierta frecuencia (cada semana, mes, bimestre, etc.)</li>
+<li>hacer una <strong>copia incremental</strong> (por ejemplo cada noche): sólo guarda los archivos modificados <strong>desde la última copia incremental</strong></li>
+<li>hacer una <strong>copia diferencial</strong>: sólo guarda los archivos modificados desde la última copia total (obviamente combino esto con hacer una copia total cada tanto).</li>
+</ul>
+<p>Cuando llega la hora de restaurar:</p>
+<ul>
+<li>si sólo hago copias totales restauro la que quiero y listo</li>
+</ul>
+<p>\[
+\text{Hoy} = \text{último total}
+\]</p>
+<ul>
+<li>si hago copias diferenciales, agarro la última copia total y aplico la última
+copia diferencial</li>
+</ul>
+<p>\[
+\text{Hoy} = \text{último total} + \text{último diferencial}
+\]</p>
+<ul>
+<li>si hago copias incrementales, agarro la última copia total y aplico desde la
+primera incremental después de la total hasta la última (en ese orden)</li>
+</ul>
+<p>\[
+\text{Hoy} = \text{último total} + \sum_i  \text{incremental}_i
+\]</p>
+<h3 id="redundancia"><a class="header" href="#redundancia">Redundancia</a></h3>
+<p>El uso de redundancia es clave en sistemas que tienen que estar up 24/7, de
+forma tal que las fallas en discos no te tiren el sistema (por supuesto, puede
+caer un meteorito en cada datacenter del planeta y ahí cagaste)</p>
+<p>Un método muy usado es <strong>RAID</strong>: <strong>R</strong>edundant <strong>A</strong>rray of <strong>I</strong>nexpensive <strong>D</strong>isks. La técnica fue evolucionando por lo que tenemos RAID en sus distintas versiones:</p>
+<p>Podemos resumir en la siguiente tabla las distintas versiones (las más usadas en la práctica) de RAID:</p>
+<!-- TODO: armar tabla -->
+<p><img src="./img/raid_0.png#floating" alt="" /></p>
+<ul>
+<li><strong>RAID 0 (stripping)</strong>
+<ul>
+<li>necesito 2 discos</li>
+<li>Parto el archivo (o data) en pedacitos y mando algunos pedacitos a un disco y otros pedacitos a otro</li>
+<li>en realidad no aporta redundancia, pero mejora el rendimiento (mejor ancho de banda y permito escrituras en paralelo)</li>
+</ul>
+</li>
+</ul>
+<!-- needed for images not to overlap -->
+<p><br><br><br><br></p>
+<p><img src="./img/raid_1.png#floating" alt="" /></p>
+<ul>
+<li><strong>RAID 1 (mirroring)</strong>
+<ul>
+<li>2 discos</li>
+<li>espejo la data, si se cae un disco entero todavía tengo la copia en el otro</li>
+<li>mejora el rendimiento de las lecturas pero en peor caso tardo el doble en escribir (muy caro).</li>
+</ul>
+</li>
+</ul>
+<!-- needed for images not to overlap -->
+<p><br><br><br><br><br></p>
+<ul>
+<li><strong>RAID 0+1</strong></li>
+</ul>
+<p><img src="./img/raid_0_plus_1.png#center" alt="" /></p>
+<ul>
+<li>
+<ul>
+<li>4 discos</li>
+<li>combina los dos anteriores: cada archivo está espejado, pero al leer leo un bloque de cada disco.</li>
+<li>leo como si usara stripping en lugar de sólo mirroring, pero al escribir hay que escribir en cada bloque de ambos.</li>
+</ul>
+</li>
+<li>
+<p><strong>RAID 2 y 3</strong></p>
+<ul>
+<li>La idea es guardar por bloque info suficiente para determinar si se dañó o no, y a veces puedo corregir errores con esa info.</li>
+<li>sigo distribuyendo los bloques entre todos los discos participantes</li>
+<li>nro. discos
+<ul>
+<li>RAID 2: 3 de paridad por cada 4 de datos</li>
+<li>RAID 3: 1 disco de paridad por cada 4 de datos</li>
+</ul>
+</li>
+<li>todos los discos participan de todo I/O, por lo que es más lento que incluso RAID 1</li>
+<li>Requiere mucho cómputo recalcular redundancias</li>
+<li>si se implementa es por HW</li>
+</ul>
+</li>
+<li>
+<p><strong>RAID 4</strong></p>
+<ul>
+<li>como RAID 3 pero usa stripping por bloque (cada bloque va a un único disco)</li>
+<li>el bottleneck sigue siendo el disco dedicado a paridad porque todo write tiene que tocarlo</li>
+</ul>
+</li>
+<li>
+<p><strong>RAID 5</strong></p>
+</li>
+</ul>
+<p><img src="./img/raid_5.png#halfcenter" alt="" /></p>
+<ul>
+<li>
+<ul>
+<li>Usa datos redundantes pero los distribuye en N + 1 discos (cada write consecutivo va a discos distintos)</li>
+<li>para cada bloque, un disco tiene la data y otro tiene info de paridad (hay info de paridad en todos los discos)</li>
+<li>ya no tengo cuello de botella para los writes, pero mantener la paridad no es fácil</li>
+<li>cae el rendimiento en la reconstrucción de info</li>
+</ul>
+</li>
+<li>
+<p><strong>RAID 6</strong></p>
+</li>
+</ul>
+<p><img src="./img/raid_6.png#halfcenter" alt="" /></p>
+<ul>
+<li>
+<ul>
+<li>como RAID 5 pero agrega un segundo bloque de paridad también distribuido, puede soportar la rotura de hasta 2 discos</li>
+<li>No hay diferencia sustancial vs RAID 5 respecto del espacio desperdiciado (en la práctica se suele usar RAID 5 + hot spare)</li>
+</ul>
+</li>
+</ul>
+<h2 id="miscelaneos"><a class="header" href="#miscelaneos">Miscelaneos</a></h2>
+<h3 id="ram-como-dispositivo"><a class="header" href="#ram-como-dispositivo">RAM como dispositivo</a></h3>
+<p>Es posible crear <strong>RAM Drives</strong>, que consisten en separar una porción de la
+DRAM del sistema y presentarlo al resto del sistema como si fuera otro
+dispositivo de almacenamiento. Por qué tendría sentido hacer esto? Si bien el
+SO usa caches y buffers para por ejemplo optimizar operaciones de I/O, esto le
+permite <strong>al usuario</strong> guardar data en la memoria usando operaciones con
+archivos. Si bien los dispositivos NVM (ej: SSD) son rápidos, la ram sigue
+siendo mucho más rápido.</p>
+<h3 id="flujo-de-un-pedido-de-lecturaescritura-a-disco"><a class="header" href="#flujo-de-un-pedido-de-lecturaescritura-a-disco">Flujo de un pedido de lectura/escritura a disco</a></h3>
+<ol>
+<li>Cuando un proceso necesita <strong>I/O</strong> llama a una syscall del sistema
+operativo. La syscall tiene varios parámetros:</li>
+</ol>
+<ul>
+<li>tipo de operación (Input o Output)</li>
+<li>el file descriptor indicando el archivo sobre el que se opera</li>
+<li>la dirección de memoria de donde transferir</li>
+<li>la cantidad de data a transferir</li>
+</ul>
+<ol start="2">
+<li>Si el disco y su controlador están disponibles, el pedido se atiende
+inmediatamente. Si no, los pedidos se guardan en una cola de pendientes para
+ese disco. Como vimos antes, el scheduler de I/O puede ordenar esa cola con
+fines de mejorar la performance.</li>
+</ol>
+<pre><code class="language-admonish info">En el pasado, era necesario especificar el track y qué cabeza del HDD usar, y
+los algoritmos de scheduling de disco eran más complejos. Hoy en día mediante
+el uso de LBAs (Logical Block Addresses) incluso el SO es abstraido de lo que
+en realidad pasa en la memoria. Sin embargo, se sigue asumiendo que LBAs
+cercanas significan accesos cercanos (físicamente hablando). Por lo tanto sigue
+teniendo sentido tener consideraciones como:
+
+- lecturas/escrituras en bloque
+- fairness
+- timeliness
+</code></pre>
+<h3 id="el-deadline-scheduler-de-linux"><a class="header" href="#el-deadline-scheduler-de-linux">El <strong>deadline scheduler</strong> de linux</a></h3>
+<p>Los algoritmos que vimos de scheduling de I/O tienen una desventaja muy grande,
+y es que pueden producir inanición. Linux para resolver esto implementó el
+<strong>deadline scheduler</strong>. </p>
+<p>Este scheduler mantiene 4 colas, dos de lectura y dos de escritura. La primera
+cola es aquella ordenada por LBA (implementando en cierta forma un C-Scan), y
+la segunda es una FIFO a la que se mandan todos aquellos pedidos que superan el
+tiempo límite configurado (500ms por default).</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="administracion_de_memoria.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="sistemas_de_archivos.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="administracion_de_memoria.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="sistemas_de_archivos.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

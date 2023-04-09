@@ -1,0 +1,511 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Protección y Seguridad - Notas Final Sistemas Operativos 2023</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./mdbook-admonish.css">
+        <link rel="stylesheet" href="././mdbook-admonish.css">
+        <link rel="stylesheet" href="./custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduccion.html"><strong aria-hidden="true">1.</strong> Introducción</a></li><li class="chapter-item expanded "><a href="sistema_operativo.html"><strong aria-hidden="true">2.</strong> Sistema Operativo</a></li><li class="chapter-item expanded "><a href="procesos_y_api.html"><strong aria-hidden="true">3.</strong> Procesos y API del SO</a></li><li class="chapter-item expanded "><a href="ipc.html"><strong aria-hidden="true">4.</strong> Intercomunicación Entre Procesos</a></li><li class="chapter-item expanded "><a href="scheduling.html"><strong aria-hidden="true">5.</strong> Scheduling</a></li><li class="chapter-item expanded "><a href="sincro_entre_procesos.html"><strong aria-hidden="true">6.</strong> Sincronización entre procesos</a></li><li class="chapter-item expanded "><a href="sincronizacion.html"><strong aria-hidden="true">7.</strong> Sincronización</a></li><li class="chapter-item expanded "><a href="administracion_de_memoria.html"><strong aria-hidden="true">8.</strong> Administración de Memoria</a></li><li class="chapter-item expanded "><a href="entrada_salida.html"><strong aria-hidden="true">9.</strong> Entrada/Salida</a></li><li class="chapter-item expanded "><a href="sistemas_de_archivos.html"><strong aria-hidden="true">10.</strong> Sistemas de Archivos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos.html"><strong aria-hidden="true">11.</strong> Sistemas Distribuidos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos_II.html"><strong aria-hidden="true">12.</strong> Sistemas Distribuidos - parte II</a></li><li class="chapter-item expanded "><a href="proteccion_y_seguridad.html" class="active"><strong aria-hidden="true">13.</strong> Protección y Seguridad</a></li><li class="chapter-item expanded "><a href="virtualizacion.html"><strong aria-hidden="true">14.</strong> Virtualización</a></li><li class="chapter-item expanded "><a href="microkernels.html"><strong aria-hidden="true">15.</strong> Microkernels</a></li><li class="chapter-item expanded "><a href="misc.html"><strong aria-hidden="true">16.</strong> Miscelaneos</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory_allocator_bsd.html"><strong aria-hidden="true">16.1.</strong> Design of a General Purpose Memory Allocator for the 4.3BSD UNIX Kernel</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Notas Final Sistemas Operativos 2023</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="protección-y-seguridad"><a class="header" href="#protección-y-seguridad">Protección y Seguridad</a></h1>
+<h2 id="ojo-son-cosas-distintas"><a class="header" href="#ojo-son-cosas-distintas">Ojo, son cosas distintas...</a></h2>
+<p>Por un lado, protección se trata de los mecanismos para que nadie pueda tocar
+los datos de otro. O sea poder decidir qué usuario puede hacer cada cosa.</p>
+<p>Por otro lado, tenemos seguridad que trata de asegurarse que los usuarios sean
+quien dicen ser y de impedir la destrucción/adulteración de datos.</p>
+<p>De todos modos nosotros medio que lo tomamos en cuenta como lo mismo. Una definición más moderna de seguridad (de la información. No confundir con seguridad informática) es la preservación de las siguientes características:</p>
+<ul>
+<li>Confidencialidad</li>
+<li>Integridad -&gt; Datos no adulterados</li>
+<li>Disponibilidad</li>
+</ul>
+<h2 id="subsistema-de-seguridad-de-un-so"><a class="header" href="#subsistema-de-seguridad-de-un-so">Subsistema de seguridad de un SO</a></h2>
+<p>Los sistemas de seguridad suelen tener:</p>
+<ul>
+<li>Sujetos: usuarios, grupos de usuarios (roles), procesos (también podría contar como objeto)</li>
+<li>Objetos: archivos, dispositivos, pipes, etc.</li>
+<li>Acciones: leer, borrar, escribir, sobreescribir, propagar permisos</li>
+</ul>
+<p>La idea de un sistema de seguridad es determinar qué sujetos pueden realizar qué acciones sobre qué objetos.</p>
+<h3 id="las-tres-a-que-garantiza-el-sistema-de-seguridad"><a class="header" href="#las-tres-a-que-garantiza-el-sistema-de-seguridad">Las tres A que garantiza el sistema de seguridad</a></h3>
+<ul>
+<li>Autenticación (Authentication): ver que alguien sea quien dice ser. Se usan distintas técnicas por lo general combinadas con criptografía para lograr esto:
+<ul>
+<li>Contraseñas</li>
+<li>Datos biométricos (Huella digital, Patrón de circulación de sangre)</li>
+</ul>
+</li>
+<li>Autorización (Authorization): qué permisos tenés y qué te permiten hacer</li>
+<li>Auditoría (Accounting): dejar un registro de todo lo que sucedió / que hiciste</li>
+</ul>
+<h3 id="algo-sobre-criptografía"><a class="header" href="#algo-sobre-criptografía">Algo sobre criptografía</a></h3>
+<p>Tenemos dos ramas usualmente confundidas. En primer lugar, la <strong>Criptografía</strong> es
+la rama de las matemáticas e informática que se encarga de hacer que la info no
+sea accedible a terceros (encripción/cifrado y desenccripción/descifrado).</p>
+<p>Por otro lado está el criptoanálisis que se encarga del estudio de los métodos
+que rompen textos cifrados cuando no tengo la clave.</p>
+<p>Hasta 1970, la técnica que predominaba era la del uso de mecanísmos simétricos,
+o sea que tienen una única clave que se usa para encriptar y desencriptar. Por
+ejemplo: Cifrado Caesar, DES, Blowfish, AES.</p>
+<p>A partir del 1970, con el uso de <strong>mecanismos asimétricos</strong> como RSA esto
+cambió. Los mecanismos asimétricos a diferencia de sus contrapartes usan
+distintas claves: una para encriptar y otra para desencriptar. Una de las dos
+es una clave pública que todos conocen y la otra es la privada que sólo se
+supone que la conozca yo.</p>
+<p>Hoy en día también contamos con <strong>funciones de has one-way</strong>, como son MD5,
+SHA1, SHA-256, etc.</p>
+<p>Una constante que se ve en casi todos los casos es que en cada lugar hay que
+hacer un tradeoff entre qué tan seguro es el protocolo que aplico vs qué tan
+rápido es.</p>
+<h2 id="autenticación"><a class="header" href="#autenticación">Autenticación</a></h2>
+<h3 id="funciones-de-hash"><a class="header" href="#funciones-de-hash">Funciones de hash</a></h3>
+<p>Si bien ya conocemos las funciones de hash, en cripto se suelen usar funciones de hash especiales que aseguren:</p>
+<ul>
+<li>resistencia a la preimagen: es difícil encontrar alguna preimagen de un hash
+resultante.</li>
+<li>resistencia a la segunda preimagen. También tiene que ser difícil dado un
+valor, encontrar otro distinto cuyo hash sea el mismo (o sea encontrar una
+colisión)</li>
+</ul>
+<p>Por lo general son útiles para almacenar contraseñas (es raro que se guarde la
+contraseña en texto plano porque alguien que obtenga acceso obtiene las
+contraseñas), aunque se puede ir más allá y usar SALT. El uso de un SALT mitiga
+el uso de algunos ataques (hash tables y rainbow tables), y consiste en meter
+aleatoreidad al input de la función de hash. De esa forma puede parecer que dos
+inputs iguales tienen distinta función de hash. Por ejemplo, puedo generar un
+string random y appendearlo a la contraseña antes de calcular el hash. También
+puedo repetir el proceso de SALTeo varias veces para reducir la chance de que
+el salt sea el mismo para dos contraseñas. El salt se guarda en el servidor
+junto con el hash.</p>
+<p>Para más info, <a href="https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/">este post</a> de auth0 está muy bueno.</p>
+<h3 id="método-rsa"><a class="header" href="#método-rsa">Método RSA</a></h3>
+<ul>
+<li>tomo dos números de muchos dígitos, uno va a ser la clave pública y el otro
+la clave privada. No sólo eso si no también queremos que sean primos.</li>
+<li>para encriptar un mensaje, interpreto cada letra como si fuera un número y
+hago una cuenta que involucra a la clave pública.</li>
+<li>para desencriptar, necesito la clave privada y nuevamente hacer una cuenta.</li>
+</ul>
+<p>Veamos un poco de detalle:</p>
+<ul>
+<li>tenemos los números \( p \) y \( q \) mencionados anteriormente.</li>
+<li>definamos \( n = pq \) y \( n' = (p-1)(q-1) \)</li>
+<li>elijamos cualquier entero \( e \) entre \( 2 \) y \( n' - 1 \) que sea coprimo con \( n' \).</li>
+<li>calculamos \( d \) tal que \( de = 1 \text{ mod }n' \) (es fácil de hacer).</li>
+<li>encriptar(c): calculo el resto de dividir \( c^e \) por \( n \)</li>
+<li>desencriptar(c): calculo el resto de dividir \( c^d \) por \( n \)</li>
+</ul>
+<p>El método funciona en la práctica porque factorizar es difícil (problema NP), y
+no puedo encontrar el valor de la clave privada únicamente partiendo de la
+pública.</p>
+<p>Un detalle importante es que las operaciones de encripción y desencripción son
+inversas entre sí. O sea \(Enc(Dec(M)) = M = Dec(Enc(M))\). Esto permite como
+veremos más adelante hacer firmas digitales con mi clave privada.</p>
+<p>Para una explicación más a fondo recomiendo <a href="https://eli.thegreenplace.net/2019/rsa-theory-and-implementation/">este
+post</a>, que
+tiene desde la teoría hasta detalles de implementación y una implementación
+hecha en go.</p>
+<h3 id="usando-rsa-para-firmas-digitales"><a class="header" href="#usando-rsa-para-firmas-digitales">Usando RSA para firmas digitales</a></h3>
+<p>Situación: quiero enviar un archivo pero quiero que estén seguros de que fui yo y nadie más. Puedo usar RSA para eso:</p>
+<ol>
+<li>calculo un hash del documento que quiero firmar</li>
+<li>encripto con mi clave privada el hash</li>
+<li>Entrego el documento + el hash encriptado</li>
+<li>El receptor lo puede desencriptar con mi clave pública. Si efectivamente lo pudo desencriptar es porque yo fui el autor.</li>
+<li>Por último chequea que el hash coincida con el documento.</li>
+</ol>
+<p>Ventajas de usar firmas digitales:</p>
+<ul>
+<li>asegura integridad (lo que firmé no se adulteró en el proceso)</li>
+<li>asegura no repudio: es mi firma y no puedo decir que no lo es</li>
+</ul>
+<h2 id="autorización"><a class="header" href="#autorización">Autorización</a></h2>
+<h3 id="monitor-de-referencias"><a class="header" href="#monitor-de-referencias">Monitor de referencias</a></h3>
+<p>El monitor de referencias es el encargado de mediar sobre las solicitudes de
+acceso a objetos por parte de los usuarios. Se basan en algúna política de
+acceso.</p>
+<p><img src="./img/reference_monitor.png#center" alt="" /></p>
+<h3 id="representando-permisos"><a class="header" href="#representando-permisos">Representando permisos</a></h3>
+<p>La forma más sencilla de implementar la autorización es mediante una matriz de
+control de accesos, es una matriz indexada en Sujetos y Objetos y el contenido
+de las celdas tienen las acciones permitidas. Si algo no está en la celda no se
+puede hacer, basándonos en el principio del mínimo privilegio. Y se suelen
+tener definidos permisos por defecto para cuando se crea un objeto nuevo.
+También por lo general ese default cambia según el tipo de objeto.</p>
+<p>Se puede almacenar como una matriz centralizada, o separada por filas /
+columnas. Esto tiene sentido si pensamos que por ejemplo los archivos suelen
+guardar lo que el usuario puede hacer consigo mismos.</p>
+<h3 id="dac-vs-mac"><a class="header" href="#dac-vs-mac">DAC vs MAC</a></h3>
+<p>Hay dos esquemas posibles para tomar para nuestra política de acceso:</p>
+<ul>
+<li>Discretionary Access Control: se basa en que los atributos de seguridad se tienen que definir explícitamente. O sea que el dueño decide los permisos.</li>
+<li>Mandatory Access Control: 
+<ul>
+<li>En este caso cada sujeto tiene un grado.</li>
+<li>Los objetos creados heredan el agrado del último sujeto que los modifica.</li>
+<li>Un sujeto sólo puede acceder a objetos de grado menor o igual.</li>
+<li>suele implementarse en entornos de manejo de info sensible.</li>
+</ul>
+</li>
+</ul>
+<h3 id="dac-en-unix"><a class="header" href="#dac-en-unix">DAC en UNIX</a></h3>
+<p>El esquema usado en UNIX es el de DAC. Veamos un ejemplo de qué tipo de permisos existen:</p>
+<pre><code class="language-bash"># En particular sólo me interesa la columna de permisos
+&gt; ls -lh
+drwx------@ - -  -   -  - 
+drwxr-xr-x  - -  -   -  - 
+drwx------+ - -  -   -  - 
+drwx------+ - -  -   -  - 
+drwx------@ - -  -   -  - 
+drwx------@ - -  -   -  - 
+-rw-r--r--  - -  -   -  - 
+drwx------  - -  -   -  - 
+drwx------+ - -  -   -  - 
+drwx------+ - -  -   -  - 
+drwxr-xr-x+ - -  -   -  - 
+drwxr-xr-x  - -  -   -  - 
+drwxr-xr-x  - -  -   -  - 
+drwxr-xr-x  - -  -   -  - 
+drwxr-xr-x  - -  -   -  - 
+drwxr-xr-x  - -  -   -  - 
+</code></pre>
+<p>Qué significan esas letras y símbolos?</p>
+<p><img src="./img/basic_permissions_unix.png#center" alt="" /></p>
+<p>Uno de los ejemplos:</p>
+<ul>
+<li>permisos: <code>drwxr-xr-x</code></li>
+<li>permisos de dueño: <code>drwx</code> -&gt; es un directorio, el dueño puede leer, escribir y ejecutar</li>
+<li>permisos de grupo: <code>r-x</code> -&gt; el grupo puede leer y ejecutar pero no escribir</li>
+<li>permisos de usuarios: <code>r-x</code> -&gt; los usuarios pueden leer y ejecutar pero no escribir</li>
+</ul>
+<p>También por abajo los permisos se representan como una tira de bits así que uno
+podría decir que asignar 7 (<code>chmod 777</code>) para los permisos es asignar lectura,
+escritura y ejecución (en el ejemplo asigno esos permisos a los 3: owner, group
+y user).</p>
+<h3 id="setuid-y-setgid"><a class="header" href="#setuid-y-setgid">SETUID y SETGID</a></h3>
+<p>Son permisos de acceso que permiten a los usuarios del sistema ejecutar
+binarios con un nivel de privilegio mayor (temporalmente y sólo para esa tarea
+específica).</p>
+<p>Me doy cuenta porque el archivo tiene activado el bit de <code>SETUID</code>. El permiso
+que debería aparecer sería <code>-rws....</code>. Otro detalle es que el bit de execute
+también tiene que estar seteado para que haga efecto el <code>SETUID</code>. Para <code>SETGID</code>
+también se muestra la s pero sobre los permisos de grupo. Se pueden settear con
+<code>chmod &lt;nro_para_setuid_segid_stickybit&gt;&lt;nro_para_owner&gt;&lt;nro_para_group&gt;&lt;nro_para_user&gt;</code></p>
+<h3 id="sudo"><a class="header" href="#sudo">SUDO</a></h3>
+<p>Permite ejecutar comandos en nombre de otro. Está bueno porque puedo escalar
+privilegios con auditabilidad de por medio, porque los comandos se loguean.</p>
+<h3 id="los-procesos-y-permisos"><a class="header" href="#los-procesos-y-permisos">Los procesos y permisos</a></h3>
+<p>Estoy un día ahí, tranqui y tiro un comando en la terminal. Eso va a spawnear
+otro proceso para el ejecutable que quiero. Qué permisos tiene el proceso? En
+general, heredan los permisos del usuario que lo corre. Pero como vimos,
+también puede pasar que tenga el bit de <code>SETUID</code>. De esa forma uno puede correr
+el comando para cambiar la contraseña sin tener permisos de administrador.</p>
+<h2 id="seguridad-en-el-software"><a class="header" href="#seguridad-en-el-software">Seguridad en el software</a></h2>
+<p>Podemos diferenciar 3 momentos en donde se hace presente el análisis de la seguridad en nuestro software:</p>
+<ul>
+<li>Arquitectura/Diseño: cuando pensamos la aplicación.</li>
+<li>Implementación: Cuando estamos escribiendo el código de la aplicación.</li>
+<li>Operación: Cuando la aplicación ya está en producción.</li>
+</ul>
+<h3 id="errores-de-implementación"><a class="header" href="#errores-de-implementación">Errores de implementación</a></h3>
+<p>Suelen ser errores más fáciles de entender y solucionar que los de diseño (Un
+error de diseño cuando estás en prod puede ser carísimo). El grueso de los
+errores además vienen de hacer suposiciones que no están garantizadas. Por
+ejemplo, &quot;<em>el usuario va a ingresar una cantidad acotada de caracteres</em>&quot;.
+Dentro de la info &quot;de entrada&quot; que muchas veces no contemplamos están:</p>
+<ul>
+<li>Variables de ambiente.</li>
+<li>El input del programa.</li>
+<li>Software de terceros (?).</li>
+</ul>
+<h3 id="buffer-overflows"><a class="header" href="#buffer-overflows">Buffer Overflows</a></h3>
+<p>Hoy en día no son tan relevantes, pero es interesante aprenderlos para entender
+que hay que tener cuidado al programar y para conocer algunas técnicas que los
+OS proveen hoy en día para prevenir esto.</p>
+<p>La idea es que a veces hay funciones con vulnerabilidades de seguridad. En
+particular en el lenguaje C (podría ser algo de otro lenguaje pero nos vamos a
+concentrar en C), existen funciones como por ejemplo <code>strcpy</code>. <code>strcpy</code> recibe
+el puntero a donde hay que copiar la data y el origen de la data, no pide nunca
+el tamaño de la misma. Lo que hace es leer del origen hasta encontrar el
+caracter de fin de string y va copiándolo en el buffer destino. El problema de
+todo esto es que las variables locales tienen su espacio reservado en la pila.
+Si usamos una variable local como buffer para <code>strcpy</code> y el string tiene más
+caracteres que el buffer, voy a estar escribiendo por fuera del espacio
+reservado para la variable local y sobre la data que está en el stack... eso
+sólo puede salir mal.</p>
+<p>Veamos un ejemplo:</p>
+<pre><code class="language-c">void f(char, *origen) {
+  char buffer[16];
+  strcpy(buffer, origen);
+}
+
+void main(void) {
+  char grande[18]; // también podría leer un input del usuario arbitrariamente grande.
+  f(grande);
+}
+</code></pre>
+<p>Antes del <code>strcpy</code>:</p>
+<p><img src="./img/buffer_overflow_1.png#center" alt="" /></p>
+<p>Después del <code>strcpy</code> (notar que se pisa el IP):</p>
+<p><img src="./img/buffer_overflow_2.png#center" alt="" /></p>
+<p>Si bien esta versión es stack based, existen otros ataques que son heap based y se basan en la misma idea. Existen para ambos algunas formas de detectarlo e intentar prevenirlo:</p>
+<ul>
+<li>memoria no ejecutable</li>
+<li>canary</li>
+<li>randomizar el espacio de memoria (<a href="https://en.wikipedia.org/wiki/Address_space_layout_randomization">aslr</a>)</li>
+<li>control de parámetros</li>
+</ul>
+<h3 id="control-de-parámetros"><a class="header" href="#control-de-parámetros">Control de parámetros</a></h3>
+<p>Esto aplica tanto para buffer overflows como otros tipos de ataque. El
+principal problema es que asumimos como válido cualquier tipo de input y eso
+nos puede llevar a ejecutar código que estaba contenido en el input. Por
+ejemplo:</p>
+<pre><code class="language-bash">$direccion=argv[1]
+echo Felix Cumple | mail -subject='Felicitaciones' $direccion
+</code></pre>
+<p>El programa espera una dirección de mail, pero ponele que usamos el parámetro
+<code>asd@asd.uba.ar; rm -rf /</code>. Si el programa está corriendo en un servidor remoto
+(y con privilegios) esto literal les borra todo.</p>
+<p>Para este problema tenemos dos potenciales soluciones:</p>
+<ol>
+<li>Usar siempre el mínimo privilegio posible para correr los programas</li>
+<li>Validar los parámetros</li>
+<li>Tainted data: se parece al anterior pero es un poco más flexible. Consiste
+en marcar los datos que provienen de fuentes externas como &quot;manchados&quot;, y de
+la misma manera las cosas que se derivan de esa fuente, y las cosas que se
+derivan de esas cosas, etc. En el hipotético caso de que quiera ejecutar
+código con data manchada, recién ahí la tengo que desmanchar</li>
+</ol>
+<pre><code class="language-admonish note title=&quot;Esto pasa en bases de datos también&quot;">Este mismo concepto de no validar la data sucede frecuentemente con bases de
+datos. El ataque es conocido como *SQL injection*. Por ejemplo, si no sanitizan
+la entrada podría ocurrir que se ejecute lo siguiente (ej: en un buscador):
+
+```c
+db.execute(&quot;UPDATE alumnos SET aprobado=true WHERE lu='$1'&quot;, lu);
+```
+
+Y que el usuario ingrese `307/08'; DROP alumnos; SELECT '` tirándote toda la tabla de alumnos.
+</code></pre>
+<h3 id="aislando-a-los-usuarios"><a class="header" href="#aislando-a-los-usuarios">Aislando a los usuarios</a></h3>
+<p>Los OS modernos suelen proveer distintas formas de aislar usuarios y procesos. Se las conocen como <em>sandboxes</em>:</p>
+<ul>
+<li><code>chroot()</code>: te permite cambiar el directorio raíz. Por ejemplo si tengo:</li>
+</ul>
+<pre><code>- /
+  - foo
+    - file_1.txt
+    - file_2.txt
+  - bar
+    - file_3.png
+</code></pre>
+<p>Si hago <code>chroot foo</code> y después <code>ls /</code> obtengo:</p>
+<pre><code>- file_1.txt
+- file_2.txt
+</code></pre>
+<ul>
+<li><code>jail()</code></li>
+</ul>
+<h2 id="principios-generales"><a class="header" href="#principios-generales">Principios generales</a></h2>
+<ul>
+<li>Mínimo privilegio</li>
+<li>Simplicidad</li>
+<li>Validar todos los accesos a datos</li>
+<li>Separación de privilegios</li>
+<li>Minimizar nro. mecanismos compartidos</li>
+<li>Seguridad multicapa</li>
+<li>Facilitar el uso de las medidas de seguridad</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="sistemas_distribuidos_II.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="virtualizacion.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="sistemas_distribuidos_II.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="virtualizacion.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

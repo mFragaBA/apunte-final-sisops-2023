@@ -1,0 +1,492 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Sistemas de Archivos - Notas Final Sistemas Operativos 2023</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./mdbook-admonish.css">
+        <link rel="stylesheet" href="././mdbook-admonish.css">
+        <link rel="stylesheet" href="./custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduccion.html"><strong aria-hidden="true">1.</strong> Introducción</a></li><li class="chapter-item expanded "><a href="sistema_operativo.html"><strong aria-hidden="true">2.</strong> Sistema Operativo</a></li><li class="chapter-item expanded "><a href="procesos_y_api.html"><strong aria-hidden="true">3.</strong> Procesos y API del SO</a></li><li class="chapter-item expanded "><a href="ipc.html"><strong aria-hidden="true">4.</strong> Intercomunicación Entre Procesos</a></li><li class="chapter-item expanded "><a href="scheduling.html"><strong aria-hidden="true">5.</strong> Scheduling</a></li><li class="chapter-item expanded "><a href="sincro_entre_procesos.html"><strong aria-hidden="true">6.</strong> Sincronización entre procesos</a></li><li class="chapter-item expanded "><a href="sincronizacion.html"><strong aria-hidden="true">7.</strong> Sincronización</a></li><li class="chapter-item expanded "><a href="administracion_de_memoria.html"><strong aria-hidden="true">8.</strong> Administración de Memoria</a></li><li class="chapter-item expanded "><a href="entrada_salida.html"><strong aria-hidden="true">9.</strong> Entrada/Salida</a></li><li class="chapter-item expanded "><a href="sistemas_de_archivos.html" class="active"><strong aria-hidden="true">10.</strong> Sistemas de Archivos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos.html"><strong aria-hidden="true">11.</strong> Sistemas Distribuidos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos_II.html"><strong aria-hidden="true">12.</strong> Sistemas Distribuidos - parte II</a></li><li class="chapter-item expanded "><a href="proteccion_y_seguridad.html"><strong aria-hidden="true">13.</strong> Protección y Seguridad</a></li><li class="chapter-item expanded "><a href="virtualizacion.html"><strong aria-hidden="true">14.</strong> Virtualización</a></li><li class="chapter-item expanded "><a href="microkernels.html"><strong aria-hidden="true">15.</strong> Microkernels</a></li><li class="chapter-item expanded "><a href="misc.html"><strong aria-hidden="true">16.</strong> Miscelaneos</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory_allocator_bsd.html"><strong aria-hidden="true">16.1.</strong> Design of a General Purpose Memory Allocator for the 4.3BSD UNIX Kernel</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Notas Final Sistemas Operativos 2023</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="sistemas-de-archivos"><a class="header" href="#sistemas-de-archivos">Sistemas de Archivos</a></h1>
+<p>Para nosotros (y sistemas basados en UNIX) un archivo es una secuencia de
+bytes, sin estructura. Se los identifica con un nombre y ese nombre puede
+incluir una extensión que puede servir para distinguir el contenido.</p>
+<p>Para ordenar los archivos en disco, los sistemas operativos tienen un módulo
+dentro del kernel llamado <strong>sistema de archivos o file system</strong>. Existen tanto
+sistemas de archivos &quot;locales&quot;, como lo son FAT, NTFS, etc. O distribuidos como
+lo son NFS, DFS, SMBFS, entre otros.</p>
+<p>Una de las responsabilidades elementales de un filesystem es determinar una
+organización lógica de los archivos, o sea:</p>
+<ul>
+<li>interna: cómo estructurar la info dentro del archivo (ej: linux usa secuencia
+de bytes y el usuario tiene la responsabilidad del formato).</li>
+<li>externa: cómo se ordenan los archivos (uso directorios, algo más tipo object storage?)</li>
+</ul>
+<p>La mayoría hoy en día además soporta alguna noción de <strong>link o alias</strong> a un
+archivo, o sea tener varios nombres para un mismo archivo (o por ejemplo poder
+acceder a un archivo desde dos rutas distintas).</p>
+<p>El filesystem también determina <strong>cómo se nombran los archivos</strong>, esto incluye:</p>
+<ul>
+<li>Determinar Caracteres de separación de directorio</li>
+<li>Si los archivos llevan o no extensión</li>
+<li>Restricciones a la longitud y caracteres permitidos</li>
+<li>Si es case sensitive o insensitive</li>
+<li>Punto de montaje (la ruta absoluta al dispositivo correspondiente al archivo)
+<ul>
+<li>ej: <code>/disk1/bla/dir_1_de_lo_montado/etc</code> tiene como punto de montaje <code>/disk1/bla</code> por ejemplo</li>
+</ul>
+</li>
+</ul>
+<p>Por último y casi lo principal, el filesystem también determina la
+representación del archivo y dos preguntas relacionadas a este:</p>
+<ul>
+<li>cómo gestiono el espacio libre?</li>
+<li>qué hago para la metadata (permisos, atributos, etc.)</li>
+</ul>
+<h2 id="representación-de-archivos"><a class="header" href="#representación-de-archivos">Representación de archivos</a></h2>
+<p>A los ojos del FS (filesystem), un archivo no es más que una lista de bloques +
+metadata. Sin embargo, una representación así no ayuda a la administración de
+metadata y gestión del espacio libre. Dada la naturaleza por lo general
+dinámica de los archivos, sólo poner los bloques contiguos en disco (esto hace
+muy rápidas las lecturas though) puede ser mala idea porque el archivo puede
+aumentaro o reducir su tamaño. Podemos reservar &quot;de más&quot; o utilizar menos
+espacio que el asignado pero eso naturalmente nos lleva a problemas de
+fragmentación. Es por esto que un esquema así no es usado en ningún FS que
+permita tanto lectura como escritura.</p>
+<h3 id="versión-1-lista-enlazada"><a class="header" href="#versión-1-lista-enlazada">Versión 1 (Lista Enlazada)</a></h3>
+<p><img src="./img/linked_list_fs.png#floating" alt="" /></p>
+<p>Claramente el problema de modificar un archivo se puede resolver mediante una
+lizta en lazada de bloques. Ahora el archivo puede aumentar/disminuir en tamaño
+y alcanza con buscar bloques y modificar la lista enlazada. Peeero:</p>
+<ul>
+<li>Lectura consecutiva = GOOD, <strong>lectura aleatoria = VERY BAD</strong></li>
+<li>Tampoco puedo leerme tooodo el archivo de una porque no sé donde está un bloque hasta leer los anteriores.</li>
+<li>Cada bloque desperdicia espacio indicando dónde está el siguiente bloque</li>
+</ul>
+<h3 id="versión-2-fat"><a class="header" href="#versión-2-fat">Versión 2 (FAT)</a></h3>
+<div style="display: flex">
+<div style="flex-grow: 1; margin-right: 5%">
+<div class="table-wrapper"><table><thead><tr><th>Bloque</th><th>Siguiente</th></tr></thead><tbody>
+<tr><td>0</td><td>vacío</td></tr>
+<tr><td>1</td><td>2</td></tr>
+<tr><td>2</td><td>5</td></tr>
+<tr><td>3</td><td>8</td></tr>
+<tr><td>4</td><td>3</td></tr>
+<tr><td>5</td><td>7</td></tr>
+<tr><td>6</td><td>vacío</td></tr>
+<tr><td>7</td><td>9</td></tr>
+<tr><td>8</td><td>-1</td></tr>
+<tr><td>9</td><td>-1</td></tr>
+<tr><td>10</td><td>vacío</td></tr>
+<tr><td>11</td><td>vacío</td></tr>
+<tr><td>12</td><td>vacío</td></tr>
+<tr><td>13</td><td>vacío</td></tr>
+</tbody></table>
+</div></div>
+<div style="flex-grow: 1">
+  <p>
+  Tomando lo que ya tenemos de la V1, FAT le da una vuelta de tuerca. En lugar de
+  guardar los punteros al siguiente bloque en el mismo bloque, me guardo una
+  tabla que tenga el bloque que le sigue a otro. Veamos un ejemplo:
+<ul>
+<li>El archivo A está en los bloques 1, 2, 5, 7 y 9 </li>
+<li>El archivo B en los bloques 4, 3 y 8.</li>
+</ul>
+<p>FAT usa este método con algunas variantes, en particular hay algunas
+direcciones que están reservadas (para marcar un bloque libre, uno reservado,
+uno con un sector defectuoso, último bloque del archivo). </p>
+<ul>
+<li>Soluciona los problemas previos porque no desperdicio espacio del bloque y puedo leerlos fuera de orden, y taaaaan ineficiente no es la lectura no secuencial</li>
+<li>Pero tengo que tener toda la tabla en memoria, lo cual puede ser mucho para discos muy grandes.</li>
+<li>También tengo una única tabla... mucha contención del recurso.</li>
+<li>Tampoco maneja seguridad</li>
+<li>Y necesito tener la tabla en memoria, no es robusto (sorprendentemente esto se usaba en windows hasta hace poco por default)</li>
+</ul>
+</p> 
+</div>
+</div>
+<h2 id="versión-3---fs-en-sistemas-unix-e-inodos"><a class="header" href="#versión-3---fs-en-sistemas-unix-e-inodos">Versión 3 - FS en sistemas UNIX e <strong>Inodos</strong></a></h2>
+<p>Los <strong>Inodos</strong> son la estructura fundamental. Cada archivo cuenta con al menos un inodo, y se estructuran de la siguiente manera:</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Inodo</th></tr></thead><tbody>
+<tr><td style="text-align: center"><strong>Atributos</strong> <br>(Tamaño, permisos, etc.)</td></tr>
+<tr><td style="text-align: center"><strong>Direcciones a unos pocos bloques</strong> <br> (puedo acceder directo, para archivos pequeños)</td></tr>
+<tr><td style="text-align: center"><strong>Single Indirect Block <br>(Puntero)</strong></td></tr>
+<tr><td style="text-align: center"><strong>Double Indirect Block <br>(Puntero)</strong></td></tr>
+<tr><td style="text-align: center"><strong>Triple Indirect Block <br>(Puntero)</strong></td></tr>
+</tbody></table>
+</div>
+<p>Donde:</p>
+<ul>
+<li>El Single Indirect Block es un bloque con punteros a bloques de datos (cubre archivos de hasta 16MB)</li>
+<li>El Double Indirect Block apunta a una tabla de Single Indirect Blocks (cubre archivos de hasta 32MB)</li>
+<li>El Triple Indirect Block apunta a un bloque de Double Indirect Blocks (cubre archivos de hasta 70TB)</li>
+</ul>
+<p><img src="./img/unix_inode.png#floating" alt="" /></p>
+<p>Esta estructura agrega complejidad pero resuelve algunos de los problemas de los modelos anteriores:</p>
+<ul>
+<li>Permite cargar en memoria las tablas correspondientes a los archivos abiertos</li>
+<li>Una tabla por archivo significa que hay mucha menos contención (tiene sentido
+que haya contención si quiero modificar el mismo archivo desde dos procesos
+distintos)</li>
+<li>Además el modelo es más consistente: sólo tengo cargada en memoria las cosas correspondientes a archivos abiertos.</li>
+</ul>
+<pre><code class="language-admonish note title=&quot;Observación&quot;">El uso de inodos introduce una nueva noción de tamaño, cosa que con FAT no pasaba. Ahora tenemos:
+
+- el tamaño de el archivo respecto a **cuántos datos tiene**
+- el tamaño del archivo respecto a **cuánto espacio en disco ocupa**
+</code></pre>
+<h3 id="metadata"><a class="header" href="#metadata">Metadata</a></h3>
+<p>Cuando hablamos de metadata estamos incluyendo los inodos (o las estructuras que use el OS en su lugar) pero además otra info, por ejemplo:</p>
+<ul>
+<li>Permisos</li>
+<li>Tamaños</li>
+<li>Propietarios/s.</li>
+<li>Fechas de creación, modificación, acceso.</li>
+<li>Bit de archivado.</li>
+<li>Tipo de archivo (regular, dispositivo virtual, pipe, etc.)</li>
+<li>Flags.</li>
+<li>Conteo de referencias.</li>
+<li>CRC o similar para chequeo/arreglo de errores.</li>
+</ul>
+<h3 id="implementando-directorios-con-inodos"><a class="header" href="#implementando-directorios-con-inodos">Implementando directorios con Inodos</a></h3>
+<p>Un directorio también es un archivo. A esta altura nos podríamos preguntar si
+está pasando un archivo-ception donde tódo es un archivo. La respuesta es sí.</p>
+<p>Retomando, al ser un archivo, un directorio tiene que tener su propio inodo.
+Dentro del bloque se guarda la lista de pares de inodo y nombre del
+archivo/directorio (probar hacer <code>vim &lt;ruta a un directorio&gt;</code>,  qué nos
+muestra?)</p>
+<pre><code class="language-admonish note collapsible=true">También se puede implementar con una tabla de hash. Cuando computo el hash
+sobre el nombre del archivo obtengo la entrada correspondiente al archivo. De
+esa forma se pueden optimizar los tiempos de búsqueda para archivos.
+
+El mayor problema de la tabla de hash es la dependencia de la función de hash y
+el tamaño fijo de la misma. Para eso se puede optar también por la alternativa
+de tabla de hash que usa chaining, que si bien menos eficiente mejora los
+tiempos de búsqueda en comparación a la alternativa inicial. 
+</code></pre>
+<h3 id="dónde-están-los-inodos-en-el-disco"><a class="header" href="#dónde-están-los-inodos-en-el-disco">Dónde están los inodos en el disco?</a></h3>
+<p><img src="./img/hdd_inodes.png#center" alt="" /></p>
+<h3 id="links"><a class="header" href="#links">Links</a></h3>
+<p>Como mencionamos antes, es normal que hoy en día los sistemas operativos
+permitan armar links entre archivos. Tenemos 2 tipos de loinks que podemos
+armar:</p>
+<ul>
+<li>link (a secas): accedo al archivo posta</li>
+<li>link simbólico: referencia al archivo posta (en lugar de guardar <code>#{nombre} #{inode_id}</code> guardo <code>#{nombre} #{path_to_file}</code>)</li>
+</ul>
+<p>Agregar links ciertamente introduce complejidad a la estructura del sistema de archivos. Es por eso que hay algunos problemas a considerar:</p>
+<ol>
+<li>Un archivo con links (dependiendo del tipo) puede tener muchas rutas
+absolutas. Si estamos recorriendo el sistema para contar estadísticas,
+deberíamos tener eso en cuenta para no contar por duplicado. Más aún, en el
+caso de directorios no queremos recorrer 2 veces el mismo directorio (o
+loopear infinitamente), por lo que es necesario saber si ya pasé por un
+directorio o no.</li>
+<li>Otro problema que surge es el del borrado</li>
+</ol>
+<ul>
+<li>Si borro un enlace simbólico no debería no debería afectar al original,
+sólo borro el link.</li>
+<li>Si borro el archivo original hay que considerar qué hacer. EN el caso de
+UNIX, los enlaces simbólicos se mantienen (no se borran), y es
+responsabilidad del usuario darse cuenta de que hay &quot;referencias huérfanas&quot;
+(al momento de acceder al archivo el OS se puede dar cuenta de que no
+existe más el original&quot;.</li>
+<li>UNIX cuenta con un tipo de link más, <strong>hard links</strong> que lo que hacen es
+mantener en el inodo la cuenta de cuántos links tiene. Si borro el archivo
+original o un link, decremento el contador. Sólo libero el bloque si el
+count llega a 0 (es una forma de hacer reference counting). No hace falta
+mantener la lista de links que apuntan al inodo.</li>
+</ul>
+<h2 id="manejo-del-espacio-libre"><a class="header" href="#manejo-del-espacio-libre">Manejo del espacio libre</a></h2>
+<p>Otro problema que le concierne al filesystem es el del manejo del espacio
+libre. Cómo trackeo las partes que están libres y las que no?</p>
+<ul>
+<li>Una forma es usar un mapa de bits (empaquetado), pero eso requiere tener el vector en memoria (malo).</li>
+<li>Al igual que con la memoria, podríamos tener una lista enlazada de bloques libres</li>
+<li>En general se *<em>clusteriza</em>. O sea si un bloque de disco puede tener <em>n</em> punteros a otros bloques, los primeros n - 1 indican bloques libres y el último es el puntero al siguiente nodo de la lista.
+<ul>
+<li>Se puede mejorar haciendo que cada nodo indique cuántos bloques libres consecutivos le siguen.</li>
+</ul>
+</li>
+</ul>
+<h2 id="uso-de-caché"><a class="header" href="#uso-de-caché">Uso de caché</a></h2>
+<p>Una forma de mejorar el rendimiento del FS es usando una caché. Puedo usarla
+tanto para cachear inodos como datos. Lo que hacemos es copiar en memoria
+algunos bloques del disco. Se maneja de manera similar a las páginas (al punto
+de que se suele usar un caché unificado para ambas).</p>
+<h2 id="consistencia"><a class="header" href="#consistencia">Consistencia</a></h2>
+<p>Para situaciones en las que la computadora deja de funcionar antes de bajar los
+cambios a disco, como no queremos perder datos el SO tiene que proveer algún
+mecanismo para no perder dichos datos. Dentro de las herramientas que el sistema provee están:</p>
+<ul>
+<li>puedo hacer write through (que escriba a disco directamente), pero tiene un impacto grande de perf.</li>
+<li>syscall <code>fsync()</code>, que hace que se graben en disco todo lo que haga falta
+(las páginas &quot;dirty&quot; del caché)</li>
+<li>usar <code>fsck</code>, que es un programa que restaura la consistencia del FS. Recorre
+todo el disco y por cada bloque cuenta cuántos inodos le apuntan y cuántas
+veces aparece referenciado como libre. Dependiendo de esos valores y si es
+posible, se toman acciones correctivas.</li>
+<li>otro técnica, consiste en usar un bit que denota si se apagó normalmente el sistema:
+<ul>
+<li>Cuando inicia el sistema y ese bit está apagado, el apagado no fue normal. En ese caso se corre <code>fsck</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="journaling"><a class="header" href="#journaling">Journaling</a></h3>
+<p>Otra técnica más para asegurar consistencia es <strong>journaling</strong>: el OS lleva un
+log o journal que tiene los cambios que hay que hacer en disco. Cuando se baja
+la caché a disco se marca que esos cambios están listos. Después de X datos
+escritos (se detecta porque se llena un buffer) también se baja a disco.</p>
+<p>Como principal ventaja está que es mucho menos trabajo que correr <code>fsck</code>.
+Cuando el sistema inicia, se aplican los cambios del buffer que no se hayan
+logrado bajar a disco. Además, las escrituras a disco son en bloques de
+operaciones, mucho mejor que hacer escrituras secuenciales.</p>
+<p>Esto no viene sin su cuota de impacto en performance, pero a pesar de eso es
+una técnica usada en la mayoría de sistemas operativos.</p>
+<h2 id="características-avanzadas-de-os"><a class="header" href="#características-avanzadas-de-os">Características avanzadas de OS</a></h2>
+<ul>
+<li>cuotas de disco</li>
+<li>encripción</li>
+<li>snapshots</li>
+<li>manejo de raid por software (más control, menos perf, se puede obtener más redundancia)</li>
+<li>compresión</li>
+</ul>
+<h2 id="network-file-system-nfs"><a class="header" href="#network-file-system-nfs">Network File System (NFS)</a></h2>
+<p>El nfs es un protocolo que permite acceder a FS remotos como si fueran locales
+mediante RPC. La idea es que &quot;montamos&quot; el filesystem remoto en algún punto del
+sistema local y todo lo que acceda ahí no sabe si es algo local o remoto. Para
+soportar esto, los OS tienen una capa llamada <strong>Virtual File System (VFS)</strong>.</p>
+<p>La VFS tiene nodos virtuales por cada archivo abierto. Si es algo local son
+inodos, si es remoto se usa otra estructura. Dependiendo de si un pedido es
+local/remoto el VFS despacha el pedido al FS real o a un cliente de NFS que
+conoce el protocolo de red a utilizar.</p>
+<p>Del lado del cliente es necesario un módulo del kernel específico pero del
+servidor basta con un programa común y corriente.</p>
+<h2 id="ext2"><a class="header" href="#ext2">Ext2</a></h2>
+<p>Ext2 es un filesystem utilizado en los sistemas linux (hoy en día existen Ext3
+y Ext4, que incorporan journaling). Veamos cómo se guarda la info en disco. El espacio se separa en <strong>block groups</strong>. Cada block group tiene:</p>
+<ul>
+<li>el superblock, tamaño 1 bloque: tiene metadata crítica para el FS. Algunos de los datos que tiene son:
+<ul>
+<li>block group number</li>
+<li>block size</li>
+<li>blocks per group</li>
+</ul>
+</li>
+<li>group descriptors, tamaño <em>n</em> bloques
+<ul>
+<li>tiene para cada block group la info de:
+<ul>
+<li>nro de bloque del block bitmap</li>
+<li>nro de bloque del inode bitmap</li>
+<li>nro de bloque del inode table</li>
+<li>nro de bloques libres, inodos libres</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>data block bitmap, tamaño 1 bloque</li>
+<li>inode bitmap, tamaño 1 bloque</li>
+<li>inode table, tamaño <em>n</em> bloques</li>
+<li>data blocks, tamaño <em>n</em> bloques</li>
+</ul>
+<p><img src="./img/ext_2_fs.png#center" alt="" /></p>
+<pre><code class="language-admonish info">Por lo general, sólo se lee el superbloque del block group 0, pero el resto de
+los block group tienen una copia para casos de corrupción de memoria. Ocurre lo
+mismo para los group descriptors.
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="entrada_salida.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="sistemas_distribuidos.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="entrada_salida.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="sistemas_distribuidos.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

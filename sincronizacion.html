@@ -1,0 +1,479 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Sincronización - Notas Final Sistemas Operativos 2023</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./mdbook-admonish.css">
+        <link rel="stylesheet" href="././mdbook-admonish.css">
+        <link rel="stylesheet" href="./custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduccion.html"><strong aria-hidden="true">1.</strong> Introducción</a></li><li class="chapter-item expanded "><a href="sistema_operativo.html"><strong aria-hidden="true">2.</strong> Sistema Operativo</a></li><li class="chapter-item expanded "><a href="procesos_y_api.html"><strong aria-hidden="true">3.</strong> Procesos y API del SO</a></li><li class="chapter-item expanded "><a href="ipc.html"><strong aria-hidden="true">4.</strong> Intercomunicación Entre Procesos</a></li><li class="chapter-item expanded "><a href="scheduling.html"><strong aria-hidden="true">5.</strong> Scheduling</a></li><li class="chapter-item expanded "><a href="sincro_entre_procesos.html"><strong aria-hidden="true">6.</strong> Sincronización entre procesos</a></li><li class="chapter-item expanded "><a href="sincronizacion.html" class="active"><strong aria-hidden="true">7.</strong> Sincronización</a></li><li class="chapter-item expanded "><a href="administracion_de_memoria.html"><strong aria-hidden="true">8.</strong> Administración de Memoria</a></li><li class="chapter-item expanded "><a href="entrada_salida.html"><strong aria-hidden="true">9.</strong> Entrada/Salida</a></li><li class="chapter-item expanded "><a href="sistemas_de_archivos.html"><strong aria-hidden="true">10.</strong> Sistemas de Archivos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos.html"><strong aria-hidden="true">11.</strong> Sistemas Distribuidos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos_II.html"><strong aria-hidden="true">12.</strong> Sistemas Distribuidos - parte II</a></li><li class="chapter-item expanded "><a href="proteccion_y_seguridad.html"><strong aria-hidden="true">13.</strong> Protección y Seguridad</a></li><li class="chapter-item expanded "><a href="virtualizacion.html"><strong aria-hidden="true">14.</strong> Virtualización</a></li><li class="chapter-item expanded "><a href="microkernels.html"><strong aria-hidden="true">15.</strong> Microkernels</a></li><li class="chapter-item expanded "><a href="misc.html"><strong aria-hidden="true">16.</strong> Miscelaneos</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory_allocator_bsd.html"><strong aria-hidden="true">16.1.</strong> Design of a General Purpose Memory Allocator for the 4.3BSD UNIX Kernel</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Notas Final Sistemas Operativos 2023</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="sincronización-razonamiento-y-problemas-clásicos"><a class="header" href="#sincronización-razonamiento-y-problemas-clásicos">Sincronización: Razonamiento y problemas clásicos</a></h1>
+<h2 id="el-problema-de-los-turnos"><a class="header" href="#el-problema-de-los-turnos">El problema de los turnos</a></h2>
+<p>Tenemos una serie de procesos ejecutando en simultáneo \( P_i, i \in
+[0, \dots, N-1] \). Cada proceso tiene que imprimir &quot;Soy el proceso
+\( i \)&quot;, y queremos que se haga en orden. (podría ser realizar
+cualquier tarea en realidad, lo importante es la constraint de orden).</p>
+<p>Podemos pensar en una solución como la siguiente:</p>
+<pre><code>// Semáforos. Tengo 1 por cada proceso (y uno extra)
+semaphore sem[N+1];
+
+// Inicialización
+fn init() {
+  for i in 0..N+1 {
+    sem[i] = 0; // blockeado
+  }
+
+  for i in 0..N+1 {
+    spawn P(i);
+  }
+
+  sem[0].signal()
+}
+
+
+// Proceso i
+fn P(i) {
+  // Esperar turno
+  sem[i].wait();
+  // Ejecutar
+  print(&quot;Soy el proc {:i}&quot;);
+  // Avisar al próximo
+  sem[i+1].signal();
+}
+</code></pre>
+<p>El programa es correcto? Cómo demuestro correctitud en un código concurrente? Tengo tripla de hoare, teorema del invariante, especificación y esas cosas?</p>
+<h2 id="razonando-en-paraleloconcurrente"><a class="header" href="#razonando-en-paraleloconcurrente">Razonando en paralelo/concurrente</a></h2>
+<p>Modelo: \( \tau = \tau_1, \dots \) donde los \( \tau_i \) son diferentes estados del programa.</p>
+<p>En programas paralelos <em>correcto</em> ya no significa lo mismo, ahora la correctitud pasa por verificar que ciertas propiedades se cumplen sobre cualquier ejecución (o sea, para cualquer scheduling posible).</p>
+<h3 id="qué-tipo-de-propiedades-tengo"><a class="header" href="#qué-tipo-de-propiedades-tengo">Qué tipo de propiedades tengo?</a></h3>
+<p>Vamos a tener:</p>
+<ul>
+<li><strong>propiedades de safety</strong>: o sea nada malo ocurre.
+<ul>
+<li>ej: ausencia de deadlock, exclusión mutua, no hay pérdida de mensajes, los relojes no se desvían a más de \( \delta \) unidades de tiempo.</li>
+</ul>
+</li>
+<li><strong>propiedades de progreso/liveness</strong>: en algún momento algo &quot;bueno sucede&quot;. Suele dar esa idea de que si tengo cosas que quiero que se ejecuten siempre estoy en posición de llegar al punto en que se ejecutan.
+<ul>
+<li>ej: &quot;si aprieto el botón, eventualmente se llama a su callback&quot;, vendría a ser como que eventualmente el sistema responde a los estímulos.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Observaciones&quot;">Las propiedades de safety de alguna forma son &quot;opuestas&quot; a las de livenes. En qué sentido? Bueno, las propiedades de safety son algo que tienen que valer para toda ejecución, eso significa que cuando no se cumple es porque hay una ejecución en donde llego a que esa cosa mala ocurre. Eso a su vez implica que tengo **una** ejecución **finita**, o contraejemplo. Entonces si quiero probar que vale, asumo que no, obtengo un &quot;contraejemplo&quot; e intento llegar a un absurdo. Y si quiero probar que no vale alcanza con buscar el contraejemplo.
+
+Por otro lado las propiedades de safety ocurre al revez. Suponer que no vale significa que sin importar la ejecución siempre tengo un camino que no llega (o sea tengo potencialmente una cantidad infinita de ejecuciones &quot;infinitas&quot;). Acá es al revés, para trabajar con cosas finitas lo demuestro &quot;directo&quot;
+</code></pre>
+<p>Una propiedad muy común es la de <strong>fairness</strong>. Se basa en la idea de que los procesos reciban su turno (para ejecutar, para ingresar a una sección crítica, etc.) con infinita frecuencia. En criollo, no ocurre que un proceso siempre quede postergado <em>ad infinitum</em>. Hay 3 tipos de fairness:</p>
+<ul>
+<li><strong>incondicional</strong>: el proceso se ejecuta regularmente si <strong>siempre está habilitado</strong>.</li>
+<li><strong>Fuerte</strong>: el proceso se ejecuta regularmente si <strong>está habilitado con infinita frecuencia</strong> (puede tener períodos de inhabilitación).</li>
+<li><strong>Débil</strong>: el proceso se ejecuta regularmente si <strong>está continuamente habilitado a partir de cierto punto</strong></li>
+</ul>
+<p>En general, suponemos que fairness está dado por default y usamos eso para probar otras propiedades (generalmente liveness: porque puedo asumir que va a recibir turnos y va a &quot;poder avanzar&quot;)</p>
+<h3 id="modelo-formal"><a class="header" href="#modelo-formal">Modelo Formal</a></h3>
+<p>Para trabajar con estas propiedades se utilizan <strong>lógicas temporales</strong>. En particular nosotros no vemos demostraciones si no mas bien argumentaciones de que las propiedades se cumplen.</p>
+<h2 id="otro-problema-clásico-rendezvous"><a class="header" href="#otro-problema-clásico-rendezvous">Otro problema clásico: Rendezvous</a></h2>
+<ul>
+<li>tengo procesos \( P_i, i \in [0, \dots, N - 1] \)</li>
+<li>la propiedad a demostrar es la propiedad <span style="color:red">BARRERA</span>:</li>
+</ul>
+<p>\[
+b(j) \text{ se ejecuta después de todos los } a(i)
+\]</p>
+<ul>
+<li>observación: no impongo ninguna restricción sobre el orden de los \( a(i) \) ni los \( b(i) \).</li>
+</ul>
+<h2 id="modelo-formal-v20"><a class="header" href="#modelo-formal-v20">Modelo Formal V2.0</a></h2>
+<p>Usamos un modelo propuesto en el libro de Nancy Lynch:</p>
+<p><img src="./img/lynch_process_model.png" alt="modelo de nancy lynch" /></p>
+<ul>
+<li>Estado: \( \sigma : [ 0, \dots, N - 1 ] \rightarrow \lbrace \text{REM}, \text{TRY}, \text{CRIT}, \text{EXIT} \rbrace \)</li>
+<li>Transición: \( \sigma \rightarrow^{l} \sigma' , l \in [ 0, \dots, N - 1 ] \rightarrow \lbrace \text{REM}, \text{TRY}, \text{CRIT}, \text{EXIT} \rbrace \)</li>
+<li>Ejecución: \( \tau = \tau_0 \rightarrow^l \tau_1 \dots \)</li>
+</ul>
+<h3 id="algunas-propiedades-bajo-el-modelo-formal"><a class="header" href="#algunas-propiedades-bajo-el-modelo-formal">Algunas propiedades bajo el modelo formal</a></h3>
+<ul>
+<li>
+<p><span style="color:red">WAIT-FREEDOM</span></p>
+<ul>
+<li>idea: &quot;Todo proceso que intenta acceder a la sección crítica, en algún momento lo logra, cada vez que lo intenta&quot;</li>
+<li>fórmula: \( \forall \tau, \forall k, \forall i, \tau_k(i) = \text{TRY} \implies \exists k' &gt; k \land \tau_{k'}(i) = CRIT \)</li>
+</ul>
+</li>
+<li>
+<p><span style="color:red">FAIRNESS</span></p>
+<ul>
+<li>en castellano: &quot;Para toda ejecución y proceso, si el proceso puede hacer una transición (la mismoa) <strong>en una cantidad infinita de estados</strong> de la ejecución, entonces existe un momento en el que hace la transición&quot;</li>
+<li>fórmula: \( \forall \tau, \forall i, | \lbrace \tau' : \tau \rightarrow \dots \tau' \rightarrow^{l_i} \tau'' \rbrace | = \infty \implies \exists k, \tau_k \rightarrow^{l_i} \tau_{k+1} \)</li>
+</ul>
+</li>
+<li>
+<p><span style="color:red">EXCL</span></p>
+<ul>
+<li>idea: &quot;Para toda ejecución y estado , no puede haber más de un proceso tal que ambos estén en estado CRIT&quot;</li>
+<li>fórmula:</li>
+</ul>
+<p>\[
+\text{EXCL} \equiv \square \text{#CRIT} \leq 1
+\]</p>
+</li>
+<li>
+<p><span style="color:red">LOCK-FREEDOM</span></p>
+<ul>
+<li>idea: para toda ejecución y estado, si hay un proceso en estado TRY y ninguno en CRIT, entonces eventualmente algún proceso está en CRIT (capaz el que estaba en TRY le ganaron de mano, pero alguno entra)</li>
+<li>fórmula: \( \square ( \text{#TRY} \geq 1 \text{#CRIT} = 0 \implies \diamond \text{#CRIT} &gt; 0 ) \)</li>
+</ul>
+</li>
+<li>
+<p><span style="color:red">STARVATION-FREEDOM</span></p>
+<ul>
+<li>
+<p>predicados auxiliares:</p>
+<ul>
+<li>IN: si un proceso está en try, eventualmente está en crit</li>
+</ul>
+<p>\[
+\text{IN}(i) \equiv i \in \text{TRY} \implies \diamond i \in \text{CRIT}
+\]</p>
+<ul>
+<li>OUT: si un proceso está en la zona crítica, eventualmente sale de la zona crítica</li>
+</ul>
+<p>\[
+\text{OUT}(i) \equiv i \in \text{CRIT} \implies \diamond i \in \text{REM}
+\]</p>
+</li>
+<li>
+<p>idea: Si todo proceso eventualmente sale de la zona crítica, entonces todo proceso eventualmente entra a la zona crítica</p>
+</li>
+<li>
+<p>fórmula: \( \forall i. \text{OUT}(i) \implies \forall i. \text{IN}(i) \)</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Observación&quot;">Podemos reescribir &lt;span style=&quot;color:red&quot;&gt;WAIT-FREEDOM&lt;/span&gt; usando el predicado IN:
+
+\\[
+  \text{WAIT-FREEDOM} \equiv \forall i. \square \text{IN}(i)
+\\]
+</code></pre>
+<ul>
+<li>
+<p><span style="color:red">SCM</span> (sección crítica de a M procesos)</p>
+<ul>
+<li>idea: puedo tener <strong>hasta M procesos</strong> en la sección crítica (esto por ejemplo aplica cuando tengo semáforos)</li>
+<li>fórmula:</li>
+</ul>
+<p>\[
+\begin{align}
+\forall \tau. \forall k. \\
+\text{1) #}&amp; \lbrace i | \tau_k(i) = CRIT \rbrace \leq M \\
+\text{2) #}&amp; \forall i. \tau_k(i) = TRY \land \text{#}\lbrace j | \tau_k(j) = CRIT \rbrace &lt; M \\
+&amp;\implies \exists k' &gt; k. \tau_{k'}(i) = CRIT
+\end{align}
+\]</p>
+</li>
+</ul>
+<h2 id="problema-lectoresescritores"><a class="header" href="#problema-lectoresescritores">Problema Lectores/escritores</a></h2>
+<ul>
+<li>
+<p>esto lo vemos en bases de datos (cuando vemos logging, manejo de transacciones, y errores/aborts)</p>
+</li>
+<li>
+<p>tengo una variable compartida</p>
+</li>
+<li>
+<p>los escritores necesitan acceso exclusivo, los lectores pueden leer al mismo tiempo</p>
+</li>
+<li>
+<p>propiedad <span style="color:red">SWMR</span> (Single-Writer/Multiple-Readers)</p>
+<p>\[
+\forall \tau \forall k. \exists i. writer(i) \land \tau_k(i) = \text{CRIT} \implies \forall j \neq i. \tau_k(j) \neq \text{CRIT} \\
+\forall \tau. \forall k. \exists i. reader(i) \land \tau_k(i) = \text{CRIT} \implies \\
+\forall j \neq i. \tau_k(j) = CRIT \implies reader(j)
+\]</p>
+<ul>
+<li>El primer predicado fuerza que si un proceso está escribiendo no hay otros procesos en la sección crítica</li>
+<li>El segundo predicado dice que si hay un proceso leyendo, entonces cualquier otro proceso que también esté en la sección crítica tiene que estar leyendo (y por ende no escribiendo. (El anterior lo inmplica en realidad)</li>
+</ul>
+</li>
+</ul>
+<h2 id="solución-y-análisis-al-problema"><a class="header" href="#solución-y-análisis-al-problema">Solución y análisis al problema</a></h2>
+<p>Uso 2 semáforos y un contador:</p>
+<pre><code>semaphore wr = 1;
+// Nota: este semáforo lo uso como mutex para 
+// obtener acceso exclusivo a `readers`
+semaphore rd = 1;
+int readers = 0;
+
+fn writer(i) {
+  // TRY
+  wr.wait();
+  // CRIT
+  write();
+  // EXIT
+  wr.signal();
+}
+
+fn reader(i) {
+  // TRY
+  rd.wait();
+  readers++;
+  if readers == 1 { 
+    wr.wait(); 
+  }
+  rd.signal();
+  // CRIT
+  read();
+
+  // EXIT
+  rd.wait();
+  readers--;
+  if readers == 0 {
+    wr.signal();
+  }
+  rd.signal();
+}
+</code></pre>
+<p>Es esta implementación correcta? A simple vista uno diría que sí, pero en realidad no. Los procesos escritores pueden llegar a quedarse bloqueados permanentemente si por ejemplo hay constantemente lectores entrando a la sección crítica. En ese caso nunca &quot;libero&quot; el lock del writer y por más de que puede estar infinitamente disponible nunca le llega su turno. O sea puede haber <strong>inanición</strong>.</p>
+<h2 id="problemas-adicionales"><a class="header" href="#problemas-adicionales">Problemas adicionales</a></h2>
+<ul>
+<li>filósofos que cenan
+<ul>
+<li>N filósofos en una mesa redonda, con tenedores (compartidos) a sus lados</li>
+<li>tengo que programar las funciones <code>tomar_tenedores(filo_i)</code> y <code>soltar_tenedores(filo_i)</code> satisfaciendo:
+<ul>
+<li><span style="color:red">EXCL-FORK</span>: tenedores de uso exclusivo</li>
+<li><span style="color:red">WAIT-FREEDOM</span>: sin deadlock</li>
+<li><span style="color:red">STARVATION-FREEDOM</span>: no inanición</li>
+<li><span style="color:red">EAT</span>: Más de un filósofo puede comer a la vez (variante de SCM)</li>
+</ul>
+</li>
+<li>nota de color: hay un resultado general que dice que <strong>NO existe</strong> una solución en la que todos los filósofos hacen lo mismo</li>
+<li>una solución es hacer que todos salvo uno agarren el de la izquierda primero y el restante agarra a la derecha primero.
+<ul>
+<li>demo para ver que no hay deadlock: agarrá el grafo de las condiciones de cauffman, cuáles son los potenciales ciclos. Cuándo ocurre que hay deadlock? Puede ocurrir con el código actual?</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Nota sobre EAT&quot;">Uno podría preguntarse: &quot;Por qué tengo que definir &lt;span style=&quot;color:red&quot;&gt;EAT&lt;/span&gt;? Si no restrinjo nada claramente permito que varios filósofos puedan comer a la vez.&quot; Creo que la respuesta a eso es que tener definido &lt;span style=&quot;color:red&quot;&gt;EAT&lt;/span&gt; nos da información extra y es útil sobre todo para evaluar si nuestro algoritmo es correcto, ya que puedo ver el código y encontrar algún contraejemplo de que eso no se cumple. Si no tengo el predicado nunca tengo contra qué comparar.
+</code></pre>
+<ul>
+<li>El barbero
+<ul>
+<li>1 único barbero</li>
+<li>una sala de espera con N sillas + la sala del barbero (cap. 1 persona)</li>
+<li>cuando no hay clientes el barbero duerme</li>
+<li>cuando entra un cliente
+<ul>
+<li>no hay lugar? =&gt; se va</li>
+<li>hay lugar? entra y despierta al peluquero si está dormido</li>
+</ul>
+</li>
+<li>potencial impl:
+<ul>
+<li>un semáforo para despertar al barbero (y para que se vuelva a dormir cuando no quedan clientes)</li>
+<li>un semáforo para hacer pasar al cliente a la silla del barbero</li>
+<li>un contador atómico para contar clientes y ver que no nos pasamos de la capacidad</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- TODO: hay un ejercicio de clase que es formalizar las propiedades a garantizar y demostrar que las satisface, estaría bueno agregar eso -->
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="sincro_entre_procesos.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="administracion_de_memoria.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="sincro_entre_procesos.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="administracion_de_memoria.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

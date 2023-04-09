@@ -1,0 +1,3049 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Notas Final Sistemas Operativos 2023</title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./mdbook-admonish.css">
+        <link rel="stylesheet" href="././mdbook-admonish.css">
+        <link rel="stylesheet" href="./custom.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduccion.html"><strong aria-hidden="true">1.</strong> Introducción</a></li><li class="chapter-item expanded "><a href="sistema_operativo.html"><strong aria-hidden="true">2.</strong> Sistema Operativo</a></li><li class="chapter-item expanded "><a href="procesos_y_api.html"><strong aria-hidden="true">3.</strong> Procesos y API del SO</a></li><li class="chapter-item expanded "><a href="ipc.html"><strong aria-hidden="true">4.</strong> Intercomunicación Entre Procesos</a></li><li class="chapter-item expanded "><a href="scheduling.html"><strong aria-hidden="true">5.</strong> Scheduling</a></li><li class="chapter-item expanded "><a href="sincro_entre_procesos.html"><strong aria-hidden="true">6.</strong> Sincronización entre procesos</a></li><li class="chapter-item expanded "><a href="sincronizacion.html"><strong aria-hidden="true">7.</strong> Sincronización</a></li><li class="chapter-item expanded "><a href="administracion_de_memoria.html"><strong aria-hidden="true">8.</strong> Administración de Memoria</a></li><li class="chapter-item expanded "><a href="entrada_salida.html"><strong aria-hidden="true">9.</strong> Entrada/Salida</a></li><li class="chapter-item expanded "><a href="sistemas_de_archivos.html"><strong aria-hidden="true">10.</strong> Sistemas de Archivos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos.html"><strong aria-hidden="true">11.</strong> Sistemas Distribuidos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos_II.html"><strong aria-hidden="true">12.</strong> Sistemas Distribuidos - parte II</a></li><li class="chapter-item expanded "><a href="proteccion_y_seguridad.html"><strong aria-hidden="true">13.</strong> Protección y Seguridad</a></li><li class="chapter-item expanded "><a href="virtualizacion.html"><strong aria-hidden="true">14.</strong> Virtualización</a></li><li class="chapter-item expanded "><a href="microkernels.html"><strong aria-hidden="true">15.</strong> Microkernels</a></li><li class="chapter-item expanded "><a href="misc.html"><strong aria-hidden="true">16.</strong> Miscelaneos</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory_allocator_bsd.html"><strong aria-hidden="true">16.1.</strong> Design of a General Purpose Memory Allocator for the 4.3BSD UNIX Kernel</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Notas Final Sistemas Operativos 2023</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introducción"><a class="header" href="#introducción">Introducción</a></h1>
+<blockquote>
+<p>Una forma de dividir a los sistemas informáticos es:</p>
+<ul>
+<li>Hardware (lo que se puede patear).</li>
+<li>Software específico (lo que sólo se puede putear).</li>
+</ul>
+<p>Un <strong>sistema operativo</strong> es un intermediario entre ellos</p>
+</blockquote>
+<h2 id="historia"><a class="header" href="#historia">Historia</a></h2>
+<ul>
+<li>1950: primeras computadoras comerciales
+<ul>
+<li>el usuario armaba tarjetas perforadas en assembler o FORTRAN, un operador se encargaba de todo.</li>
+<li>problema: mucho tiempo de procesamiento desperdiciado.</li>
+<li>(más adelante) solución: sistemas batch. Hacías tarjeta -&gt; cinta, cinta -&gt; impresora.
+<ul>
+<li>seguía habiendo un operador haciendo de intermediario entre usuario y hardware.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>más adelante, surge el concepto de <strong>multiprogramación</strong>, tratamos de usar el tiempo ocioso de un trabajo <code>j_1</code> ejecutando otro <code>j_2</code>. <code>j_1</code> capaz tarda un poco más pero en total tardo menos.
+<ul>
+<li>también surge la idea de <strong>contención</strong> (dos programas queriendo acceder a un recurso a la vez)</li>
+</ul>
+</li>
+<li>(después) surgen sistemas de <strong>timesharing</strong>, o sea conectar varias terminales a una misma computadora y darles un poco de tiempo de procesador a cada una.</li>
+</ul>
+<h2 id="un-so"><a class="header" href="#un-so">Un S.O.</a></h2>
+<blockquote>
+<ul>
+<li>Un SO es una pieza de software que hace de intermediario entre el HW y los programas de usuario.
+<ul>
+<li>permite que el software específico no se preocupe con detalles de bajo nivel de HW</li>
+<li>permite que el usuario use correctamente el HW.</li>
+</ul>
+</li>
+<li>Tiene que manejar cuestiones como la contención y la concurrencia de tal manera que:
+<ul>
+<li>sea eficiente</li>
+<li>se haga correctamente</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sistema-operativo"><a class="header" href="#sistema-operativo">Sistema Operativo</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="procesos"><a class="header" href="#procesos">Procesos</a></h1>
+<p>Un programa podemos definirlo como un texto escrito en un lenguaje de programación, o bien dicho código compilado a lenguaje máquina. Es <strong>estático</strong>. Ahora, cuando ese programa se ejecuta, pasamos a tener un <strong>proceso</strong>. Un proceso es la contracara dinámica del programa. </p>
+<p>El estado de un proceso está representado por:</p>
+<ul>
+<li>los registros</li>
+<li>la memoria del proceso
+<ul>
+<li>stack</li>
+<li>heap (o data section). En realidad el silverschatz lo separa en
+<ul>
+<li>data section: variables globales</li>
+<li>heap: memoria dinámica</li>
+</ul>
+</li>
+<li>el área de text: donde se almacena el código</li>
+</ul>
+</li>
+</ul>
+<p>Justamente los procesos son dinámicos ya que cambian su estado a medida que el programa ejecuta. Podemos entonces armar un diagrama de estados de un proceso:</p>
+<p><img src="./img/diagrama_estados_proceso.png" alt="diagrama de estados de un proceso" /></p>
+<ul>
+<li><strong>new</strong>: el proceso se está creando</li>
+<li><strong>running</strong>: se están ejecutando instrucciones</li>
+<li><strong>waiting</strong>: el proceso está esperando por un evento (I/O o recepción de alguna señal)</li>
+<li><strong>ready</strong>: el proceso está en espera de ser asignado a un procesador</li>
+<li><strong>terminated</strong>: el proceso terminó la ejecución</li>
+</ul>
+<h2 id="modelo-de-procesos"><a class="header" href="#modelo-de-procesos">Modelo de procesos</a></h2>
+<p>El modelo de procesos que consideramos es un modelo de <strong>procesos
+secuenciales</strong>. Esto quiere decir que cada proceso piensa que tiene un
+único CPU propio. Sin embargo, en la realidad no es así. Como
+mencionamos anteriormente, la técnica de <strong>multiprogramación</strong> surgió
+como técnica para aprovechar el tiempo ocioso de ejecución de otros
+programas (ej: tienen que esperar I/O). Esto, junto a las ideas de
+<strong>timesharing</strong> (repartir el tiempo de procesador) caracterizan a este
+modelo, en donde si bien cada proceso cree que está asignado a un CPU
+de manera exclusiva, en realidad el sistema operativo es el encargado
+de asignara y retirar del cpu a los distintos procesos.</p>
+<p>Ahora, si un proceso tiene un estado, pero no está constantemente en ejecución y tampoco es necesario que ejecute sobre el mismo CPU, necesitamos guardar en algún lado si estado. Cada proceso se representa en el sistema operativo con un <strong>PCB</strong> (process control block). Una PCB contiene:</p>
+<ul>
+<li>El estado actual del proceso</li>
+<li>El PC</li>
+<li>Registros del CPU (incluye flags del procesador): junto con el PC, es necesario guardar explícitamente la data cuando ocurren interrupciones.</li>
+<li>info para el scheduler, por ejemplo la prioridad del proceso</li>
+<li>info de manejo de memoria</li>
+<li>accounting info: estadísticas de tiempo de cómputo</li>
+<li>status de IO: tiene la lista de dispositivos de I/O asignados al proceso, los archivos abiertos, etc.</li>
+</ul>
+<h2 id="threads"><a class="header" href="#threads">Threads</a></h2>
+<p>Una limitación de este modelo de cómputo es que asume que todo programa tiene un único flujo de ejecución. Sin embargo, la mayoría de programas realizxan varias tareas a la vez. Es por esto que se extiende este concepto de proceso para permitir que un proceso tenga varios <strong>threads de ejecución</strong>. En architecturas multicore cobra más importancia todavía porque en un core pueden correr varios threads en paralelo. En los sistemas que cuentan con PCB y threads, la PCB se extiende para que tenga información sobre cada thread. No solo eso, si no que en la práctica crear threads es menos costoso que crear nuevos procesos.</p>
+<h2 id="Árbol-de-procesos"><a class="header" href="#Árbol-de-procesos">Árbol de Procesos</a></h2>
+<ul>
+<li>Los procesos están organizados jerárquicamente, como un árbol.</li>
+<li>Cuando el SO comienza, lanza un proceso que se suele llamar init o systemd</li>
+<li>Cada proceso puede lanzar procesos hijos:
+<ul>
+<li><code>fork()</code> es una llamada al sistema que crea un proceso igual al actual</li>
+<li>el resultado es el PID del proceso hijo</li>
+<li>el padre puede suspender la ejecución hasta que un proceso (p ej. el proceso hijo) termine conociendo su PID con la syscall <code>wait()</code></li>
+<li>cuando el proceso hijo termina, el código de estado indicado por el hijo se le devuelve al padre.</li>
+<li>el proceso hijo puede, o bien seguir ejecutando lo mismo que el proceso padre, o bien ejecutar algo distinto. Para eso puede usar la syscall <code>exec()</code> para reemplazar su código binario por otro.</li>
+</ul>
+</li>
+</ul>
+<p><img src="./img/arbol_de_procesos.png" alt="árbol de procesos" /></p>
+<p>Por ejemplo, cuando lanzamos un programa desde la shell, el proceso de la shell hace un llamado a <code>fork()</code> y el proceso hijo hace <code>exec()</code> del programa que se desea ejecutar. El proceso de la shell espera hasta que el proceso hijo termine.</p>
+<pre><code class="language-admonish warning title=&quot;Cuidado&quot;">Esto es una simplificación de lo que en realidad ocurre en una shell hoy en día
+</code></pre>
+<pre><code class="language-admonish info title=&quot;pstree&quot;">pstree es un comando que muestra los procesos actuales en forma de árbol. Si recibe un PID como parámetro, muestra el árbol a partir de ese proceso. Para más info `man pstree`
+</code></pre>
+<h2 id="actividades-de-un-proceso"><a class="header" href="#actividades-de-un-proceso">Actividades de un proceso</a></h2>
+<p>Vimos los distintos estados que puede tener un proceso en ejecución. Cuando un proceso está en ejecución, puede:</p>
+<ul>
+<li>hacer operaciones entre registros y direcciones de memoria</li>
+<li>llamadas al sistema operativo o <em>syscalls</em> (las vemos más adelante)</li>
+<li>I/O (por lo general mediante llamadas al sistema operativo) (las vemos más adelante)</li>
+</ul>
+<p>Como mencionamos antes, un proceso no está todo el tiempo en ejecución (Uno si no podría esperar a que termine, pero y si el proceso se &quot;cuelga&quot;?). La pregunta es entonces por cuánto tiempo ejecuta? Ese tiempo lo llamamos <strong>quantum</strong>. En general hay 2 formas de administrar ese tiempo:</p>
+<ul>
+<li><strong>cooperation</strong>: los procesos son los que &quot;voluntariamente&quot; detienen su ejecución para dar tiempo a otros procesos.</li>
+<li><strong>preemption</strong>: los procesos tienen un tiempo limitado para ejecutar, y cuando este acaba el sistema operativo pasa el proceso al estado <em>waiting</em> y asigna el CPU a otro proceso. Lo importante de esto es que el proceso en ningún momento puede decidir si se puede quedar o no con un poco más de tiempo de CPU.
+<ul>
+<li>este es el estándar de hoy día, y para implementarlo el SO se cuelga de la interrupción del reloj.</li>
+</ul>
+</li>
+</ul>
+<p>Pero en este segundo caso surgen las preguntas:</p>
+<ul>
+<li>cómo decide el OS a quién le toca y cuánto tiempo tiene?</li>
+<li>qué significa hacer que otro proceso se ejecute?</li>
+</ul>
+<h2 id="el-scheduler"><a class="header" href="#el-scheduler">El Scheduler</a></h2>
+<p>Para responder las preguntas anteriores aparece el <strong>scheduler</strong>, un módulo del sistema operativo cuya función es decidir a qué proceso le corresponde ejecutar en cada momento.</p>
+<p>Cuando el scheduler tiene que cambiar el programa que se ejecura en la CPU, primero tiene que:</p>
+<ol>
+<li>guardar los registros</li>
+<li>guardar el IP</li>
+<li>si es un programa nuevo, cargarlo en memoria</li>
+<li>cargar los registros correspondientes</li>
+<li>poner el nuevo IP</li>
+<li>algunas cosas extra que se explican más adelante</li>
+</ol>
+<pre><code class="language-admonish info text=&quot;PCB y PCT&quot;">Para los pasos 1 y 2 usamos la PCB mencionada anteriormente, pero además tenemos una estructura más que es la PCT (Process Control Table), que en resumidas cuerntas es un diccionario / array de PCBs.
+</code></pre>
+<p>Esta serie de pasos se la conoce como <em>cambio de contexto</em> o <strong>context switch</strong> y no es gratis, por lo que el scheduler tiene que optimizar el tiempo que está haciendo <em>context switch</em>.</p>
+<p><img src="./img/context_switch_1.png" alt="ejemplo de context switch" /></p>
+<h2 id="actividades-de-un-proceso---syscalls"><a class="header" href="#actividades-de-un-proceso---syscalls">Actividades de un proceso - syscalls</a></h2>
+<ul>
+<li>Un proceso también puede hacer llamadas al sistema (<code>fork()</code>, <code>exec()</code>, etc.)</li>
+<li>Desde el punto de vista del código, es un llamado a función (linkeada dinámicamente). Muchas veces incluso ni vemos la syscall propia, si no que los lenguajes nos abstraen de dichas actividades.
+<ul>
+<li>esto de todos modos es más costoso que ejecutar código, ya que requiere de una interrupción, y a veces cambios de contexto.</li>
+<li>Por ejemplo, cuando uno en C++ hace <code>cout &lt;&lt; &quot;Hola Mundo\n&quot;;</code> por detrás está realizando llamadas al sistema para escribir por salida estándar.</li>
+</ul>
+</li>
+<li>En todos los casos se tiene que llamar a kernel (en linux se hace mediante una interrupción al handler <code>0x80</code>, ahora directamente <code>syscall</code>), y en varios casos es necesario cambiar el nivel de privilegio, contexto, interrupciones, etc.</li>
+</ul>
+<p>Ejemplo usando syscall write (en x86-64):</p>
+<pre><code class="language-x86asm">global start
+
+section .text
+start:
+  mov rax, 1      ; write
+  mov rdi, 1      ; stdout
+  mov rsi, msg
+  mov rdx, 13
+  syscall
+
+  mov rax, 0x60   ; exit
+  mov rdi, 0
+  syscall
+
+section .data
+
+msg:    db   &quot;Hello, world!&quot;
+</code></pre>
+<p>El mismo ejemplo en C:</p>
+<pre><code class="language-c">#include &lt;unistd.h&gt;
+
+int main(int argc, char* argv[]) {
+    write(1, &quot;Hello, world!\n&quot;, 14);
+    return 0;
+}
+</code></pre>
+<h2 id="api-del-so"><a class="header" href="#api-del-so">API del SO</a></h2>
+<p>Las syscalls proveen una interfaz a los servicios del OS, también conocido como API del OS.</p>
+<pre><code class="language-admonish info text=&quot;Syscalls&quot;">se pueden ver las llamadas al sistema operativo disponibles usando el comando `man syscalls`
+</code></pre>
+<p>Existe hoy en día un estándar para la API de los OS basados en unix, llamado <strong>POSIX</strong> (<strong>P</strong>ortable <strong>O</strong>perating <strong>S</strong>ystem <strong>I</strong>nfertace; <strong>X</strong>: UNIX). Define algunos servicios core que debe brindar el OS:</p>
+<ul>
+<li>Creación y manejo de procesos</li>
+<li>Pipes (lo vemos más adelante)</li>
+<li>Señales</li>
+<li>Operaciones de archivos y directorios</li>
+<li>Excepciones</li>
+<li>Errores del bus.</li>
+<li>Biblioteca C</li>
+<li>Instrucciones de E/S y de control de dispositivo (ioctl).</li>
+</ul>
+<h2 id="io"><a class="header" href="#io">I/O</a></h2>
+<p>Por último, mencionamos que dentro de las cosas que un proceso puede hacer, una es operaciones de I/O (Entrada y Salida).</p>
+<p>Si hay algo que caracterizan las entradas de I/O es que <strong>son muy lentas</strong>. Entonces, cuando un proceso necesita hacer I/O tiene algunas opciones:</p>
+<ul>
+<li>quedarse esperando (<strong>busy waiting</strong>) </li>
+<li><strong>polling</strong> (que el proceso consulte cada tanto si la operación se completó o no) (es como una forma de busy waiting, pero tranquilamente el proceso puede hacer algo más mientras consulta a ver si terminó la I/O)</li>
+<li><strong>interrupciones</strong>: cuando pedís I/O te saco y te vuelvo recién a meter cuando se completó la operación</li>
+<li>Otras que no vemos</li>
+</ul>
+<pre><code class="language-admonish info text=&quot;Multiprogramación desde el código&quot;">Además, podemos caracterizar en 2 el tipo de operaciones (aplica a I/O) pero puede ser en general:
+
+- **bloqueante**: hago el &quot;inicio de la operación&quot; (ya sea con una syscall o no) y el proceso no recibe de vuelta el control/ se bloquea hasta que la operación termina
+- **no bloqueante**: hago la syscall, y retorna de inmediato. Sin embargo, no significa que la operación terminó. Si no que tengo que enterarme de alguna manera que la operación terminó.
+
+En otros contextos también se usa la idea de bloqueante vs no bloqueante para esa idea de me bloqueo hasta que termina una operación vs. consulto yo a ver cuándo termina y mientras tanto hago algo más.
+</code></pre>
+<p>Si recordamos, en la PCB se guardaba el estado de un proceso. Pero además de eso también se guarda información relevante para el scheduler como la prioridad del proceso y la lista de recursos por los que está esperando.</p>
+<h2 id="señales"><a class="header" href="#señales">Señales</a></h2>
+<p>Es un mecanismo presente en los sistemas POSIX que permiten notificar a un proceso la ocurrencia de un evento. Un proceso tiene al igual que el SO, handlers para las distintas señales. Cuando recibe una, la ejecución del proceso se detiene y se ejecuta el handler correspondiente.
+Algunas señales conocidas son <code>SIGINT</code>, <code>SIGKILL</code>, <code>SIGSEGV</code>, <code>SIGSTOP</code>, entre otras.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="intercomunicación-entre-procesos-ipc"><a class="header" href="#intercomunicación-entre-procesos-ipc">Intercomunicación Entre Procesos (IPC)</a></h1>
+<p>La comunicación entre procesos es parte fundamental de muchas piezas de software de hoy en día, ya sea entre procesos de un mismo equipo o entre procesos remotos. Se usa en contextos donde se busca/tiene:</p>
+<ul>
+<li>Mejorar la velocidad de procesamiento</li>
+<li>Modularizar funcionalidad (hoy en día el software es grande y complejo)</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Arquitectura multiproceso en Chrome&quot;">Originalmente (e incluso hoy en día), los browsers tenían un único proceso. Esto trae algunos problemas, por ejemplo que si un sitio se &quot;cuelga&quot;, se te cuelga todo el browser.
+
+Chrome en cambio crea **3 tipos de procesos**:
+
+- Browser: administra UI, acceso a disco y a red.
+- Renderer: muestra las páginas, se encarga de procesar html y javascript. Se instancia un nuevo proceso Renderer por sitio.
+- Plug-in: Proceso para cada tipo de plugin.
+
+![Arquitectura Multiproceso en Chrome](./img/multiprocess_chrome.png)
+
+Más info en la [documentación de chromium](https://www.chromium.org/developers/design-documents/multi-process-architecture/)
+</code></pre>
+<h2 id="tipos-de-ipc"><a class="header" href="#tipos-de-ipc">Tipos de IPC</a></h2>
+<p>Hay distintas formas de realizar IPC:</p>
+<ul>
+<li>memoria compartida</li>
+<li>algún recurso compartido (ej: archivos)</li>
+<li>pasaje de mensajes (nos vamos a concentrar en este más que nada)</li>
+</ul>
+<p><img src="./img/tipos_ipc.png" alt="tipos_ipc" /></p>
+<p>Los SO brindan distintas apis para hacer IPC. Por ejemplo:</p>
+<ul>
+<li>Unix SySV Transport Layer Interface</li>
+<li>BSD Sockets (En linux fue el que terminó ganando)
+<ul>
+<li>idea: 
+<ol>
+<li>Dame un agujero en la pared</li>
+<li>Uní mi socket con el de este proceso</li>
+<li>tengo <code>open()</code>, <code>read()</code>, <code>write()</code> (similar a un archivo)</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p>A los ojos de un proceso, hacer IPC es como hacer E/S. Los detalles los esconde todos el SO.</p>
+<h2 id="pipes"><a class="header" href="#pipes">Pipes</a></h2>
+<p>Son un &quot;pseudo archivo&quot; que por debajo es una forma de IPC. Tenemos:</p>
+<ul>
+<li>Ordinary pipes (como los que usamos en la terminal): <code>ls -l | grep so</code></li>
+<li>Named pipes: <code>mkfifo -m 0640 /tmp/mituberia</code></li>
+</ul>
+<h2 id="ipc-sincrónicoasincrónico"><a class="header" href="#ipc-sincrónicoasincrónico">IPC Sincrónico/Asincrónico</a></h2>
+<ul>
+<li>Síncrona (ej TCP):
+<ul>
+<li>El emisor no termina de enviar hasta que el receptor no recibe.</li>
+<li>Si el mensaje se envió sin error suele significar que también se recibió sin error.</li>
+<li>En general es bloqueante.</li>
+</ul>
+</li>
+<li>Asíncrona (ej UDP):
+<ul>
+<li>El emisor envía y &quot;en algún momento le llegará&quot;.</li>
+<li>suele requerir algún mecanismo adicional para saber si llegó el mensaje</li>
+<li>no bloquea al emisor (salvo capaz para copiar el mensaje a un buffer del SO o desde un buffer)</li>
+</ul>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="scheduling"><a class="header" href="#scheduling">Scheduling</a></h1>
+<p>La política de scheduling es una parte fundamental y distintiva del SO. Una mejor política de scheduling impacta fuertemente en el rendimiento y funcionamiento de un SO, es por eso que gran parte de los esfuerzos en optimizar un SO pasa por mejorar la política de scheduling. Sin embargo, para hablar de optimización tenemos que saber qué optimizar y qué métricas usamos.</p>
+<ul>
+<li>Ecuanimidad (<strong>fairness</strong>): que los recursos del procesador se repartan equitativamente.</li>
+<li>Eficiencia: tengo que maximizar el tiempo que la CPU está ocupada ejecutando &quot;cosas útiles&quot;. Por ejemplo, no está bueno dar un quantum chico porque gasto mucho tiempo en context switches.</li>
+<li>Carga del sistema: minimiza la cantidad de procesos listos a la espera de ser ejecutados. O sea tener muchos procesos listos y no ejecutando = malo.</li>
+<li>Tiempo de respuesta: minimizar el tiempo de respuesta <strong>percibido por los usuarios interactivos</strong>.</li>
+<li>Latencia: minimizar el tiempo requerido para un proceso para que empiece a mostrar resultados.</li>
+<li>Rendimiento / Throughput: maximizo #procesos terminados por unidad de tiempo.</li>
+<li>Liberación de recursos: hacer que terminen cuanto antes los procesos que consumen muchos recursos.</li>
+</ul>
+<p>Obviamente no puede tener todo, y cada SO hace un balance y prioriza de maneras distintas.</p>
+<p>Para el resto de la info, vamos a asumir que tenemos un único procesador. Pero esto se generaliza a más procesadores en donde el scheduler ahora también tiene que decidir a qué procesador mandar cada proceso. Eso agrega nuevas consideraciones como por ejemplo el costo de mover un proceso de un procesador a otro (por cuestiones de localidad de memoria por ejemplo).</p>
+<h2 id="el-procesador-como-una-sala-de-espera"><a class="header" href="#el-procesador-como-una-sala-de-espera">El procesador como una sala de espera</a></h2>
+<ul>
+<li>La analogía y modelo que se usa es el de colas. El scheduler mantiene una <strong>ready queue</strong> con los procesos listos que tiene para mantener. En general por debajo la ready queue es una lista enlazada en donde cada nodo apunta a la PCB correspondiente.</li>
+<li>Entonces distintos tipos de colas van a cambiar el funcionamiento del scheduler.
+<ul>
+<li>Un primer enfoque es el de una simple cola FIFO, pero trae el problema de que estaríamos tratando a todos los procesos de la misma manera. No es lo mismo un proceso que requiera mucha CPU (<em>cpu-bound</em>) a uno que no (por ejemplo un proceso I/O-bound).</li>
+<li>Para eso podemos resolverlo agregando prioridades al modelo.</li>
+<li>Siguiente problema: <strong>inanición</strong> (starvation). Los procesos de mayor prioridad están constantemente &quot;ganando&quot; tiempo de CPU y traba a los de menor prioridad</li>
+<li>Posible solución: a medida que un proceso &quot;envejece&quot;, le aumento la priordad.</li>
+</ul>
+</li>
+<li>Otro enfoque: round robin, o sea darle un cachito de tiempo a cada proceso.
+<ul>
+<li>cuánto quantum les doy?
+<ul>
+<li>Si es muy largo, los procesos &quot;interactivos&quot; dejarían de verse como tales.</li>
+<li>Si es muy corto, tengo mucho context switch</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Qué hago? Combino ambos enfoques: round robin + prioridades.
+<ul>
+<li>además se le suele dar un poquito más de prioridad a los procesos IO bound dado que no requieren tanto tiempo de CPU y liberan rápidamente su lugae.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-admonish info text=&quot;Otras Colas&quot;">Además de la ready queue, el OS tiene otras colas. Recordemos que podemos tener operaciones de I/O, o procesos a la espera de algún evento (ej: esperar a que un proceso hijo termine). En dichos casos, los procesos tienen que esperar a que esa operación termine (por lo general es mucho más lenta que el resto de las operaciones en CPU), entonces el scheduler puede mover el proceso a una **wait queue**
+
+![queue diagram](./img/queue_diagram.png)
+</code></pre>
+<h2 id="múltiples-colas"><a class="header" href="#múltiples-colas">Múltiples colas</a></h2>
+<p>Esto extiende el modelo anterior. Cada cola representa el quantum que se le otorga a los procesos de dicha cola. Y las de menos quantum tienen mayor prioridad. Además, el scheduler puede decidir mover al proceso de cola.</p>
+<h2 id="scheduling-en-sistemas-batch"><a class="header" href="#scheduling-en-sistemas-batch">Scheduling en sistemas batch</a></h2>
+<ul>
+<li>Se suele usar la estrategia Shortest Job First. 
+<ul>
+<li>Apunta a maximizar el throughput. </li>
+<li>En general en estos sistemas se puede predecir el tiempo que tarda el trabajo
+<ul>
+<li>Cuando conocés las duraciones de antemano, esta estrategia es óptima respecto a la latencia promedio.</li>
+</ul>
+</li>
+<li>alternativa: pensar cuánto tiempo falta hasta hacer E/S nuevamente</li>
+<li>cómo predicen el tiempo en CPU? Uso info del pasado (estadísticas).</li>
+</ul>
+</li>
+</ul>
+<h2 id="scheduling-en-real-time"><a class="header" href="#scheduling-en-real-time">Scheduling en real time</a></h2>
+<p>Cuando hablamos de sistemas real time nos referimos a la predictibilidad del mismo. Esto quiere decir que las tareas/procesos tienen <strong>deadlines estrictos</strong>, por lo general presente en sistemas críticos. O sea no cumplo deadline = MALO. No vimos mucho de esto pero mencionamos 2 alternativas:</p>
+<ul>
+<li>scheduling cooperativo</li>
+<li>Earliest Deadline First</li>
+</ul>
+<h2 id="scheduling-en-smp"><a class="header" href="#scheduling-en-smp">Scheduling en SMP</a></h2>
+<p>Ahora si en este contexto tenemos un sistema multiprocesador. El problema principal del scheduling en estos sistemas es la caché. Como dijimos antes, mover un proceso a otro procesador puede implicar perder la data que ya teníamos en cache. Se introduce en estos casos el concepto de afinidad al procesador para incentivar a que se use el mismo procesador.</p>
+<ul>
+<li>Decimos que la <strong>afinidad es dura</strong> si se tiene que respetar a rajatabla (siempre al mismo procesador).</li>
+<li>Si no es <strong>afinidad blanda</strong></li>
+</ul>
+<pre><code class="language-admonish info title=&quot;NUMA (Non Uniform Memory Access)&quot;">Nuevas arquitecturas permiten al CPU acceder a los espacios de memoria de otros CPUs. Sin embargo, esto tiene un costo extra por lo que sigue siendo mejor el acceso a la memoria local del CPU. También sigue existiendo el problema de la cache, con lo cual es una mejora pero no es una solución, si no una herramienta extra.
+
+![NUMA](./img/numa.png)
+</code></pre>
+<pre><code class="language-admonish info title=&quot;El scheduler en linux&quot;">En lugar de usar una cola, se tiene un ABB donde la clave es el tiempo en ejecución para la &quot;ready queue&quot;. Luego, en log #Procesos se puede obtener el siguiente a ejecutar.
+![Linux scheduling](./img/linux_scheduler.png)
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sincronización-entre-procesos"><a class="header" href="#sincronización-entre-procesos">Sincronización entre procesos</a></h1>
+<p>Intro bla bla... <a href="http://www.cs.columbia.edu/~junfeng/10fa-e6998/papers/concurrency-bugs.pdf">PAPER Shan Lu et al. Learning from Mistakes - A Comprehensive Study on Real World Concurrency Bug Characteristics. ASPLOS'08</a></p>
+<h2 id="sección-crítica-crit"><a class="header" href="#sección-crítica-crit">Sección Crítica (CRIT)</a></h2>
+<p>Es un cacho de código tal que:</p>
+<ul>
+<li>sólo hay (o debería haber) un proceso a la vez en CRIT.</li>
+<li>todo proceso que esté esperando entrar a CRIT va a entrar eventualmente.</li>
+<li>Ningún proceso fuera de CRIT puede bloquear a otro.</li>
+</ul>
+<p>A nivel código se implementa con dos llamados: uno para entrar y otro para salir de la CRIT. Si implementamos exitosamente secciones críticas, los procesos pueden compartir datos sin tosquearse.</p>
+<h2 id="implementando-secciones-críticas"><a class="header" href="#implementando-secciones-críticas">Implementando secciones críticas</a></h2>
+<p>Una alternativa es usar <strong>locks</strong>. Son como booleanos compartidos. Cuando entro a la CRIT lo pongo en 1, al salir en 0. Si está en 1 espero a que tenga un 0.</p>
+<pre><code class="language-admonish warning text=&quot;no todo es tan simple&quot;">El problema de que el scheduler nos cague puede seguir ocurriendo (primero checkeo el bool, después me suspenden el proceso). Por lo general nos remitimos a soluciones que usan el HW.
+</code></pre>
+<h2 id="tas"><a class="header" href="#tas">TAS</a></h2>
+<p>El Hw suele proveer alguna instrucción que permite settear atómicamente el valor de un booleano/entero en 1. Nosotros la vamos a llamar <code>TestAndSet</code>.</p>
+<pre><code>fn TestAndSet(variable) {
+  old_value = variable.value
+  variable.value = 1
+  return old_value
+}
+</code></pre>
+<p>Pero además toda la operación se realiza de forma atómica, o sea de forma indivisible sin importar que tengamos varias CPUs.</p>
+<pre><code class="language-admonish info title=&quot;TestAndSet en x86&quot;">En x86 tenés la operación `bts` que te permite settear el flag de carry y un bit de un registro. Y esa operación si se le agrega el prefijo `lock` hace que se ejecute de manera atómica. O sea `lock bts &lt;registro&gt; &lt;nro_de_bit&gt;`
+</code></pre>
+<h2 id="usando-tas"><a class="header" href="#usando-tas">Usando TAS</a></h2>
+<pre><code>boolean lock;
+
+while(TRUE) {
+  while (TestAndSet(&amp;lock)) {
+    // devuelve true si estaba lockeado. No hago nada
+  }
+
+  // devolvió FALSE, estoy en la sección crítica (recordar que después del check pasa a ser TRUE el valor del lock);
+  // hago lo que necesite la sección crítica
+
+  // salgo de la sección crítica
+  lock = FALSE;
+
+  // acá puedo hacer todo lo que no tenga sección crítica
+}
+</code></pre>
+<pre><code class="language-admonish info title=&quot;Observación&quot;">Durante el while interno no hace nada, pero está comiendo \&lt;\&lt;MUCHO\&gt;\&gt; CPU (busy wait)
+</code></pre>
+<h2 id="alternativa-sleep"><a class="header" href="#alternativa-sleep">Alternativa: Sleep</a></h2>
+<p>Una alternativa podría ser agregar un sleep adentro del while. Y cuando falla el intento de obtener el lock suspender el proceso durante un tiempo. La cuestión es cuánto tiempo? </p>
+<ul>
+<li>Si es mucho, pierdo tiempo (y alguien puede &quot;robarme el lugar&quot;).</li>
+<li>Si es poco, sigo desperdiciando CPU (menos que antes though).</li>
+<li>Y si le pido al SO que me deje seguir cuando esté liberado el lock?</li>
+</ul>
+<h2 id="problemas-con-sleep-problema-del-productor-consumidor"><a class="header" href="#problemas-con-sleep-problema-del-productor-consumidor">Problemas con sleep: Problema del Productor-Consumidor</a></h2>
+<ul>
+<li>Un proceso mete elementos a un buffer (Productor), otro los retira (Consumidor).</li>
+<li>Nuevamente hay <strong>contención</strong> de recursos. Pero además hay un problema adicional, qué pasa si 
+<ul>
+<li>se llenó el buffer y el productor quiere meter cosas</li>
+<li>se vació el buffer y el consumidor quiere sacar cosas</li>
+<li>En ambos casos la respuesta es esperar</li>
+</ul>
+</li>
+</ul>
+<p>Seguro que busy waiting nos alcanza, y si usamos <em>sleep/wakeup</em>?</p>
+<p>De vuelta estamos atados a la traza de ejecución. Como el chequeo de
+la capacidad del buffer y el sleep/wakeup no es atómico de por sí,
+puede pasar que el consumidor reciba el wakeup antes de usar el
+sleep, y después haga el sleep. Si por ejemplo el buffer es de un
+único elemento, puede pasar que se cuelgue el sistema.</p>
+<h2 id="semáforos-la-true-way"><a class="header" href="#semáforos-la-true-way">Semáforos: la true way</a></h2>
+<p>Un semáforo es una variable entera con las siguientes características:</p>
+<ul>
+<li>se puede inicializar con cualquier valor</li>
+<li>tiene 2 operaciones:
+<ul>
+<li><code>wait()</code></li>
+<li><code>signal()</code></li>
+</ul>
+</li>
+<li><code>wait(s): while (s &lt;= 0) sleep(); s--;</code></li>
+<li><code>signal(s): s++; if (X espera por s) wakeup(X)</code></li>
+<li>Ambas se implementan de forma tal que su ejecución sea atómica (sin interrupciones en realidad)</li>
+<li>Caso particular: <code>mutex = lock = semáforo inicializado en 1</code></li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Productor-Consumidor con semáforos&quot;">Una posible implementación del mismo problema anterior pero usando semáforos:
+
+    semaforo mutex = 1;
+    semaforo llenos = 0;
+    semaforo vacios = N; // Capacidad del buffer
+
+    fn productor() {
+      while(true) {
+        item = producir_item();
+
+        // Entrando a zona crítica
+        wait(vacios);
+        wait(mutex);
+
+        agregar(item, buffer);
+        cant++;
+
+        signal(mutex);
+        signal(llenos);
+      }    
+    }
+
+    fn consumidor() {
+        while(true) {
+          wait(llenos); // espero a que &quot;me despierten&quot;
+
+          wait(mutex); // acceso exclusivo al buffer
+          item = sacar(buffer);
+          cant--;
+
+          signal(mutex); // libero el buffer
+          signal(vacios); // incremento la &quot;capacidad del bufer&quot; trackeada por el semáforo. si estaba lleno (vacios = -1) ahora pasa a 0 y despierta al productor
+          hacer_algo(item); // zona no crítica
+        }
+      }
+</code></pre>
+<pre><code class="language-admonish warning title=&quot;Cuidado&quot;">Esto está muy lindo, pero **ojo**. Tan sólo invertir el orden de los `wait`/`signal` puede resultar en una situación en la que ambos se quedan esperando. Por ejemplo, si consumidor se implementara de la siguiente manera:
+
+    fn consumidor() {
+      wait(mutex);
+      wait(llenos);
+
+      // ... El resto igual
+    }  
+
+Imaginemos que :
+
+- el consumidor ejecuta primero y le toca hacer `wait(mutex)` (adquiere el mutex)
+- luego hace `wait(llenos);` y se queda esperando porque por ahora está en 0
+- luego ejecuta el productor, y hace `wait(vacios)` exitosamente pero al hacer `wait(mutex)` se va a quedar esperando porque el mutex ya estaba bloqueado por el consumidor.
+
+Esta situación en la que se da una dependencia de recursos cíclica entre procesos se llama **deadlock**, y es uno de los grandes problemas que surgen en la concurrencia manifestándose en todo tipo de sistemas.
+</code></pre>
+<h2 id="volviendo-al-siglo-21"><a class="header" href="#volviendo-al-siglo-21">Volviendo al siglo 21...</a></h2>
+<p>Hoy en día la mayoría de lenguajes de alto nivel proveen interfaces para implementar secciones críticas y manejo de concurrencia. Por ejemplo con:</p>
+<ul>
+<li>bool atómicos</li>
+<li>int atómico</li>
+<li>colas atómica</li>
+</ul>
+<h2 id="spin-locks"><a class="header" href="#spin-locks">Spin locks</a></h2>
+<p>Basándonos en el diseño que vimos de bools atómicos vamos a construir una serie de locks. El primero de ellos es el mutex llamado TASLock, o spin lock.</p>
+<pre><code>atomic&lt;bool&gt; reg;
+
+fn create() { reg.set(false); }
+fn lock() { while(reg.testAndSet()) {} }
+fn unlock() { reg.set(false); }
+</code></pre>
+<pre><code class="language-admonish warning title=&quot;Cuidado&quot;">`lock()` **no es atómico**
+</code></pre>
+<p>Ejemplo de uso:</p>
+<pre><code>TasLock mutex;
+
+int donar(int donacion) {
+    int res;
+
+    // inicia sección crítica
+    mutex.lock();
+    fondo += donacion;
+    mutex.unlock();
+    // Fin sección crítica
+
+    // inicio de otra sección crítica
+    mutex.lock();
+    res = ticket; ticket++;
+    mutex.unlock();
+    // Fin de la sección crítica
+
+    return res;
+}
+</code></pre>
+<p>Algunas observaciones sobre el TASLock:</p>
+<ul>
+<li>todo <code>lock()</code> necesita su <code>unlock()</code>, no hay que olvidárselo.</li>
+<li>usa busy waiting, ya dijimos que era menos malo.
+<ul>
+<li>esto igual depende, hay que comparar el overhead vs semáforos que tampoco son gratis</li>
+</ul>
+</li>
+<li>podemos minimizar el costo: en vez de usar <code>testAndSet()</code> de una, chequeás el valor de la variable antes de intentar (la operación es más barata).
+<ul>
+<li>Al implementar eso obtenemos un TTasLock</li>
+</ul>
+</li>
+</ul>
+<p>Ejemplo del TTasLock:</p>
+<pre><code>bool mutex;
+fn create() { mutex.set(false); }
+fn lock() {
+    while(true) {
+      while (mutex.get()) { // true == ta lockeado }
+      if (!mutex.testAndSet()) return; // si da falso =&gt; no estaba lockeado y yo obtuve el lock, si no vuelvo a loopear
+    }
+}
+fn unlock() { mutex.set(false); }
+</code></pre>
+<p>Surge la natural pregunta: <strong>Cuánto mejora?</strong></p>
+<p><img src="./img/ttas_lock_vs_taslock.png" alt="Comparando TasLock y TTasLock" /></p>
+<h2 id="otro-tipo-de-operaciones-atómicas"><a class="header" href="#otro-tipo-de-operaciones-atómicas">Otro tipo de operaciones atómicas</a></h2>
+<h3 id="entero-atómico"><a class="header" href="#entero-atómico">Entero atómico</a></h3>
+<pre><code>atomic int getAndInc() { //... }
+atomic int getAndAdd(int v) { //... }
+atomic int compareAndSwap(T u, T v) { //... } // Esta operación compara el contenido con u y si es igual lo cambia por v (devolviendo u)
+</code></pre>
+<h3 id="cola"><a class="header" href="#cola">Cola</a></h3>
+<pre><code>atomic enqueue(T item) { // Uso lock para asegurar acceso exclusivo; }
+atomic dequeue(T *pitem) { // Uso lock para asegurar acceso exclusivo; }
+</code></pre>
+<h2 id="locks-recursivos"><a class="header" href="#locks-recursivos">Locks recursivos</a></h2>
+<p>El siguiente código genera deadlock:</p>
+<pre><code>fn f() {
+  mutex.lock();
+  f();
+  mutex.unlock();
+}
+</code></pre>
+<p>El siguiente también, cuando cada proceso ejecuta la primer linea (cada uno adquiere un lock nomás):</p>
+<pre><code>fn proceso_1() {
+  mutexA.lock();
+  mutexB.lock();
+  // ...
+}
+
+fn proceso_2() {
+  mutexB.lock();
+  mutexA.lock();
+  // ...
+}
+</code></pre>
+<h3 id="solución-mutex-reentrante-o-recursivo"><a class="header" href="#solución-mutex-reentrante-o-recursivo">Solución: Mutex reentrante o recursivo</a></h3>
+<p>Esquema de implementación V1, un mutex con un atomic int:</p>
+<pre><code>int calls;
+atomic&lt;int&gt; mutex;
+
+fn create() { mutex.set(0); }
+fn wait() { while(!mutex.testAndSet(1)) {} }
+fn signal() { mutex.set(0) }
+</code></pre>
+<p>Esquema V2, ahora si reentrante:</p>
+<pre><code>int calls;
+atomic&lt;int&gt; owner;
+
+fn create() { owner.set(-1); calls = 0; }
+fn lock() {
+    if (owner.get() != self) {
+      while(owner.compareAndSwap(-1, self) != self) // en alguna call lo adquiere y en la siguiente el compareAndSwap devuelve self
+    }
+    calls++;
+}
+
+fn unlock() {
+    if (--calls == 0) owner.set(-1);
+}
+</code></pre>
+<p>Esquema V3, ahora si con local spinning:</p>
+<pre><code>int calls;
+atomic&lt;int&gt; owner;
+
+fn create() { owner.set(-1); calls = 0; }
+fn lock() {
+    while (true) {
+      while (owner.get() != -1 and owner.get != self) {}
+      if(owner.compareAndSwap(-1, self) == self) { break; }
+    }
+    calls++;
+}
+
+fn unlock() {
+    if (--calls == 0) owner.set(-1);
+}
+</code></pre>
+<h2 id="condiciones-de-coffman"><a class="header" href="#condiciones-de-coffman">Condiciones de Coffman</a></h2>
+<p>Postula una serie de condiciones necesarias para la existencia de un deadlock:</p>
+<ul>
+<li><strong>Exclusión mutua</strong>: Un recurso no puede estar asignado a más de un proceso.</li>
+<li><strong>Hold and wait</strong>: Los procesos que ya tienen algún recurso pueden solicitar otro.</li>
+<li><strong>No preemption</strong>: No hay mecanismo para quitarle los recursos a un proceso por la fuerza</li>
+<li><strong>Espera circular</strong>: tiene que haber un ciclo de N &gt;= 2 procesos tal que \(P_i\) espera un recurso que tiene \( P_{i+1} \)</li>
+</ul>
+<p>Uno puede plantear un modelo con un grafo bipartito en donde tengo:</p>
+<ul>
+<li>Los nodos son procesos y recursos</li>
+<li>agrego un eje de un nodo de proceso a uno de recurso si el proceso solicitó el recurso</li>
+<li>agrego un eje de un recurso a un proceso si el proceso adquirió el recurso</li>
+<li>bajo este modelo tener un ciclo en el grafo es equivalente a tener un deadlock</li>
+</ul>
+<h2 id="problemas-de-sincronización"><a class="header" href="#problemas-de-sincronización">Problemas de sincronización</a></h2>
+<p>Mencionamos 1 tipo explícito de problemas pero hay varios:</p>
+<ul>
+<li>Deadlock: ya lo vimos</li>
+<li>Race condition: el acceso concurrente a un mismo recurso nos puede dejar en un estado inválido.</li>
+<li>Starvation: también conocido como inanición, es cuando un proceso se &quot;consume todos los recursos&quot; y no le permite a otros &quot;avanzar&quot;. Por ejemplo, un proceso que siempre &quot;gana&quot; la zona crítica y los otros siempre tienen que esperar. Es un problema en sí mismo, cómo aseguro que todos los procesos eventualmente puedan acceder a la zona crítica si lo requieren?</li>
+</ul>
+<p>Para tratar estos problemas tenemos algunas herramientas, pero no hay un &quot;one size fits all&quot;:</p>
+<ul>
+<li>patrones de diseño (o sea usar lo que ya sabemos que anda bien y no tiene problemas de concurrencia)</li>
+<li>reglas de programación (ej: pido locks en X orden y los libero en Y orden)</li>
+<li>Prioridades: para evitar Starvation</li>
+<li>Protocolo (similar a patrones de diseño, uso cosas que se que funcionan y no reinvento la rueda)</li>
+</ul>
+<p>Para detectar estos problemas hay algunas técnicas aunque hasta el día de hoy no hay un algoritmo que pueda detectar <strong>cualquier</strong> tipo de problema de concurrencia:</p>
+<ul>
+<li>análisis de programas
+<ul>
+<li>estático</li>
+<li>dinámico (profiling por ejemplo)</li>
+</ul>
+</li>
+<li>en tiempo de ejecución
+<ul>
+<li>preventivo (antes de que ocurra)</li>
+<li>recuperación (deadlock recovery. Por ejemplo las bases de datos tienen que hacer esto y abortar transacciones)</li>
+</ul>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sincronización-razonamiento-y-problemas-clásicos"><a class="header" href="#sincronización-razonamiento-y-problemas-clásicos">Sincronización: Razonamiento y problemas clásicos</a></h1>
+<h2 id="el-problema-de-los-turnos"><a class="header" href="#el-problema-de-los-turnos">El problema de los turnos</a></h2>
+<p>Tenemos una serie de procesos ejecutando en simultáneo \( P_i, i \in
+[0, \dots, N-1] \). Cada proceso tiene que imprimir &quot;Soy el proceso
+\( i \)&quot;, y queremos que se haga en orden. (podría ser realizar
+cualquier tarea en realidad, lo importante es la constraint de orden).</p>
+<p>Podemos pensar en una solución como la siguiente:</p>
+<pre><code>// Semáforos. Tengo 1 por cada proceso (y uno extra)
+semaphore sem[N+1];
+
+// Inicialización
+fn init() {
+  for i in 0..N+1 {
+    sem[i] = 0; // blockeado
+  }
+
+  for i in 0..N+1 {
+    spawn P(i);
+  }
+
+  sem[0].signal()
+}
+
+
+// Proceso i
+fn P(i) {
+  // Esperar turno
+  sem[i].wait();
+  // Ejecutar
+  print(&quot;Soy el proc {:i}&quot;);
+  // Avisar al próximo
+  sem[i+1].signal();
+}
+</code></pre>
+<p>El programa es correcto? Cómo demuestro correctitud en un código concurrente? Tengo tripla de hoare, teorema del invariante, especificación y esas cosas?</p>
+<h2 id="razonando-en-paraleloconcurrente"><a class="header" href="#razonando-en-paraleloconcurrente">Razonando en paralelo/concurrente</a></h2>
+<p>Modelo: \( \tau = \tau_1, \dots \) donde los \( \tau_i \) son diferentes estados del programa.</p>
+<p>En programas paralelos <em>correcto</em> ya no significa lo mismo, ahora la correctitud pasa por verificar que ciertas propiedades se cumplen sobre cualquier ejecución (o sea, para cualquer scheduling posible).</p>
+<h3 id="qué-tipo-de-propiedades-tengo"><a class="header" href="#qué-tipo-de-propiedades-tengo">Qué tipo de propiedades tengo?</a></h3>
+<p>Vamos a tener:</p>
+<ul>
+<li><strong>propiedades de safety</strong>: o sea nada malo ocurre.
+<ul>
+<li>ej: ausencia de deadlock, exclusión mutua, no hay pérdida de mensajes, los relojes no se desvían a más de \( \delta \) unidades de tiempo.</li>
+</ul>
+</li>
+<li><strong>propiedades de progreso/liveness</strong>: en algún momento algo &quot;bueno sucede&quot;. Suele dar esa idea de que si tengo cosas que quiero que se ejecuten siempre estoy en posición de llegar al punto en que se ejecutan.
+<ul>
+<li>ej: &quot;si aprieto el botón, eventualmente se llama a su callback&quot;, vendría a ser como que eventualmente el sistema responde a los estímulos.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Observaciones&quot;">Las propiedades de safety de alguna forma son &quot;opuestas&quot; a las de livenes. En qué sentido? Bueno, las propiedades de safety son algo que tienen que valer para toda ejecución, eso significa que cuando no se cumple es porque hay una ejecución en donde llego a que esa cosa mala ocurre. Eso a su vez implica que tengo **una** ejecución **finita**, o contraejemplo. Entonces si quiero probar que vale, asumo que no, obtengo un &quot;contraejemplo&quot; e intento llegar a un absurdo. Y si quiero probar que no vale alcanza con buscar el contraejemplo.
+
+Por otro lado las propiedades de safety ocurre al revez. Suponer que no vale significa que sin importar la ejecución siempre tengo un camino que no llega (o sea tengo potencialmente una cantidad infinita de ejecuciones &quot;infinitas&quot;). Acá es al revés, para trabajar con cosas finitas lo demuestro &quot;directo&quot;
+</code></pre>
+<p>Una propiedad muy común es la de <strong>fairness</strong>. Se basa en la idea de que los procesos reciban su turno (para ejecutar, para ingresar a una sección crítica, etc.) con infinita frecuencia. En criollo, no ocurre que un proceso siempre quede postergado <em>ad infinitum</em>. Hay 3 tipos de fairness:</p>
+<ul>
+<li><strong>incondicional</strong>: el proceso se ejecuta regularmente si <strong>siempre está habilitado</strong>.</li>
+<li><strong>Fuerte</strong>: el proceso se ejecuta regularmente si <strong>está habilitado con infinita frecuencia</strong> (puede tener períodos de inhabilitación).</li>
+<li><strong>Débil</strong>: el proceso se ejecuta regularmente si <strong>está continuamente habilitado a partir de cierto punto</strong></li>
+</ul>
+<p>En general, suponemos que fairness está dado por default y usamos eso para probar otras propiedades (generalmente liveness: porque puedo asumir que va a recibir turnos y va a &quot;poder avanzar&quot;)</p>
+<h3 id="modelo-formal"><a class="header" href="#modelo-formal">Modelo Formal</a></h3>
+<p>Para trabajar con estas propiedades se utilizan <strong>lógicas temporales</strong>. En particular nosotros no vemos demostraciones si no mas bien argumentaciones de que las propiedades se cumplen.</p>
+<h2 id="otro-problema-clásico-rendezvous"><a class="header" href="#otro-problema-clásico-rendezvous">Otro problema clásico: Rendezvous</a></h2>
+<ul>
+<li>tengo procesos \( P_i, i \in [0, \dots, N - 1] \)</li>
+<li>la propiedad a demostrar es la propiedad <span style="color:red">BARRERA</span>:</li>
+</ul>
+<p>\[
+b(j) \text{ se ejecuta después de todos los } a(i)
+\]</p>
+<ul>
+<li>observación: no impongo ninguna restricción sobre el orden de los \( a(i) \) ni los \( b(i) \).</li>
+</ul>
+<h2 id="modelo-formal-v20"><a class="header" href="#modelo-formal-v20">Modelo Formal V2.0</a></h2>
+<p>Usamos un modelo propuesto en el libro de Nancy Lynch:</p>
+<p><img src="./img/lynch_process_model.png" alt="modelo de nancy lynch" /></p>
+<ul>
+<li>Estado: \( \sigma : [ 0, \dots, N - 1 ] \rightarrow \lbrace \text{REM}, \text{TRY}, \text{CRIT}, \text{EXIT} \rbrace \)</li>
+<li>Transición: \( \sigma \rightarrow^{l} \sigma' , l \in [ 0, \dots, N - 1 ] \rightarrow \lbrace \text{REM}, \text{TRY}, \text{CRIT}, \text{EXIT} \rbrace \)</li>
+<li>Ejecución: \( \tau = \tau_0 \rightarrow^l \tau_1 \dots \)</li>
+</ul>
+<h3 id="algunas-propiedades-bajo-el-modelo-formal"><a class="header" href="#algunas-propiedades-bajo-el-modelo-formal">Algunas propiedades bajo el modelo formal</a></h3>
+<ul>
+<li>
+<p><span style="color:red">WAIT-FREEDOM</span></p>
+<ul>
+<li>idea: &quot;Todo proceso que intenta acceder a la sección crítica, en algún momento lo logra, cada vez que lo intenta&quot;</li>
+<li>fórmula: \( \forall \tau, \forall k, \forall i, \tau_k(i) = \text{TRY} \implies \exists k' &gt; k \land \tau_{k'}(i) = CRIT \)</li>
+</ul>
+</li>
+<li>
+<p><span style="color:red">FAIRNESS</span></p>
+<ul>
+<li>en castellano: &quot;Para toda ejecución y proceso, si el proceso puede hacer una transición (la mismoa) <strong>en una cantidad infinita de estados</strong> de la ejecución, entonces existe un momento en el que hace la transición&quot;</li>
+<li>fórmula: \( \forall \tau, \forall i, | \lbrace \tau' : \tau \rightarrow \dots \tau' \rightarrow^{l_i} \tau'' \rbrace | = \infty \implies \exists k, \tau_k \rightarrow^{l_i} \tau_{k+1} \)</li>
+</ul>
+</li>
+<li>
+<p><span style="color:red">EXCL</span></p>
+<ul>
+<li>idea: &quot;Para toda ejecución y estado , no puede haber más de un proceso tal que ambos estén en estado CRIT&quot;</li>
+<li>fórmula:</li>
+</ul>
+<p>\[
+\text{EXCL} \equiv \square \text{#CRIT} \leq 1
+\]</p>
+</li>
+<li>
+<p><span style="color:red">LOCK-FREEDOM</span></p>
+<ul>
+<li>idea: para toda ejecución y estado, si hay un proceso en estado TRY y ninguno en CRIT, entonces eventualmente algún proceso está en CRIT (capaz el que estaba en TRY le ganaron de mano, pero alguno entra)</li>
+<li>fórmula: \( \square ( \text{#TRY} \geq 1 \text{#CRIT} = 0 \implies \diamond \text{#CRIT} &gt; 0 ) \)</li>
+</ul>
+</li>
+<li>
+<p><span style="color:red">STARVATION-FREEDOM</span></p>
+<ul>
+<li>
+<p>predicados auxiliares:</p>
+<ul>
+<li>IN: si un proceso está en try, eventualmente está en crit</li>
+</ul>
+<p>\[
+\text{IN}(i) \equiv i \in \text{TRY} \implies \diamond i \in \text{CRIT}
+\]</p>
+<ul>
+<li>OUT: si un proceso está en la zona crítica, eventualmente sale de la zona crítica</li>
+</ul>
+<p>\[
+\text{OUT}(i) \equiv i \in \text{CRIT} \implies \diamond i \in \text{REM}
+\]</p>
+</li>
+<li>
+<p>idea: Si todo proceso eventualmente sale de la zona crítica, entonces todo proceso eventualmente entra a la zona crítica</p>
+</li>
+<li>
+<p>fórmula: \( \forall i. \text{OUT}(i) \implies \forall i. \text{IN}(i) \)</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Observación&quot;">Podemos reescribir &lt;span style=&quot;color:red&quot;&gt;WAIT-FREEDOM&lt;/span&gt; usando el predicado IN:
+
+\\[
+  \text{WAIT-FREEDOM} \equiv \forall i. \square \text{IN}(i)
+\\]
+</code></pre>
+<ul>
+<li>
+<p><span style="color:red">SCM</span> (sección crítica de a M procesos)</p>
+<ul>
+<li>idea: puedo tener <strong>hasta M procesos</strong> en la sección crítica (esto por ejemplo aplica cuando tengo semáforos)</li>
+<li>fórmula:</li>
+</ul>
+<p>\[
+\begin{align}
+\forall \tau. \forall k. \\
+\text{1) #}&amp; \lbrace i | \tau_k(i) = CRIT \rbrace \leq M \\
+\text{2) #}&amp; \forall i. \tau_k(i) = TRY \land \text{#}\lbrace j | \tau_k(j) = CRIT \rbrace &lt; M \\
+&amp;\implies \exists k' &gt; k. \tau_{k'}(i) = CRIT
+\end{align}
+\]</p>
+</li>
+</ul>
+<h2 id="problema-lectoresescritores"><a class="header" href="#problema-lectoresescritores">Problema Lectores/escritores</a></h2>
+<ul>
+<li>
+<p>esto lo vemos en bases de datos (cuando vemos logging, manejo de transacciones, y errores/aborts)</p>
+</li>
+<li>
+<p>tengo una variable compartida</p>
+</li>
+<li>
+<p>los escritores necesitan acceso exclusivo, los lectores pueden leer al mismo tiempo</p>
+</li>
+<li>
+<p>propiedad <span style="color:red">SWMR</span> (Single-Writer/Multiple-Readers)</p>
+<p>\[
+\forall \tau \forall k. \exists i. writer(i) \land \tau_k(i) = \text{CRIT} \implies \forall j \neq i. \tau_k(j) \neq \text{CRIT} \\
+\forall \tau. \forall k. \exists i. reader(i) \land \tau_k(i) = \text{CRIT} \implies \\
+\forall j \neq i. \tau_k(j) = CRIT \implies reader(j)
+\]</p>
+<ul>
+<li>El primer predicado fuerza que si un proceso está escribiendo no hay otros procesos en la sección crítica</li>
+<li>El segundo predicado dice que si hay un proceso leyendo, entonces cualquier otro proceso que también esté en la sección crítica tiene que estar leyendo (y por ende no escribiendo. (El anterior lo inmplica en realidad)</li>
+</ul>
+</li>
+</ul>
+<h2 id="solución-y-análisis-al-problema"><a class="header" href="#solución-y-análisis-al-problema">Solución y análisis al problema</a></h2>
+<p>Uso 2 semáforos y un contador:</p>
+<pre><code>semaphore wr = 1;
+// Nota: este semáforo lo uso como mutex para 
+// obtener acceso exclusivo a `readers`
+semaphore rd = 1;
+int readers = 0;
+
+fn writer(i) {
+  // TRY
+  wr.wait();
+  // CRIT
+  write();
+  // EXIT
+  wr.signal();
+}
+
+fn reader(i) {
+  // TRY
+  rd.wait();
+  readers++;
+  if readers == 1 { 
+    wr.wait(); 
+  }
+  rd.signal();
+  // CRIT
+  read();
+
+  // EXIT
+  rd.wait();
+  readers--;
+  if readers == 0 {
+    wr.signal();
+  }
+  rd.signal();
+}
+</code></pre>
+<p>Es esta implementación correcta? A simple vista uno diría que sí, pero en realidad no. Los procesos escritores pueden llegar a quedarse bloqueados permanentemente si por ejemplo hay constantemente lectores entrando a la sección crítica. En ese caso nunca &quot;libero&quot; el lock del writer y por más de que puede estar infinitamente disponible nunca le llega su turno. O sea puede haber <strong>inanición</strong>.</p>
+<h2 id="problemas-adicionales"><a class="header" href="#problemas-adicionales">Problemas adicionales</a></h2>
+<ul>
+<li>filósofos que cenan
+<ul>
+<li>N filósofos en una mesa redonda, con tenedores (compartidos) a sus lados</li>
+<li>tengo que programar las funciones <code>tomar_tenedores(filo_i)</code> y <code>soltar_tenedores(filo_i)</code> satisfaciendo:
+<ul>
+<li><span style="color:red">EXCL-FORK</span>: tenedores de uso exclusivo</li>
+<li><span style="color:red">WAIT-FREEDOM</span>: sin deadlock</li>
+<li><span style="color:red">STARVATION-FREEDOM</span>: no inanición</li>
+<li><span style="color:red">EAT</span>: Más de un filósofo puede comer a la vez (variante de SCM)</li>
+</ul>
+</li>
+<li>nota de color: hay un resultado general que dice que <strong>NO existe</strong> una solución en la que todos los filósofos hacen lo mismo</li>
+<li>una solución es hacer que todos salvo uno agarren el de la izquierda primero y el restante agarra a la derecha primero.
+<ul>
+<li>demo para ver que no hay deadlock: agarrá el grafo de las condiciones de cauffman, cuáles son los potenciales ciclos. Cuándo ocurre que hay deadlock? Puede ocurrir con el código actual?</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Nota sobre EAT&quot;">Uno podría preguntarse: &quot;Por qué tengo que definir &lt;span style=&quot;color:red&quot;&gt;EAT&lt;/span&gt;? Si no restrinjo nada claramente permito que varios filósofos puedan comer a la vez.&quot; Creo que la respuesta a eso es que tener definido &lt;span style=&quot;color:red&quot;&gt;EAT&lt;/span&gt; nos da información extra y es útil sobre todo para evaluar si nuestro algoritmo es correcto, ya que puedo ver el código y encontrar algún contraejemplo de que eso no se cumple. Si no tengo el predicado nunca tengo contra qué comparar.
+</code></pre>
+<ul>
+<li>El barbero
+<ul>
+<li>1 único barbero</li>
+<li>una sala de espera con N sillas + la sala del barbero (cap. 1 persona)</li>
+<li>cuando no hay clientes el barbero duerme</li>
+<li>cuando entra un cliente
+<ul>
+<li>no hay lugar? =&gt; se va</li>
+<li>hay lugar? entra y despierta al peluquero si está dormido</li>
+</ul>
+</li>
+<li>potencial impl:
+<ul>
+<li>un semáforo para despertar al barbero (y para que se vuelva a dormir cuando no quedan clientes)</li>
+<li>un semáforo para hacer pasar al cliente a la silla del barbero</li>
+<li>un contador atómico para contar clientes y ver que no nos pasamos de la capacidad</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- TODO: hay un ejercicio de clase que es formalizar las propiedades a garantizar y demostrar que las satisface, estaría bueno agregar eso -->
+<div style="break-before: page; page-break-before: always;"></div><h1 id="administración-de-memoria"><a class="header" href="#administración-de-memoria">Administración de Memoria</a></h1>
+<p>Vamos a estudiar un subsistema presente en la mayoría de OS: el <strong>manejador de memoria (MMU)</strong>. Se encarga de:</p>
+<ul>
+<li>manejar el espacio libre/ocupado</li>
+<li>asignar y liberar memoria</li>
+<li>controlar swapping</li>
+<li>permisos maybe?</li>
+</ul>
+<p>Cuando tenemos un único proceso en memoria todo es mucho más sencillo porque lo tengo en memoria mientras viva el programa. Una vez que introducimos multiprogramación necesitamos hacer algo con la memoria de un proceso que es desalojado. Para eso se usa la técnica de <strong>swapping</strong> que consiste en pasar a disco la memoria de procesos que no se estén ejecutando. Eso es muy lento (hay que copiar toda la memoria <strong>a disco</strong>)... y si tratamos de ser golosos y dejamos ambos procesos en memoria?</p>
+<p>De todos modos estamos pateando el problema a futuro. Si en algún momento no me entra nada más definitivamente tengo que mandar algún proceso a disco. Ahora, supongamos lo siguiente:</p>
+<ol>
+<li>proceso es desalojado</li>
+<li>nuevo proceso es introducido, ocupando el cacho de memoria recién liberado</li>
+<li>el proceso antes desalojado tiene que volver a ejecutarse, pero ya pisé el espacio de memoria que tenía asignado. Le asigno el nuevo espacio con direcciones distintas?</li>
+</ol>
+<p><img src="./img/return_to_memory.png" alt="return to memory" /></p>
+<p>En ese caso tenemos algunas alternativas:</p>
+<ul>
+<li>divido y &quot;fijo&quot; bloques de memoria (o sea una vez que te toca un bloque de memoria no te pueden mandar a otro)
+<ul>
+<li>Esto es malo por muchos motivos, sobre todo porque así solo no resuelve el problema anterior</li>
+</ul>
+</li>
+<li>cada vez que meto y saco un proceso, reescribo las direcciones de los accesos a memoria
+<ul>
+<li>mucho muy caro</li>
+</ul>
+</li>
+<li>la solución que es usada en la práctica es una mezcla entre las primeras 2:
+<ul>
+<li>para un proceso, las direcciones de memoria son siempre las mismas</li>
+<li>voy a acomodar las direcciones de los accesos a memoria, pero en lugar de modificar el código alcanza con tener un registro que haga de base.</li>
+</ul>
+</li>
+</ul>
+<p>Por otro lado hay algunos problemas más que no mencionamos:</p>
+<ul>
+<li>cómo sabe el OS qué bloques de memoria están libres?</li>
+<li>cómo sabe dónde conviene ubicar un proceso?</li>
+<li>cómo hago para que un programa no pueda acceder a la memoria de otro?</li>
+</ul>
+<p>Estos problemas se los conoce como:</p>
+<ul>
+<li><strong>Reubicación</strong> (cambio de contexto y swapping)</li>
+<li><strong>Protección</strong> (memoria privada de los procesos)</li>
+<li><strong>Manejo del espacio libre</strong> (evitar fragmentación)</li>
+</ul>
+<h2 id="fragmentación"><a class="header" href="#fragmentación">Fragmentación</a></h2>
+<p>Ocurre cuando tenemos suficiente memoria para los pedidos de memoria pero en ningún caso es continua. </p>
+<h3 id="tipos-de-fragmentación"><a class="header" href="#tipos-de-fragmentación">Tipos de fragmentación</a></h3>
+<p>Hay 2 tipos de fragmentación:</p>
+<ul>
+<li><strong>fragmentación externa</strong>: tengo bloques libres pero son chicos y dispersos</li>
+<li><strong>fragmentación interna</strong>: desperdicio espacio dentro de los propios bloques (p. ej, si sólo asigno bloques de tamaño potencia de 2)</li>
+</ul>
+<h3 id="solucionando-problemas-de-fragmentación"><a class="header" href="#solucionando-problemas-de-fragmentación">Solucionando problemas de fragmentación</a></h3>
+<p>Si bien se puede usar un proceso de &quot;compactado&quot;, dicho proceso es muy costoso como para hacer en un SO RT. En cambio la memoria se divide:</p>
+<ul>
+<li>por segmentos</li>
+<li>por páginas</li>
+</ul>
+<p>Ambos casos son bloques de igual tamaño, pero cumplen distintas
+funcionalidades. Los segmentos separan memoria <strong>dentro de un proceso</strong> según
+su &quot;propósito&quot;. En cambio las páginas son las unidades &quot;indivisibles&quot; de
+memoria que se le asignan a los procesos.</p>
+<p>Una alternativa es dividir todo en bloques y usar un bitmap para trackear qué
+bloques están libres y cuáles ocupados. Pero tiene problemas porque no es fácil
+encontrar bloques consecutivos y el tamaño del bitmap te determina la
+granularidad de los bloques de memoria, lo cual no siempre se llevan bien.</p>
+<p>Otra alternativa que si es usada es <strong>usar listas enlazadas</strong>, donde cada nodo es un proceso o bloque libre. En ese caso liberar es barato, asignar es fácil una vez que decidí <strong>dónde</strong>.</p>
+<p><img src="./img/memory_linked_list.png" alt="" /></p>
+<h3 id="políticas-de-asignación"><a class="header" href="#políticas-de-asignación">Políticas de asignación</a></h3>
+<ul>
+<li><strong>First Fit</strong>: asigno el primero que veo que entra.
+<ul>
+<li>es rápido, pero tiende a fragmentar la memoria.</li>
+<li>el <a href="./memory_allocator_bsd.html">allocator de 4.2BSD</a> usa esta dentro del conjunto de políticas</li>
+</ul>
+</li>
+<li><strong>Best fit</strong>: me fijo dónde entra con menos desperdicio
+<ul>
+<li>más lento</li>
+<li>al contrario de lo esperado, no es tan bueno respecto a fragmentación porque llena la memoria de pequeños cachitos inutilizables</li>
+</ul>
+</li>
+<li>variante <strong>Quick Fit</strong>: Mantengo una lista de los bloques libres de tamaños más frecuentemente utilizados
+<ul>
+<li>también usado en el <a href="./memory_allocator_bsd.html">allocator de 4.2BSD</a></li>
+</ul>
+</li>
+<li><strong>buddy system</strong>
+<ul>
+<li>usa splitting de bloques</li>
+<li>restringe que todos los bloques sean de tamaño potencia de 2</li>
+</ul>
+</li>
+</ul>
+<h2 id="reubicación"><a class="header" href="#reubicación">Reubicación</a></h2>
+<p>Se parece al problema de &quot;Tengo un programa de tamaño \( M \) que no necesita más de \( K \) bytes a la vez. Sólo tengo \(N &lt; M\) bytes disponibles. Debería poder correr el programa, pero cómo? Combinamos 2 técnicas. El ya mencionado swapping, y virtualización del espacio de memoria. Haciendo uso de la MMU (del hardware, no del SO), traducimos las direcciones virtuales a las correspondientes direcciones físicas.</p>
+<p><img src="./img/mmu.png" alt="MMU" /></p>
+<h3 id="comparación-memoria-virtual"><a class="header" href="#comparación-memoria-virtual">Comparación memoria virtual</a></h3>
+<div class="table-wrapper"><table><thead><tr><th></th><th>Sin memoria virtual</th><th>Con Memoria Virtual</th></tr></thead><tbody>
+<tr><td>Espacio de direcciones</td><td>tamaño de la memoria física (si la ram es de 4 GB, no puedo direccionar a más que eso)</td><td>tamaño de la memoria física + swap (acá hace la diferencia)</td></tr>
+<tr><td>Obtener una celda</td><td>Obtengo el contenido y listo</td><td>- Pongo la dirección virtual en el bus de memoria<br> -la MMU traduce la dirección virtual a una física<br> - La tabla de traducción tiene un bit que dice si está cargado en memoria<br> - Si no está cargado se carga<br> - La dirección física se pone en el bus que llega a la placa de memoria<br> - Obtengo el contenido</td></tr>
+</tbody></table>
+</div>
+<h2 id="algunos-detalles"><a class="header" href="#algunos-detalles">Algunos detalles</a></h2>
+<p><img src="./img/mmu_paging.png#floating" alt="paging" /></p>
+<ul>
+<li>El espacio de memoria virtual está dividido en bloques de tamaño fijo llamados <strong>páginas</strong></li>
+<li>La memoria física en cambio se divide y agrupa en page frames</li>
+<li>la MMU mappea páginas a frames</li>
+<li>la MMU (hw) interpreta direcciones como página (los n bits más significativos) + offset.</li>
+<li>siempre swappeo páginas</li>
+</ul>
+<h3 id="detectando-y-manejando-swap"><a class="header" href="#detectando-y-manejando-swap">Detectando y manejando swap</a></h3>
+<p>Cuando una página no está en memoria, la MMU emite una page fault que el SO
+registró en el array de interrupts. El SO ataja esa fault, y se encarga de
+sacar una página de memoria (si hace falta) y otorgarle el espacio a la página
+pedida. Es importante también la decisión de <strong>qué página sacar</strong>.</p>
+<pre><code class="language-admonish info title=&quot;swapping standard vs actual&quot;">La versión standard de swapping consiste en sacar de memoria **todo** el
+proceso, pero eso tiene un costo prohibitivo. Es por eso que hoy en día,
+sistemas como Linux y Windows usan una variante que consiste en sacar páginas
+de otros procesos pero no los procesos enteros, si no sacamos las páginas
+necesarias para liberar suficiente memoria. Es por eso que hoy en día
+*swapping* refiere a swapping standard y *paging/paginado* refiere a swapping +
+paging/paginado. La operación de **page out** consiste en mover una página de
+memoria a disco y **page in** de disco a memoria.
+</code></pre>
+<pre><code class="language-admonish warning title=&quot;swapping en dispositivos móviles&quot;">
+Los sistemas operativos como Android y IOS a diferencia de los que vimos no tienen ni usan ninguna forma de swapping. Esto es porque las memorias secundarias de estos dispositivos tienen restricciones respecto a la cantidad de escrituras que se le pueden hacer. Y swapping incurre en muchas escrituras. Es por eso que ante una situación en donde no tengo dónde ubicar nueva memoria se toman medidas como:
+
+- liberar páginas que sean read only (p. ej. de código)
+- las páginas escritas **siempre se mantienen en memoria**
+- matar procesos, y sólo guardar el estado en el que se cerraron las aplicaciones
+
+</code></pre>
+<h3 id="mmu"><a class="header" href="#mmu">MMU</a></h3>
+<p>La MMU se organiza de forma tal que buscar páginas sea rápido pero que la tabla
+no ocupe mucho espacio. Si tengo una tabla sola para todo el espacio de memoria
+física + swap, voy a necesitar demasiadas entradas en la tabla. Es mucha
+memoria (y por ende mucho tiempo). Por eso es mejor usar una <strong>tabla de páginas
+multinivel</strong>. </p>
+<p>Como mencionamos antes, usamos los primeros bits (algunos) para ir a la primera
+tabla, y después usamos los siguientes bits como offset dentro de esa tabla
+(podría tener más niveles). Esto tiene como ventaja que no necesito una tabla
+gigante en memoria, si no la tabla de primer nivel y las tablas
+correspondientes a las tareas que se estén usando.  (Eso sí, hay un mínimo
+extra de espacio que &quot;desperdicio&quot; que se nota a medida que tengo mayor
+utilización de la memoria)</p>
+<p><img src="./img/multilevel_mmu.png" alt="multilevel mmu" /></p>
+<pre><code class="language-admonish info title=&quot;Nota Grande como una casa&quot;">No tenemos una única tabla de páginas para todo, si no que **tenemos una tabla
+de páginas multinivel por proceso**. Las arquitecturas suelen incluir un
+registro que hay que cargar con la dirección de la tabla de páginas (sorpresa
+sorpresa también tiene que ir en la PCB). Tener toda la tabla montada con
+registros sería muy rápido pero sólo es viable para tablas muy chicas. 
+
+Como veremos más adelante una optimización que sí se usa es la de mediante hw
+implementar una cache para ahorrarnos algunos pasos de la traducción de
+direcciones lógicas a físiscas.
+
+Además es común que se use un espacio de direcciones de memoria lógica común
+(por ejemplo, 0x8000 a 0x9FFF) y en ese caso si tuviésemos una única tabla de
+páginas se nos estarían pisando todas las páginas... todo el trabajo sería al
+pedo.
+</code></pre>
+<h3 id="entrada-de-la-tabla-de-páginas"><a class="header" href="#entrada-de-la-tabla-de-páginas">Entrada de la tabla de páginas</a></h3>
+<p>En cada entrada de la tabla de páginas hay:</p>
+<ul>
+<li>el page frame</li>
+<li>el bit de ausencia/presencia (en memoria)</li>
+<li>bits de protección</li>
+<li>bit de dirty (para saber si la página fue modificada o no)</li>
+<li>bit de referenciada (para saber si fue leída o no)</li>
+<li>más info según arquitectura</li>
+</ul>
+<h3 id="cacheando-la-mmu"><a class="header" href="#cacheando-la-mmu">Cacheando la MMU</a></h3>
+<ul>
+<li>Introdujimos varios accesos a memoria extra por cada acceso a memoria deseado, sobre todo con la tabla multinivel.</li>
+<li>Para reducir el impacto en performance, se suele agregar una cache sobre la tabla de páginas
+<ul>
+<li>Usa registros rápidos, mejor que acceder a memoria de una</li>
+<li>me ahorra tablas intermedias</li>
+<li>busca en paralelo sobre toda la tabla</li>
+<li>se lo suele llamar TLB</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;ASIDs&quot;">Algunas TLBs guardan **address-space identifiers**, que identifican cada
+proceso y brindan protección por proceso. (dado que si no, como la TLB es parte
+del HW no tiene noción de procesos y esas y uno podría estar accediendo desde
+otro proceso a las páginas de mi proceso)
+</code></pre>
+<h3 id="reemplazo-de-páginas"><a class="header" href="#reemplazo-de-páginas">Reemplazo de páginas</a></h3>
+<p>Podemos hacer uso de los campos que nos provee la tabla de páginas:</p>
+<ul>
+<li>FIFO así como viene </li>
+<li>FIFO pero si tiene referenced paso a la siguiente asumiendo que recién la
+subieron. Si no hay más ahí si uso esa.</li>
+<li>Not Recently Used: extendiendo la idea anterior, primero busco que no sean
+referenciadas ni modificadas. Luego las que fueron referenciadas pero no
+modificadas, por último las modificadas.</li>
+<li>Least Recently Used (LRU): mantengo timestamp (obviamente no es gratis) en cada entrada de la tabla de páginas.</li>
+<li>otra cosa a considerar: desalojo las páginas de mi proceso o de otro?</li>
+</ul>
+<h3 id="consideraciones-extra"><a class="header" href="#consideraciones-extra">Consideraciones Extra</a></h3>
+<ul>
+<li>las estrategias mencionadas a veces se combinan con cargar páginas por adelantado
+<ul>
+<li>me evito algunos page fault</li>
+<li>aprovecho la localidad referencial</li>
+</ul>
+</li>
+<li>puedo usar páginas especiales:
+<ul>
+<li>read only</li>
+<li>no swappeables</li>
+</ul>
+</li>
+</ul>
+<h3 id="pasos-durante-un-page-fault"><a class="header" href="#pasos-durante-un-page-fault">Pasos durante un Page Fault</a></h3>
+<ol>
+<li>se emite el page fault (una interrupción), que atrapa el kernel.</li>
+<li>se guardan el IP y otros registros en el stack.</li>
+<li>El kernel determina que es un page fault y llama a la rutina específica</li>
+<li>Averigua qué dirección virtual se estaba buscando (por lo general queda algún registro de eso)</li>
+<li>se chequea que sea una dirección válida y que el proceso tenga los permisos suficientes. Si no los tiene se mata al proceso con una señal de segment violation (SIGSEGV)</li>
+<li>Se busca un page frame libre si lo hubiese y si no se libera mediante el algoritmo de reemplazo de páginas</li>
+<li>Si la página tenía el bit dirty prendido hay que bajarla a disco</li>
+</ol>
+<ul>
+<li>el proceso del kernel de I/O es suspendido, hay un context switch y la página se marca como busy para que no se use.</li>
+</ul>
+<ol start="8">
+<li>Cuando el SI es notificado de que terminó de bajar la página a disco inicia la operación para cargar en memoria la página a la que le liberamos el espacio.</li>
+<li>Cuando llega la interrupción que indica que el I/O para cargar la página terminó, se actualiza la tabla de páginas para indicar que está cargada.</li>
+<li>La instrucción que causó el page fault se recomienza, tomando el IP del stack y los valores de los registros.</li>
+<li>Se devuelve el control al proceso de usuario.</li>
+</ol>
+<h3 id="thrashing"><a class="header" href="#thrashing">Thrashing</a></h3>
+<p>Se le llama <strong>Thrashing</strong> a la situación en la que no hay suficiente memoria y además hay muchos procesos compitiendo por usarla. Eso puede generar que el SO esté constantemente cambiando páginas de memoria a disco una y otra vez.</p>
+<h2 id="protección-y-reubicación"><a class="header" href="#protección-y-reubicación">Protección y Reubicación</a></h2>
+<p>Ya mencionamos que cada proceso tendría su propia tabla de páginas. Eso ya es
+un atenuante y cumple además funciones de protección. Otra solución posible es
+que cada proceso tenga su propio espacio de memoria. Esos espacios llamados
+<strong>segmentos</strong> se determinan en base a un registro especial que describe a qué
+segmento hacen referencia las direcciones. Sin embargo, esto requiere soporte
+especial del hardware (para implementarse eficientemente) e incluso hoy en día
+no es muy tenido en cuenta en los OS.</p>
+<h3 id="segmentación-en-intel"><a class="header" href="#segmentación-en-intel">Segmentación en Intel</a></h3>
+<ul>
+<li>Cada proceso tiene su Local Descriptor Table (LDT).</li>
+<li>Los programas suelen tener un segmento para código, otro para datos y otro
+para el stack.</li>
+<li>Hay una Global Descriptor Table (GDT) compartida. Ahí están los segmentos del
+sistema.</li>
+<li>Tenemos 2 registros de 16 bits, DS y CS que sirven para indicar qué segmento
+se va a usar.
+<ul>
+<li>13 bits son un índice, 1 indica si es global o no y 2 sirven para
+protección</li>
+<li>Cuando se carga algo en uno de esos registros se trae la entrada de la
+LDT/GDT que corresponde, además el OS recibe una interrupción y puede
+hacer validaciones de seguridad.</li>
+</ul>
+</li>
+<li>Cada entrada de la LDT y GDT tiene la base de las direcciones de memoria y el
+tamaño del segmento
+<ul>
+<li>las direcciones se interpretan como física/virtual según esté habilitado el
+paginado</li>
+</ul>
+</li>
+</ul>
+<h2 id="copy-on-write"><a class="header" href="#copy-on-write">Copy-on-write</a></h2>
+<p>Cuando usamos la syscall <code>fork()</code>, es común utilizar la estrategia <strong>copy-on-write</strong>, que consiste en:</p>
+<ul>
+<li>Al crear el proceso se usan las mismas páginas</li>
+<li>Cuando el proceso padre o el hijo escriben en alguna página, ahí se duplican
+y cada uno tiene su copia independiente</li>
+<li>Esto tiene mucho sentido porque si vamos a llamar a <code>exec()</code> o alguna otra
+syscall que pisa la memoria del proceso, pierde sentido copiarnos toda la
+memoria y tabla de páginas del proceso padre.</li>
+</ul>
+<h2 id="miscelaneos"><a class="header" href="#miscelaneos">Miscelaneos</a></h2>
+<h3 id="hashed-page-tables"><a class="header" href="#hashed-page-tables">Hashed Page Tables</a></h3>
+<p>Una alternativa a las tablas de páginas tradicionales es usar tablas de hash
+con chaining. Cada &quot;row&quot; de la tabla tiene una lista enlazada (para las
+colisiones) en donde los nodos tienen la dirección de la página, el frame que
+le corresponde y un puntero al siguiente elemento. Hay una variante propuesta
+para espacios de memoria de 64 bits que consiste en usar <strong>clustered page
+tables</strong> que tienen un concepto similar pero cada entrada de la tabla puede
+representar a muchas páginas en lugar de una sola. Entonces una única entrada
+puede guardar los mappeos de muchos frames. Es útil cuando hay direcciones de
+memoria esparsas (muchas referencias no contiguas y desparramadas a lo largo de
+la memoria).</p>
+<h3 id="inverted-page-tables"><a class="header" href="#inverted-page-tables">Inverted Page Tables</a></h3>
+<p>El proceso de las tablas de páginas es más o menos como sigue:</p>
+<ul>
+<li>Cada proceso tiene su tabla de páginas</li>
+<li>Cada entrada de la tabla representa una página en el espacio de direcciones
+virtual (independientemente de si está en uso o no).</li>
+<li>el SO traduce direcciones lógicas en frames (aka direcciones físicas)
+<ul>
+<li>como la tabla <strong>está ordenada según las direcciones lógicas</strong>, es &quot;fácil&quot;
+buscar la entrada en la tabla correspondiente.</li>
+</ul>
+</li>
+</ul>
+<p>Una de las desventajas de este proceso es que las tablas de páginas pueden
+tener muchas entradas, millones incluso. Y eso incurre en un consumo más alto
+de memoria.</p>
+<p>Para resolver ese problema, se puede usar una <strong>inverted page table</strong>. La idea
+es que tenemos una única tabla, y la tabla tiene una entrada por cada frame de
+la memoria. La entrada consiste de información del proceso al que se le asignó
+el frame (PID por ejemplo), junto con la dirección virtual que le fue asignada.</p>
+<ul>
+<li>tengo <strong>una única tabla</strong>.</li>
+<li>la tabla tiene una única entrada por cada frame, no hay repetidos.</li>
+</ul>
+<p><img src="./img/inverted_page_table.png" alt="inverted page table" /></p>
+<p>Pero ojo, ahora las direcciones están ordenadas por su dirección física, no
+lógica. Entonces tendría que hacer un barrido secuencial para resolver la
+traducción de la dirección lógica. Eso es muy caro, y el motivo por el que se
+suele combinar con hashing para reducir el número de comparaciones.</p>
+<p>Otro problema que tiene esta técnica es que no puede haber memoria compartida,
+ya que hay una única entrada en la tabla por dirección física.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="entradasalida"><a class="header" href="#entradasalida">Entrada/Salida</a></h1>
+<p>Nos vamos a concentrar en dispositivos de almacenamiento. Dentro de estos se incluyen:</p>
+<ul>
+<li>Discos Rígidos (hoy también discos sólidos).</li>
+<li>Unidades de cinta: principalmente usados para backup</li>
+<li>Discos removibles: cd, dvd, disquette, usb, etc.</li>
+<li>discos virtuales (también llamados NAS: Network Attached Storage): NFS, CIFS,
+DFS, AFS, Coda</li>
+<li>Storage Area Network (SAN): similar a Nas, tengo el almacenamiento en red pero los protocolos que usa son específicos para este tipo de datos.</li>
+</ul>
+<h2 id="subsistema-de-io-y-modelo"><a class="header" href="#subsistema-de-io-y-modelo">Subsistema de I/O y Modelo</a></h2>
+<p>Conceptualmente un dispositivo de I/O consta de dos partes:</p>
+<ul>
+<li>El dispositivo físico</li>
+<li>Un <strong>controlador del dispositivo</strong> (ojo, no son los drivers de software si no
+de hw) que interactúa con el SO mediante algún bus o registro.</li>
+</ul>
+<p>Al igual que con otros subsistemas, el sistema operativo mediante <strong>drivers</strong> logra abstraer detalles propios del dispositivo al usuario:</p>
+<p><img src="./img/io_subsystem.png#floating" alt="layout subsistema I/O" /></p>
+<ul>
+<li>Los drivers conocen las particularidades del HW con el que se comunican.</li>
+<li>Por lo general los drivers son provistos por el mismo fabricante de HW que el
+dispositivo.</li>
+<li>Distintos modelos de un mismo fabricante pueden usar distintos drivers.</li>
+<li>Por ejemplo, algo a considerar por un driver puede ser qué bit hay que leer
+para marcar el final de una operación.</li>
+<li>Tienen un impacto muy grande sobre el rendimiento del sistema:
+<ul>
+<li>corren en máximo privilegio (a.k.a te pueden hacer bosta todo el sistema)</li>
+<li>De ellos depende el rendimiento del I/O que como vimos es frecuentemente
+usado y fundamental para el rendimiento general del sistema.</li>
+</ul>
+</li>
+</ul>
+<h2 id="formas-de-io"><a class="header" href="#formas-de-io">Formas de I/O</a></h2>
+<p>Vemos 3 formas de implementar I/O (por lo general en la práctica están disponibles las 3):</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th>Polling</th><th>Interrupciones (o push)</th><th>DMA (acceso directo a memoria)</th></tr></thead><tbody>
+<tr><td>📄 Desc.</td><td>El driver periódicamente verifica si el dispositivo se comunicó</td><td>El dispositivo avisa mediante interrupciones</td><td>La CPU no interviene (por lo general para transferir grandes volúmenes de info)</td></tr>
+<tr><td>✅ Ventajas</td><td>Cambios de contexto predecibles</td><td>Eventos asincrónicos poco frecuentes</td><td>Cuando el controlador de DMA finaliza, interrupe a la CPU (1 vs varios para comunicarse en interrupciones)</td></tr>
+<tr><td>💀 Desventajas</td><td>Alto consumo de CPU</td><td>Cambios de contexto impredecibles</td><td>Necesitás el componente específico de HW (controlador de DMA)</td></tr>
+</tbody></table>
+</div>
+<h2 id="api-de-io"><a class="header" href="#api-de-io">API de I/O</a></h2>
+<p>Tenemos las syscalls:</p>
+<ul>
+<li><code>open()</code>/ <code>close()</code></li>
+<li><code>read()</code> / <code>write()</code></li>
+<li><code>seek()</code></li>
+</ul>
+<p>Ocultan bastante de la complejidad, aunque hay algunos detalles que se exponen (ej: si se obtiene acceso exclusivo al dispositivo o no)</p>
+<h2 id="tipos-de-dispositivos"><a class="header" href="#tipos-de-dispositivos">Tipos de dispositivos</a></h2>
+<p>Los dispositivos pueden separarse en 2 grupos:</p>
+<ul>
+<li><strong>char device</strong>: 
+<ul>
+<li>la info se transmite byte a byte, debido a eso no tienen acceso aleatorio y utilizan caches para mejorar la performance.</li>
+<li>ej: mouse, teclado, terminales, puerto serie.</li>
+</ul>
+</li>
+<li><strong>block device</strong>:
+<ul>
+<li>se transmite info en bloque, permite acceso aleatorio y en general usan un buffer.</li>
+<li>ej: disco rígido, memoria flash, cd rom</li>
+</ul>
+</li>
+</ul>
+<p>Si bien esta es una clasificación general, la comunicación con dispositivos tiene otras variables:</p>
+<ul>
+<li>Si es lectura, escritura o lecto-escritura</li>
+<li>Si es compartido o dedicado</li>
+<li>Si es sincrónico o asincrónico</li>
+<li>La velocidad de respuesta del dispositivo</li>
+</ul>
+<p>Parte del objetivo del SO y la api de I/O es ocultar la mayor cantidad de
+detalles posibles y a la vez brindar acceso consistente a toda la fauna de
+dispositivos.</p>
+<pre><code class="language-admonish info title=&quot;Dispositivos en Linux&quot; collapsible=true">Los dispoistivos en linux están representados por archivos y se ubican en el directorio `/dev`. En el siguiente ejemplo, podemos ver que el archivo contiene información del tipo de archivo (c para char device, b para block device):
+
+```bash
+ls -lh /dev
+crw-rw-rw-  1 root    wheel        0x9000001 Mar  5 12:06 cu.wlan-debug
+brw-r-----  1 root    operator     0x1000000 Mar  5 12:06 disk0
+brw-r-----  1 root    operator     0x1000001 Mar  5 12:06 disk0s1
+brw-r-----  1 root    operator     0x1000002 Mar  5 12:06 disk0s2
+brw-r-----  1 root    operator     0x1000003 Mar  5 12:06 disk0s3
+```
+</code></pre>
+<pre><code class="language-admonish info title=&quot;API de I/O en linux&quot;">En el caso de linux, bajo la premisa de que *&quot;todo es un archivo&quot;* se proveen funciones de alto nivel para acceso a archivos:
+
+- `fopen()`, `fclose()`
+- `fread()`, `fwrite()`: modo bloque
+- `fgetc()`, `fputc()`: modo char
+- `fgets()`, `fputs()`: modo char stream (ej: con esto puedo escribir en consola)
+- `fscanf()`, `fprintf()`: modo char con formato
+</code></pre>
+<h2 id="planificación-de-io"><a class="header" href="#planificación-de-io">Planificación de I/O</a></h2>
+<p>En el caso del disco, una de las claves para obtener un buen rendimiento es
+optimizar los accesos al mismo. Esto es porque el disco consiste de una cabeza
+que se mueve, y eso lleva tiempo. Si junto varios pedidos y los ordeno de
+manera tal que minimice la cantidad de movimientos voy a mejorar mucho la
+performance.</p>
+<p>La planificación de disco entronces se trata de cómo manejar la cola de pedidos
+de I/O para lograr el mejor rendimiento posible. Es un equilibrio entre ancho
+de banda, latencia rotacional y <strong>tiempo de búsqueda (seek time)</strong>, que es el
+tiempo necesario para que la cabeza se ubique sobre el cilindro que tiene el
+sector deseado.</p>
+<h3 id="políticas-de-scheduling-de-io-a-disco"><a class="header" href="#políticas-de-scheduling-de-io-a-disco">Políticas de scheduling de I/O a disco</a></h3>
+<p>Tenemos algunos esquemas:</p>
+<ul>
+<li>FIFO
+<ul>
+<li>problema: estoy moviendo la cabeza de un lado a otro, a menos que los
+pedidos &quot;se porten bien&quot;.</li>
+</ul>
+</li>
+<li>Shortest Seek Time First (SSTF)
+<ul>
+<li>idea: atiendo como próximo al pedido más cercano a la posición actual de la
+cabeza (o sea es un algoritmo goloso)</li>
+<li>si bien mejora el tiempo de respuesta, puede producit inanición</li>
+</ul>
+</li>
+<li><strong>Algoritmo scan o del ascensor</strong>
+<ul>
+<li>idea: ir primero en un sentido, atendiendo los pedidos en el camino. Luego
+vuelvo y hago lo mismo.</li>
+<li>es una mejora, aunque si me piden un sector por donde acaba de pasar la
+cabeza tardo muuuuucho.</li>
+<li>además no es tan uniforme (predecible) el tiempo de espera</li>
+</ul>
+</li>
+<li><strong>C-Scan</strong>: igual a scan pero al llegar al final vuelve al principio sin
+atender otros pedidos (asume que el disco es una lista circular)</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Nota&quot;">En la práctica ninguno de estos algoritmos se usan al 100%, suele ser una mezcla entre estos, prioridades, caches, etc.
+</code></pre>
+<h2 id="ssd"><a class="header" href="#ssd">SSD</a></h2>
+<p>Hoy en día prolifera el uso de discos de estado sólido (SSD). Si bien tienen notables ventajas (más resistentes, menor consumo, más silenciosos, mejor performance de lectura), también presenta sus propios problemas:</p>
+<ul>
+<li>durabilidad</li>
+<li>write amplification</li>
+</ul>
+<!-- TODO: expandir esto -->
+<h2 id="gestión-del-disco"><a class="header" href="#gestión-del-disco">Gestión del disco</a></h2>
+<h3 id="formateo"><a class="header" href="#formateo">Formateo</a></h3>
+<p>Consiste en poner por cada sector códigos para detección de errores,
+puntualmente un prefijo y un postfijo. Si al leer un sector, el prefijo y
+postfijo no tienen el valor esperado es porque el sector está dañado.</p>
+<h3 id="booteo"><a class="header" href="#booteo">Booteo</a></h3>
+<p>Las computadoras suelen tener un programa en ROM que carga algunos sectores del
+principio del disco, y los comienza a ejecutar (bootloader?). Dicho programa es
+muy pequeño y solamente sirve para cargar el OS, no es un OS en sí mismo.</p>
+<h3 id="manejo-de-bloques-dañados"><a class="header" href="#manejo-de-bloques-dañados">Manejo de bloques dañados</a></h3>
+<p>Hay distintas formas de atajarnos:</p>
+<ul>
+<li>por software, si hacemos que el sistema de archivos se encarge de la gestión
+de bloques dañados</li>
+<li>por hardware:
+<ul>
+<li>hay discos que vienen con sectores extra para reemplazar a los defectuosos.
+A veces algunos discos traen sectores extra en todos los cilindros</li>
+<li>cuando la controladora detecta un bloque dañado puede actualizar una tabla
+interna de remapeo para usar un sector distinto (esto puede interferir con
+las optimizaciones del scheduler de I/O)</li>
+</ul>
+</li>
+</ul>
+<h2 id="spooling-simultaneous-peripheral-operation-on-line"><a class="header" href="#spooling-simultaneous-peripheral-operation-on-line">Spooling (Simultaneous Peripheral Operation On-Line)</a></h2>
+<p>Spooling permite interactuar con dispositivos que requieren acceso dedicado sin
+bloquear al proceso que los necesita. El ejemplo más distintivo es el de la
+impresora. Cuando uno imprime, en lugar de bloquearse el proceso hasta tener
+acceso, se encola el trabajo en una cola específica y se tiene un proceso que
+se encarga de desencolarla a medida que la impresora (o el dispositivo en otros
+casos) se libera.</p>
+<pre><code class="language-admonish info title=&quot;Nota&quot;">En el caso de spooling, el usuario es consciente de que ocurre pero el kernel no.
+</code></pre>
+<h2 id="protección-de-la-información"><a class="header" href="#protección-de-la-información">Protección de la información</a></h2>
+<p>Vamos a ver algunas técnicas que podemos emplear para proteger nuestros datos.
+Muchas veces dependiendo del tipo de dato, del valor que le asignemos y el
+costo de mantenerlo vamos a optar por una u otra manera. Con proteger nuestros
+datos nos referimos a por ejemplo que el disco falle y se descomponga algún
+sector (o el disco entero), a que tengo una aplicación que está corriendo 24/7
+y tengo que tener tolerancia a fallas, etc. Las dos técnicas que vamos a ver son:</p>
+<ul>
+<li>copias de seguridad</li>
+<li>redundancia</li>
+</ul>
+<pre><code class="language-admonish note">En particular **la redundancia no nos protege de la modificación/eliminación
+accidental de la información**. Es por eso que se suelen combinar ambas técnicas.
+Hay casos sin embargo en donde ninguna de las técnicas nos salva (en algún
+momento corrompemos datos/archivos y nos damos cuenta tarde con varios backups
+encima). En esos casos los sistemas de archivos nos deberían brindar algunas
+protecciones para que eso no pase (o al menos no pase seguido).
+</code></pre>
+<h3 id="copias-de-seguridad"><a class="header" href="#copias-de-seguridad">Copias de seguridad</a></h3>
+<p>Hacer una <strong>copia de seguridad (backup)</strong> consiste en resguardar los datos
+(obviamente solo los importantes) en otro lado. Para grandes volúmenes de info,
+se suele hacer en cinta o discos duros (Si es algo hogareño podés hacerlo con
+el dispositivo de almacenamiento externo que te plazca). De vuelta, en caso de
+sistemas con mucha data, se suelen programar los backups para que se hagan de
+noche.</p>
+<p>Sin embargo, copiar <strong>todos</strong> los datos es muy caro. Por eso podemos implementar distintas estrategias:</p>
+<ul>
+<li>hacer una <strong>copia total</strong> con cierta frecuencia (cada semana, mes, bimestre, etc.)</li>
+<li>hacer una <strong>copia incremental</strong> (por ejemplo cada noche): sólo guarda los archivos modificados <strong>desde la última copia incremental</strong></li>
+<li>hacer una <strong>copia diferencial</strong>: sólo guarda los archivos modificados desde la última copia total (obviamente combino esto con hacer una copia total cada tanto).</li>
+</ul>
+<p>Cuando llega la hora de restaurar:</p>
+<ul>
+<li>si sólo hago copias totales restauro la que quiero y listo</li>
+</ul>
+<p>\[
+\text{Hoy} = \text{último total}
+\]</p>
+<ul>
+<li>si hago copias diferenciales, agarro la última copia total y aplico la última
+copia diferencial</li>
+</ul>
+<p>\[
+\text{Hoy} = \text{último total} + \text{último diferencial}
+\]</p>
+<ul>
+<li>si hago copias incrementales, agarro la última copia total y aplico desde la
+primera incremental después de la total hasta la última (en ese orden)</li>
+</ul>
+<p>\[
+\text{Hoy} = \text{último total} + \sum_i  \text{incremental}_i
+\]</p>
+<h3 id="redundancia"><a class="header" href="#redundancia">Redundancia</a></h3>
+<p>El uso de redundancia es clave en sistemas que tienen que estar up 24/7, de
+forma tal que las fallas en discos no te tiren el sistema (por supuesto, puede
+caer un meteorito en cada datacenter del planeta y ahí cagaste)</p>
+<p>Un método muy usado es <strong>RAID</strong>: <strong>R</strong>edundant <strong>A</strong>rray of <strong>I</strong>nexpensive <strong>D</strong>isks. La técnica fue evolucionando por lo que tenemos RAID en sus distintas versiones:</p>
+<p>Podemos resumir en la siguiente tabla las distintas versiones (las más usadas en la práctica) de RAID:</p>
+<!-- TODO: armar tabla -->
+<p><img src="./img/raid_0.png#floating" alt="" /></p>
+<ul>
+<li><strong>RAID 0 (stripping)</strong>
+<ul>
+<li>necesito 2 discos</li>
+<li>Parto el archivo (o data) en pedacitos y mando algunos pedacitos a un disco y otros pedacitos a otro</li>
+<li>en realidad no aporta redundancia, pero mejora el rendimiento (mejor ancho de banda y permito escrituras en paralelo)</li>
+</ul>
+</li>
+</ul>
+<!-- needed for images not to overlap -->
+<p><br><br><br><br></p>
+<p><img src="./img/raid_1.png#floating" alt="" /></p>
+<ul>
+<li><strong>RAID 1 (mirroring)</strong>
+<ul>
+<li>2 discos</li>
+<li>espejo la data, si se cae un disco entero todavía tengo la copia en el otro</li>
+<li>mejora el rendimiento de las lecturas pero en peor caso tardo el doble en escribir (muy caro).</li>
+</ul>
+</li>
+</ul>
+<!-- needed for images not to overlap -->
+<p><br><br><br><br><br></p>
+<ul>
+<li><strong>RAID 0+1</strong></li>
+</ul>
+<p><img src="./img/raid_0_plus_1.png#center" alt="" /></p>
+<ul>
+<li>
+<ul>
+<li>4 discos</li>
+<li>combina los dos anteriores: cada archivo está espejado, pero al leer leo un bloque de cada disco.</li>
+<li>leo como si usara stripping en lugar de sólo mirroring, pero al escribir hay que escribir en cada bloque de ambos.</li>
+</ul>
+</li>
+<li>
+<p><strong>RAID 2 y 3</strong></p>
+<ul>
+<li>La idea es guardar por bloque info suficiente para determinar si se dañó o no, y a veces puedo corregir errores con esa info.</li>
+<li>sigo distribuyendo los bloques entre todos los discos participantes</li>
+<li>nro. discos
+<ul>
+<li>RAID 2: 3 de paridad por cada 4 de datos</li>
+<li>RAID 3: 1 disco de paridad por cada 4 de datos</li>
+</ul>
+</li>
+<li>todos los discos participan de todo I/O, por lo que es más lento que incluso RAID 1</li>
+<li>Requiere mucho cómputo recalcular redundancias</li>
+<li>si se implementa es por HW</li>
+</ul>
+</li>
+<li>
+<p><strong>RAID 4</strong></p>
+<ul>
+<li>como RAID 3 pero usa stripping por bloque (cada bloque va a un único disco)</li>
+<li>el bottleneck sigue siendo el disco dedicado a paridad porque todo write tiene que tocarlo</li>
+</ul>
+</li>
+<li>
+<p><strong>RAID 5</strong></p>
+</li>
+</ul>
+<p><img src="./img/raid_5.png#halfcenter" alt="" /></p>
+<ul>
+<li>
+<ul>
+<li>Usa datos redundantes pero los distribuye en N + 1 discos (cada write consecutivo va a discos distintos)</li>
+<li>para cada bloque, un disco tiene la data y otro tiene info de paridad (hay info de paridad en todos los discos)</li>
+<li>ya no tengo cuello de botella para los writes, pero mantener la paridad no es fácil</li>
+<li>cae el rendimiento en la reconstrucción de info</li>
+</ul>
+</li>
+<li>
+<p><strong>RAID 6</strong></p>
+</li>
+</ul>
+<p><img src="./img/raid_6.png#halfcenter" alt="" /></p>
+<ul>
+<li>
+<ul>
+<li>como RAID 5 pero agrega un segundo bloque de paridad también distribuido, puede soportar la rotura de hasta 2 discos</li>
+<li>No hay diferencia sustancial vs RAID 5 respecto del espacio desperdiciado (en la práctica se suele usar RAID 5 + hot spare)</li>
+</ul>
+</li>
+</ul>
+<h2 id="miscelaneos-1"><a class="header" href="#miscelaneos-1">Miscelaneos</a></h2>
+<h3 id="ram-como-dispositivo"><a class="header" href="#ram-como-dispositivo">RAM como dispositivo</a></h3>
+<p>Es posible crear <strong>RAM Drives</strong>, que consisten en separar una porción de la
+DRAM del sistema y presentarlo al resto del sistema como si fuera otro
+dispositivo de almacenamiento. Por qué tendría sentido hacer esto? Si bien el
+SO usa caches y buffers para por ejemplo optimizar operaciones de I/O, esto le
+permite <strong>al usuario</strong> guardar data en la memoria usando operaciones con
+archivos. Si bien los dispositivos NVM (ej: SSD) son rápidos, la ram sigue
+siendo mucho más rápido.</p>
+<h3 id="flujo-de-un-pedido-de-lecturaescritura-a-disco"><a class="header" href="#flujo-de-un-pedido-de-lecturaescritura-a-disco">Flujo de un pedido de lectura/escritura a disco</a></h3>
+<ol>
+<li>Cuando un proceso necesita <strong>I/O</strong> llama a una syscall del sistema
+operativo. La syscall tiene varios parámetros:</li>
+</ol>
+<ul>
+<li>tipo de operación (Input o Output)</li>
+<li>el file descriptor indicando el archivo sobre el que se opera</li>
+<li>la dirección de memoria de donde transferir</li>
+<li>la cantidad de data a transferir</li>
+</ul>
+<ol start="2">
+<li>Si el disco y su controlador están disponibles, el pedido se atiende
+inmediatamente. Si no, los pedidos se guardan en una cola de pendientes para
+ese disco. Como vimos antes, el scheduler de I/O puede ordenar esa cola con
+fines de mejorar la performance.</li>
+</ol>
+<pre><code class="language-admonish info">En el pasado, era necesario especificar el track y qué cabeza del HDD usar, y
+los algoritmos de scheduling de disco eran más complejos. Hoy en día mediante
+el uso de LBAs (Logical Block Addresses) incluso el SO es abstraido de lo que
+en realidad pasa en la memoria. Sin embargo, se sigue asumiendo que LBAs
+cercanas significan accesos cercanos (físicamente hablando). Por lo tanto sigue
+teniendo sentido tener consideraciones como:
+
+- lecturas/escrituras en bloque
+- fairness
+- timeliness
+</code></pre>
+<h3 id="el-deadline-scheduler-de-linux"><a class="header" href="#el-deadline-scheduler-de-linux">El <strong>deadline scheduler</strong> de linux</a></h3>
+<p>Los algoritmos que vimos de scheduling de I/O tienen una desventaja muy grande,
+y es que pueden producir inanición. Linux para resolver esto implementó el
+<strong>deadline scheduler</strong>. </p>
+<p>Este scheduler mantiene 4 colas, dos de lectura y dos de escritura. La primera
+cola es aquella ordenada por LBA (implementando en cierta forma un C-Scan), y
+la segunda es una FIFO a la que se mandan todos aquellos pedidos que superan el
+tiempo límite configurado (500ms por default).</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sistemas-de-archivos"><a class="header" href="#sistemas-de-archivos">Sistemas de Archivos</a></h1>
+<p>Para nosotros (y sistemas basados en UNIX) un archivo es una secuencia de
+bytes, sin estructura. Se los identifica con un nombre y ese nombre puede
+incluir una extensión que puede servir para distinguir el contenido.</p>
+<p>Para ordenar los archivos en disco, los sistemas operativos tienen un módulo
+dentro del kernel llamado <strong>sistema de archivos o file system</strong>. Existen tanto
+sistemas de archivos &quot;locales&quot;, como lo son FAT, NTFS, etc. O distribuidos como
+lo son NFS, DFS, SMBFS, entre otros.</p>
+<p>Una de las responsabilidades elementales de un filesystem es determinar una
+organización lógica de los archivos, o sea:</p>
+<ul>
+<li>interna: cómo estructurar la info dentro del archivo (ej: linux usa secuencia
+de bytes y el usuario tiene la responsabilidad del formato).</li>
+<li>externa: cómo se ordenan los archivos (uso directorios, algo más tipo object storage?)</li>
+</ul>
+<p>La mayoría hoy en día además soporta alguna noción de <strong>link o alias</strong> a un
+archivo, o sea tener varios nombres para un mismo archivo (o por ejemplo poder
+acceder a un archivo desde dos rutas distintas).</p>
+<p>El filesystem también determina <strong>cómo se nombran los archivos</strong>, esto incluye:</p>
+<ul>
+<li>Determinar Caracteres de separación de directorio</li>
+<li>Si los archivos llevan o no extensión</li>
+<li>Restricciones a la longitud y caracteres permitidos</li>
+<li>Si es case sensitive o insensitive</li>
+<li>Punto de montaje (la ruta absoluta al dispositivo correspondiente al archivo)
+<ul>
+<li>ej: <code>/disk1/bla/dir_1_de_lo_montado/etc</code> tiene como punto de montaje <code>/disk1/bla</code> por ejemplo</li>
+</ul>
+</li>
+</ul>
+<p>Por último y casi lo principal, el filesystem también determina la
+representación del archivo y dos preguntas relacionadas a este:</p>
+<ul>
+<li>cómo gestiono el espacio libre?</li>
+<li>qué hago para la metadata (permisos, atributos, etc.)</li>
+</ul>
+<h2 id="representación-de-archivos"><a class="header" href="#representación-de-archivos">Representación de archivos</a></h2>
+<p>A los ojos del FS (filesystem), un archivo no es más que una lista de bloques +
+metadata. Sin embargo, una representación así no ayuda a la administración de
+metadata y gestión del espacio libre. Dada la naturaleza por lo general
+dinámica de los archivos, sólo poner los bloques contiguos en disco (esto hace
+muy rápidas las lecturas though) puede ser mala idea porque el archivo puede
+aumentaro o reducir su tamaño. Podemos reservar &quot;de más&quot; o utilizar menos
+espacio que el asignado pero eso naturalmente nos lleva a problemas de
+fragmentación. Es por esto que un esquema así no es usado en ningún FS que
+permita tanto lectura como escritura.</p>
+<h3 id="versión-1-lista-enlazada"><a class="header" href="#versión-1-lista-enlazada">Versión 1 (Lista Enlazada)</a></h3>
+<p><img src="./img/linked_list_fs.png#floating" alt="" /></p>
+<p>Claramente el problema de modificar un archivo se puede resolver mediante una
+lizta en lazada de bloques. Ahora el archivo puede aumentar/disminuir en tamaño
+y alcanza con buscar bloques y modificar la lista enlazada. Peeero:</p>
+<ul>
+<li>Lectura consecutiva = GOOD, <strong>lectura aleatoria = VERY BAD</strong></li>
+<li>Tampoco puedo leerme tooodo el archivo de una porque no sé donde está un bloque hasta leer los anteriores.</li>
+<li>Cada bloque desperdicia espacio indicando dónde está el siguiente bloque</li>
+</ul>
+<h3 id="versión-2-fat"><a class="header" href="#versión-2-fat">Versión 2 (FAT)</a></h3>
+<div style="display: flex">
+<div style="flex-grow: 1; margin-right: 5%">
+<div class="table-wrapper"><table><thead><tr><th>Bloque</th><th>Siguiente</th></tr></thead><tbody>
+<tr><td>0</td><td>vacío</td></tr>
+<tr><td>1</td><td>2</td></tr>
+<tr><td>2</td><td>5</td></tr>
+<tr><td>3</td><td>8</td></tr>
+<tr><td>4</td><td>3</td></tr>
+<tr><td>5</td><td>7</td></tr>
+<tr><td>6</td><td>vacío</td></tr>
+<tr><td>7</td><td>9</td></tr>
+<tr><td>8</td><td>-1</td></tr>
+<tr><td>9</td><td>-1</td></tr>
+<tr><td>10</td><td>vacío</td></tr>
+<tr><td>11</td><td>vacío</td></tr>
+<tr><td>12</td><td>vacío</td></tr>
+<tr><td>13</td><td>vacío</td></tr>
+</tbody></table>
+</div></div>
+<div style="flex-grow: 1">
+  <p>
+  Tomando lo que ya tenemos de la V1, FAT le da una vuelta de tuerca. En lugar de
+  guardar los punteros al siguiente bloque en el mismo bloque, me guardo una
+  tabla que tenga el bloque que le sigue a otro. Veamos un ejemplo:
+<ul>
+<li>El archivo A está en los bloques 1, 2, 5, 7 y 9 </li>
+<li>El archivo B en los bloques 4, 3 y 8.</li>
+</ul>
+<p>FAT usa este método con algunas variantes, en particular hay algunas
+direcciones que están reservadas (para marcar un bloque libre, uno reservado,
+uno con un sector defectuoso, último bloque del archivo). </p>
+<ul>
+<li>Soluciona los problemas previos porque no desperdicio espacio del bloque y puedo leerlos fuera de orden, y taaaaan ineficiente no es la lectura no secuencial</li>
+<li>Pero tengo que tener toda la tabla en memoria, lo cual puede ser mucho para discos muy grandes.</li>
+<li>También tengo una única tabla... mucha contención del recurso.</li>
+<li>Tampoco maneja seguridad</li>
+<li>Y necesito tener la tabla en memoria, no es robusto (sorprendentemente esto se usaba en windows hasta hace poco por default)</li>
+</ul>
+</p> 
+</div>
+</div>
+<h2 id="versión-3---fs-en-sistemas-unix-e-inodos"><a class="header" href="#versión-3---fs-en-sistemas-unix-e-inodos">Versión 3 - FS en sistemas UNIX e <strong>Inodos</strong></a></h2>
+<p>Los <strong>Inodos</strong> son la estructura fundamental. Cada archivo cuenta con al menos un inodo, y se estructuran de la siguiente manera:</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Inodo</th></tr></thead><tbody>
+<tr><td style="text-align: center"><strong>Atributos</strong> <br>(Tamaño, permisos, etc.)</td></tr>
+<tr><td style="text-align: center"><strong>Direcciones a unos pocos bloques</strong> <br> (puedo acceder directo, para archivos pequeños)</td></tr>
+<tr><td style="text-align: center"><strong>Single Indirect Block <br>(Puntero)</strong></td></tr>
+<tr><td style="text-align: center"><strong>Double Indirect Block <br>(Puntero)</strong></td></tr>
+<tr><td style="text-align: center"><strong>Triple Indirect Block <br>(Puntero)</strong></td></tr>
+</tbody></table>
+</div>
+<p>Donde:</p>
+<ul>
+<li>El Single Indirect Block es un bloque con punteros a bloques de datos (cubre archivos de hasta 16MB)</li>
+<li>El Double Indirect Block apunta a una tabla de Single Indirect Blocks (cubre archivos de hasta 32MB)</li>
+<li>El Triple Indirect Block apunta a un bloque de Double Indirect Blocks (cubre archivos de hasta 70TB)</li>
+</ul>
+<p><img src="./img/unix_inode.png#floating" alt="" /></p>
+<p>Esta estructura agrega complejidad pero resuelve algunos de los problemas de los modelos anteriores:</p>
+<ul>
+<li>Permite cargar en memoria las tablas correspondientes a los archivos abiertos</li>
+<li>Una tabla por archivo significa que hay mucha menos contención (tiene sentido
+que haya contención si quiero modificar el mismo archivo desde dos procesos
+distintos)</li>
+<li>Además el modelo es más consistente: sólo tengo cargada en memoria las cosas correspondientes a archivos abiertos.</li>
+</ul>
+<pre><code class="language-admonish note title=&quot;Observación&quot;">El uso de inodos introduce una nueva noción de tamaño, cosa que con FAT no pasaba. Ahora tenemos:
+
+- el tamaño de el archivo respecto a **cuántos datos tiene**
+- el tamaño del archivo respecto a **cuánto espacio en disco ocupa**
+</code></pre>
+<h3 id="metadata"><a class="header" href="#metadata">Metadata</a></h3>
+<p>Cuando hablamos de metadata estamos incluyendo los inodos (o las estructuras que use el OS en su lugar) pero además otra info, por ejemplo:</p>
+<ul>
+<li>Permisos</li>
+<li>Tamaños</li>
+<li>Propietarios/s.</li>
+<li>Fechas de creación, modificación, acceso.</li>
+<li>Bit de archivado.</li>
+<li>Tipo de archivo (regular, dispositivo virtual, pipe, etc.)</li>
+<li>Flags.</li>
+<li>Conteo de referencias.</li>
+<li>CRC o similar para chequeo/arreglo de errores.</li>
+</ul>
+<h3 id="implementando-directorios-con-inodos"><a class="header" href="#implementando-directorios-con-inodos">Implementando directorios con Inodos</a></h3>
+<p>Un directorio también es un archivo. A esta altura nos podríamos preguntar si
+está pasando un archivo-ception donde tódo es un archivo. La respuesta es sí.</p>
+<p>Retomando, al ser un archivo, un directorio tiene que tener su propio inodo.
+Dentro del bloque se guarda la lista de pares de inodo y nombre del
+archivo/directorio (probar hacer <code>vim &lt;ruta a un directorio&gt;</code>,  qué nos
+muestra?)</p>
+<pre><code class="language-admonish note collapsible=true">También se puede implementar con una tabla de hash. Cuando computo el hash
+sobre el nombre del archivo obtengo la entrada correspondiente al archivo. De
+esa forma se pueden optimizar los tiempos de búsqueda para archivos.
+
+El mayor problema de la tabla de hash es la dependencia de la función de hash y
+el tamaño fijo de la misma. Para eso se puede optar también por la alternativa
+de tabla de hash que usa chaining, que si bien menos eficiente mejora los
+tiempos de búsqueda en comparación a la alternativa inicial. 
+</code></pre>
+<h3 id="dónde-están-los-inodos-en-el-disco"><a class="header" href="#dónde-están-los-inodos-en-el-disco">Dónde están los inodos en el disco?</a></h3>
+<p><img src="./img/hdd_inodes.png#center" alt="" /></p>
+<h3 id="links"><a class="header" href="#links">Links</a></h3>
+<p>Como mencionamos antes, es normal que hoy en día los sistemas operativos
+permitan armar links entre archivos. Tenemos 2 tipos de loinks que podemos
+armar:</p>
+<ul>
+<li>link (a secas): accedo al archivo posta</li>
+<li>link simbólico: referencia al archivo posta (en lugar de guardar <code>#{nombre} #{inode_id}</code> guardo <code>#{nombre} #{path_to_file}</code>)</li>
+</ul>
+<p>Agregar links ciertamente introduce complejidad a la estructura del sistema de archivos. Es por eso que hay algunos problemas a considerar:</p>
+<ol>
+<li>Un archivo con links (dependiendo del tipo) puede tener muchas rutas
+absolutas. Si estamos recorriendo el sistema para contar estadísticas,
+deberíamos tener eso en cuenta para no contar por duplicado. Más aún, en el
+caso de directorios no queremos recorrer 2 veces el mismo directorio (o
+loopear infinitamente), por lo que es necesario saber si ya pasé por un
+directorio o no.</li>
+<li>Otro problema que surge es el del borrado</li>
+</ol>
+<ul>
+<li>Si borro un enlace simbólico no debería no debería afectar al original,
+sólo borro el link.</li>
+<li>Si borro el archivo original hay que considerar qué hacer. EN el caso de
+UNIX, los enlaces simbólicos se mantienen (no se borran), y es
+responsabilidad del usuario darse cuenta de que hay &quot;referencias huérfanas&quot;
+(al momento de acceder al archivo el OS se puede dar cuenta de que no
+existe más el original&quot;.</li>
+<li>UNIX cuenta con un tipo de link más, <strong>hard links</strong> que lo que hacen es
+mantener en el inodo la cuenta de cuántos links tiene. Si borro el archivo
+original o un link, decremento el contador. Sólo libero el bloque si el
+count llega a 0 (es una forma de hacer reference counting). No hace falta
+mantener la lista de links que apuntan al inodo.</li>
+</ul>
+<h2 id="manejo-del-espacio-libre"><a class="header" href="#manejo-del-espacio-libre">Manejo del espacio libre</a></h2>
+<p>Otro problema que le concierne al filesystem es el del manejo del espacio
+libre. Cómo trackeo las partes que están libres y las que no?</p>
+<ul>
+<li>Una forma es usar un mapa de bits (empaquetado), pero eso requiere tener el vector en memoria (malo).</li>
+<li>Al igual que con la memoria, podríamos tener una lista enlazada de bloques libres</li>
+<li>En general se *<em>clusteriza</em>. O sea si un bloque de disco puede tener <em>n</em> punteros a otros bloques, los primeros n - 1 indican bloques libres y el último es el puntero al siguiente nodo de la lista.
+<ul>
+<li>Se puede mejorar haciendo que cada nodo indique cuántos bloques libres consecutivos le siguen.</li>
+</ul>
+</li>
+</ul>
+<h2 id="uso-de-caché"><a class="header" href="#uso-de-caché">Uso de caché</a></h2>
+<p>Una forma de mejorar el rendimiento del FS es usando una caché. Puedo usarla
+tanto para cachear inodos como datos. Lo que hacemos es copiar en memoria
+algunos bloques del disco. Se maneja de manera similar a las páginas (al punto
+de que se suele usar un caché unificado para ambas).</p>
+<h2 id="consistencia"><a class="header" href="#consistencia">Consistencia</a></h2>
+<p>Para situaciones en las que la computadora deja de funcionar antes de bajar los
+cambios a disco, como no queremos perder datos el SO tiene que proveer algún
+mecanismo para no perder dichos datos. Dentro de las herramientas que el sistema provee están:</p>
+<ul>
+<li>puedo hacer write through (que escriba a disco directamente), pero tiene un impacto grande de perf.</li>
+<li>syscall <code>fsync()</code>, que hace que se graben en disco todo lo que haga falta
+(las páginas &quot;dirty&quot; del caché)</li>
+<li>usar <code>fsck</code>, que es un programa que restaura la consistencia del FS. Recorre
+todo el disco y por cada bloque cuenta cuántos inodos le apuntan y cuántas
+veces aparece referenciado como libre. Dependiendo de esos valores y si es
+posible, se toman acciones correctivas.</li>
+<li>otro técnica, consiste en usar un bit que denota si se apagó normalmente el sistema:
+<ul>
+<li>Cuando inicia el sistema y ese bit está apagado, el apagado no fue normal. En ese caso se corre <code>fsck</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="journaling"><a class="header" href="#journaling">Journaling</a></h3>
+<p>Otra técnica más para asegurar consistencia es <strong>journaling</strong>: el OS lleva un
+log o journal que tiene los cambios que hay que hacer en disco. Cuando se baja
+la caché a disco se marca que esos cambios están listos. Después de X datos
+escritos (se detecta porque se llena un buffer) también se baja a disco.</p>
+<p>Como principal ventaja está que es mucho menos trabajo que correr <code>fsck</code>.
+Cuando el sistema inicia, se aplican los cambios del buffer que no se hayan
+logrado bajar a disco. Además, las escrituras a disco son en bloques de
+operaciones, mucho mejor que hacer escrituras secuenciales.</p>
+<p>Esto no viene sin su cuota de impacto en performance, pero a pesar de eso es
+una técnica usada en la mayoría de sistemas operativos.</p>
+<h2 id="características-avanzadas-de-os"><a class="header" href="#características-avanzadas-de-os">Características avanzadas de OS</a></h2>
+<ul>
+<li>cuotas de disco</li>
+<li>encripción</li>
+<li>snapshots</li>
+<li>manejo de raid por software (más control, menos perf, se puede obtener más redundancia)</li>
+<li>compresión</li>
+</ul>
+<h2 id="network-file-system-nfs"><a class="header" href="#network-file-system-nfs">Network File System (NFS)</a></h2>
+<p>El nfs es un protocolo que permite acceder a FS remotos como si fueran locales
+mediante RPC. La idea es que &quot;montamos&quot; el filesystem remoto en algún punto del
+sistema local y todo lo que acceda ahí no sabe si es algo local o remoto. Para
+soportar esto, los OS tienen una capa llamada <strong>Virtual File System (VFS)</strong>.</p>
+<p>La VFS tiene nodos virtuales por cada archivo abierto. Si es algo local son
+inodos, si es remoto se usa otra estructura. Dependiendo de si un pedido es
+local/remoto el VFS despacha el pedido al FS real o a un cliente de NFS que
+conoce el protocolo de red a utilizar.</p>
+<p>Del lado del cliente es necesario un módulo del kernel específico pero del
+servidor basta con un programa común y corriente.</p>
+<h2 id="ext2"><a class="header" href="#ext2">Ext2</a></h2>
+<p>Ext2 es un filesystem utilizado en los sistemas linux (hoy en día existen Ext3
+y Ext4, que incorporan journaling). Veamos cómo se guarda la info en disco. El espacio se separa en <strong>block groups</strong>. Cada block group tiene:</p>
+<ul>
+<li>el superblock, tamaño 1 bloque: tiene metadata crítica para el FS. Algunos de los datos que tiene son:
+<ul>
+<li>block group number</li>
+<li>block size</li>
+<li>blocks per group</li>
+</ul>
+</li>
+<li>group descriptors, tamaño <em>n</em> bloques
+<ul>
+<li>tiene para cada block group la info de:
+<ul>
+<li>nro de bloque del block bitmap</li>
+<li>nro de bloque del inode bitmap</li>
+<li>nro de bloque del inode table</li>
+<li>nro de bloques libres, inodos libres</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>data block bitmap, tamaño 1 bloque</li>
+<li>inode bitmap, tamaño 1 bloque</li>
+<li>inode table, tamaño <em>n</em> bloques</li>
+<li>data blocks, tamaño <em>n</em> bloques</li>
+</ul>
+<p><img src="./img/ext_2_fs.png#center" alt="" /></p>
+<pre><code class="language-admonish info">Por lo general, sólo se lee el superbloque del block group 0, pero el resto de
+los block group tienen una copia para casos de corrupción de memoria. Ocurre lo
+mismo para los group descriptors.
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sistemas-distribuidos"><a class="header" href="#sistemas-distribuidos">Sistemas Distribuidos</a></h1>
+<p>A los ojos de la materia, un sistema distribuido es un conjunto de recursos conectados que interactúan. Esto puede ser:</p>
+<ul>
+<li>Varias máquinas conectadas por red</li>
+<li>Un procesador con varias memorias</li>
+<li>Varios procesadores que comparten una (o más) memoria(s).</li>
+</ul>
+<p>Una extensión a esa definición que a mi me gusta es que el sistema distribuido <strong>hacia afuera se comporta como si fuese &quot;un único recurso&quot;</strong></p>
+<p>Qué ventajas nos puede traer un sistema distribuido vs. el esquema que veníamos usando?</p>
+<ul>
+<li>Paralelismo: ojo, esto no siempre ocurre. Ej: cualquier sistema de cómputo
+paralelo. Mando un algoritmo paralelo a correr en 4 máquinas y que en una &quot;se
+junte&quot; el resultado.</li>
+<li>Replicación: esta está muy bien. Como es el caso de bitcoin, que se caiga un
+nodo, dos nodos, veinte nodos no me tira el sistema.</li>
+<li>Descentralización: No quiero un único punto de falla. O tampoco quiero que el
+sistema lo rija una única entidad.</li>
+</ul>
+<p>Qué desventajas puede tener un sistema distribuido?</p>
+<ul>
+<li>La sincronización es difícil</li>
+<li>Mantener coherencia es difícil</li>
+<li>muy rara vez se comparte clock lo cual nos restringe a no necesariamente
+poder confiar en timestamps o heartbeats. A menos que tengas toda la papa y
+seas como google que compra relojes atómicos.</li>
+<li>Muchas veces cada &quot;participante&quot; tiene una visión parcial de todo lo que ocurre</li>
+</ul>
+<h2 id="sistemas-distribuidos-mediante-memoria-compartida"><a class="header" href="#sistemas-distribuidos-mediante-memoria-compartida">Sistemas distribuidos mediante memoria compartida</a></h2>
+<p>Por HW:</p>
+<ul>
+<li>UMA</li>
+<li>NUMA</li>
+<li>Híbrida</li>
+</ul>
+<p>Por SW:</p>
+<ul>
+<li>Estructurada
+<ul>
+<li>Memoria asociativa</li>
+<li>Arrays distribuidos</li>
+</ul>
+</li>
+<li>No estructurada
+<ul>
+<li>Memoria virtual global.</li>
+<li>Memoria virtual particionada por localidad</li>
+</ul>
+</li>
+</ul>
+<h2 id="cuando-no-hay-memoria-compartida"><a class="header" href="#cuando-no-hay-memoria-compartida">Cuando no hay memoria compartida</a></h2>
+<p>Como dijimos, no tener clocks hace las cosas difíciles. Pero <strong>no tener clock y
+memoria compartida</strong> hace las cosas muuuucho muy difícil. De todos modos hay
+algunas alternativas:</p>
+<ul>
+<li>Telnet (sólo para conectarse a otro equipo)</li>
+</ul>
+<p><img src="./img/rpc.png#floating" alt="" /></p>
+<ul>
+<li>RPC
+<ul>
+<li>permite a los programas hacer *<em>procedure calls</em> de manera remota, también enviar datos.</li>
+<li>existen bibliotecas que ocultan al programador los detalles de la comunicación</li>
+<li>importante: es un mecanismo <strong>sincrónico</strong></li>
+</ul>
+</li>
+</ul>
+<p>Para generalizar un poco, estos métodos tienen en común la forma de cooperación
+de solicitar un servicio a otro. El otro servicio no tiene un rol activo además
+de proveer el servicio. Estas arquitecturas son las que se conocen como
+<strong>cliente/servidor</strong>.</p>
+<h2 id="mecanismos-asincrónicos"><a class="header" href="#mecanismos-asincrónicos">Mecanismos asincrónicos</a></h2>
+<p>Hasta ahora vimos:</p>
+<ul>
+<li>con memoria compartida</li>
+<li>con cliente/servidor (sincrónico)</li>
+</ul>
+<p>Ahora veamos las formas de comunicación asincrónica:</p>
+<ul>
+<li>RPC asincrónico en sus distintos colores:
+<ul>
+<li>Promises</li>
+<li>Futures</li>
+<li>Otros(?)</li>
+</ul>
+</li>
+<li>Pasaje de mensajes (<code>send</code> / <code>receive</code>)</li>
+</ul>
+<p>Pasaje de mensajes es el mecanismo más general, ya que no asume nada más allá
+de tener un canal de comunicación. Este modelo si bien simple, viene con una
+serie de problemas a considerar:</p>
+<ul>
+<li>encoding/decoding de los datos</li>
+<li>la comunicación puede ser muy lenta</li>
+<li>se pueden perder mensajes (TCP/IP atenúa mucho la posibilidad de que esto suceda)</li>
+<li>enviar mensajes puede tener un costo económico</li>
+<li>Los nodos pueden morir</li>
+<li>La red se puede partir</li>
+</ul>
+<p>Los últimos dos problemas los vamos a ignorar pero son mucho muy reales llevado a la práctica.</p>
+<p>Aparece también la noción de <strong>complejidad medida sobre la cantidad de mensajes que intercambian</strong>.</p>
+<pre><code class="language-admonish info title=&quot;Conjetura de Brewer&quot;">En un entorno distribuido no se puede tener a la vez consistencia,
+disponibilidad y tolerancia a fallas todas al mismo tiempo. A lo sumo 2 de las
+3.
+
+Esto de hecho fue demostrado en 2002 por Seth Gilbert y Nancy Lynch con lo cual
+es un teorema más que una conjetura, pero como teorema se lo conoce como el CAP
+theorem.
+</code></pre>
+<h2 id="locks-en-entornos-distribuidos"><a class="header" href="#locks-en-entornos-distribuidos">Locks en entornos distribuidos</a></h2>
+<p>En entornos distribuidos no tenemos un <code>TestAndSet</code> atómico. Es por eso que tenemos que buscar alternativas. Podemos distinguir a grandes rasgos dos enfoques:</p>
+<ul>
+<li>Un enfoque centralizado, en donde tenemos un nodo que hace de coordinador entre los recursos.
+<ul>
+<li>Poco resiliente, hay un punto único de falla</li>
+<li>El coordinador se transforma en un cuello de botella del procesamiento y la capacidad de la red (no siempre)</li>
+<li>Tengo que recurrir al coordinador (que puede estar lejos), para acceder a un recurso que puede estar al lado mio.</li>
+</ul>
+</li>
+<li>Un enfoque distribuido en donde los procesos &quot;negocian&quot; recursos</li>
+</ul>
+<h2 id="locks-descentralizados"><a class="header" href="#locks-descentralizados">Locks descentralizados</a></h2>
+<p>La analogía que usamos para esto es el &quot;canto guerra pri&quot;. El tema es que en un
+entorno distribuido, saber quién cantó pri es difícil. Quién gana? El que
+primero mandó el mensaje? El que logró que la mayoría reciba su mensaje? Si hay
+empate, elijo del te timestamp más chico? Cómo comparo tiempstamps si es
+difícil coordinar clocks?</p>
+<p>Esto último nos lo responde nuestro queridísimo amigo Leslie Lamport, que dice
+que nos tendría que... something something un huevo something sincronizar
+relojes. Lo importante es saber si un evento ocurre antes que otro o no. Para
+eso se define el siguiente orden parcial entre eventos:</p>
+<ul>
+<li>Si dentro de un proceso, \( A \) sucede antes que \( B \), entonces \( A \rightarrow B \).</li>
+<li>Si \( E \) es el envío de un mensaje y \( R \) su recepción, \( E \rightarrow R \), aunque sucedan en distintos procesos.</li>
+<li>Es transitiva (si \( A \rightarrow B \) y \( B \rightarrow C \), entonces \( A \rightarrow C \)).</li>
+<li>Si no vale ni \( A \rightarrow B \) ni \( B \rightarrow A \), entonces \( A \) y \( B \) son concurrentes.</li>
+</ul>
+<h3 id="implementación"><a class="header" href="#implementación">Implementación</a></h3>
+<ul>
+<li>Cada procesador tiene un reloj (lo único importante es que sea monótono
+creciente)</li>
+<li>Cada mensaje lleva el ts del reloj</li>
+<li>Como la recepción siempre es posterior al envío, cuando se recibe un mensaje
+en tiempo <code>t</code> mayor al tiempo de nuestro reloj, actualizo nuestro reloj al
+tiempo <code>t + 1</code>.</li>
+<li>Lo único que falta resolver son los empates, que al ser concurrentes la
+resolución puede ser arbitraria (por ejemplo, decido por PID)</li>
+</ul>
+<h2 id="acuerdo-bizantino"><a class="header" href="#acuerdo-bizantino">Acuerdo Bizantino</a></h2>
+<p>Es el perfecto ejemplo de que cuando puede haber pérdida de mensajes es difícil ponerse de acuerdo.</p>
+<blockquote>
+<p>La idea del problema bizantino es que dos generales en campamentos de
+distintas ubicaciones se quieren poner de acuerdo para atacar una ciudad.
+Para eso, uno manda un mensajero (pero ojo, puede ser interceptado por la
+gente de la ciudad y ser asesinado) que le dice la hora de ataque al otro
+general. El otro general va a responderle, o bien estando de acuerdo con la
+hora o proponiendo otra. El problema está que cuando uno responde no tiene
+forma de saber que la respuesta llegó a menos que el otro le responda, pero
+en ese caso el otro no puede estar seguro de que éste recibió el mensaje.</p>
+</blockquote>
+<h3 id="formalización"><a class="header" href="#formalización">Formalización</a></h3>
+<p>Dados:</p>
+<ul>
+<li>Potenciales <strong>fallas en la comunicación</strong></li>
+<li>Valores: \( V = \lbrace 0, 1 \rbrace \)</li>
+<li>Inicio: Todo proceso \( i \) arranca con algún \( \text{init}(i) \in V \)</li>
+</ul>
+<p>Se busca:</p>
+<ul>
+<li>Acuerdo: Para todo \( i \neq j \), \( \text{decide}(i) = \text{decide}(j) \)</li>
+<li>Validez: Existe algún \( i \) tal que \( \text{decide}(i) = \text{init}(i) \)</li>
+<li>Terminación: Todo \( i \) termina en un número finito de transiciones (WAIT-FREEDOM)</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Teorema&quot;">Teorema: No existe ningún algoritmo para resolver el problema de consenso en este escenario
+</code></pre>
+<h3 id="variante-1"><a class="header" href="#variante-1">Variante #1</a></h3>
+<p>No hay errores de comunicación, pero los procesos pueden dejar de funcionar. En este caso pedimos que los procesos que no fallen terminen en un número finito de transiciones. En ese caso consenso se puede resolver con \( \mathcal{O}((k + 1) * N^2) \) mensajes.</p>
+<h3 id="variante-2"><a class="header" href="#variante-2">Variante #2</a></h3>
+<p>En este caso lo que suponemos es que los procesos no son confiables (es como si reemplazaran al mensajero por uno de la ciudad). Se puede resolver consenso bizantino para \( n \) procesos y \( k \) fallas si y sólo si \( n &gt; 3 * k \) (falla menos de un tercio de los nodos) y la conectividad es mayor que \( 2 * k \).</p>
+<h2 id="scheduling-en-sistemas-distribuidos"><a class="header" href="#scheduling-en-sistemas-distribuidos">Scheduling en sistemas distribuidos</a></h2>
+<ul>
+<li>local: (lo que ya vimos). Le doy el procesador a un proceso listo</li>
+<li>global: asigno un proceso a algún procesador/recurso. Ej: un load balancer ponele recibiendo requests</li>
+</ul>
+<p>Cuando es global, comparto la carga entre procesadores/equipos:</p>
+<ul>
+<li>cuando es estática, determino el procesador al crear el proceso (o recibir el request)</li>
+<li>cuando es dinámico asigno durante la ejecución el procesador (puede requerir migrar, lo cual es caro)
+<ul>
+<li>puedo triggerear la migración cuando un procesador está muy cargado (sender initiated) o cuando está muy libro (work stealing)</li>
+</ul>
+</li>
+</ul>
+<p>La política de scheduling se va a encargar de:</p>
+<ul>
+<li>Transferencia: cuándo hay que migrar un proceso</li>
+<li>Selección: elegir qué proceso migrar</li>
+<li>Ubicación: saber dónde migrar un proceso</li>
+<li>Info: cómo se difunde el estado del scheduler (los procesadores, las tareas, etc.)</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sistemas-distribuidos---parte-ii"><a class="header" href="#sistemas-distribuidos---parte-ii">Sistemas Distribuidos - parte II</a></h1>
+<h2 id="modelo-de-fallas"><a class="header" href="#modelo-de-fallas">Modelo de fallas</a></h2>
+<p>Para trabajar con algoritmos distribuidos es importante definir el modelo de fallas, por ejemplo:</p>
+<ul>
+<li>Nadie falla</li>
+<li>Los procesos se pueden caer pero no levantarse</li>
+<li>Los procesos se pueden caer y levantar</li>
+<li>Los procesos se pueden caer y levantar pero sólo en determinados momentos</li>
+<li>La red se particiona</li>
+<li>Los procesos se pueden comportar de manera arbitraria (procesos &quot;bizantinos&quot;/ hay fallas bizantinas)</li>
+</ul>
+<p>Cada una te fuerza a hacer algoritmos distintos (y como vimos antes, hay
+problemas que bajo un modelo se pueden resolver pero bajo otro no). Nosotros
+nos concentramos más que nada en los modelos sin fallas.</p>
+<p>Los algoritmos distribuidos/paralelos están buenísimos pero tienen un problema,
+o en realidad el problema es nuestro. Desde algo I armamos un marco teórico
+para analizar la complejidad de los problemas, que en entornos
+paralelos/distribuidos no tienen sentido. Para elegir algo que tiene más
+sentido, tomamos lo que por lo general resulta el cuello de botella en
+algoritmos distribuidos: el pasaje de mensajes (a través de la red, en cnpt).
+En particular vamos a medir la complejidad según la cantidad de mensajes que se
+envían a través de la red.</p>
+<p>Algunas variantes que también se pueden analizar:</p>
+<ul>
+<li>el tamaño de la red</li>
+<li>la cantidad de procesos</li>
+<li>cómo ubicar a cada proceso</li>
+</ul>
+<p>Los problemas que vamos a tratar pertenecen a 3 clases de problemas:</p>
+<ul>
+<li>Orden de ocurrencia de eventos</li>
+<li>Exclusión mutua</li>
+<li>Consenso</li>
+</ul>
+<h2 id="exclusión-mutua-distribuida"><a class="header" href="#exclusión-mutua-distribuida">Exclusión mutua distribuida</a></h2>
+<p>En su forma más sensilla, el problema también se conoce como <strong>token passing</strong>.
+La idea es armar un anillo lógico entre procesos y poner a circular un token.
+Cuando tengo el token, es como si entrara a la sección crítica. En un modelo en
+donde no hay fallas esto te sirve porque no hay inanición. Por otro lado, en
+redes grandes, es posible que tengas que esperar mucho hasta tu turno, aunque
+nadie más necesite el token. También estoy generando mensajes aunque no haga
+falta.</p>
+<p>Algunas de las implementaciones:</p>
+<ul>
+<li>Fiber Distributed Data Interface (FDDI).</li>
+<li>Time-Division Multiple-Access (TDMA).</li>
+<li>TImed-Triggered Architecture (TTA).</li>
+</ul>
+<h3 id="v2-pedidos-en-lugar-de-pasar-el-token"><a class="header" href="#v2-pedidos-en-lugar-de-pasar-el-token">V2: pedidos en lugar de pasar el token</a></h3>
+<p>CUando quiero entrar a la sección crítica envío a todo el mundo (el mismo
+proceso inclusive) el mensaje <code>solicitud(P_i, ts)</code>, siendo <code>ts</code> el timestamp.
+Cada proceso puede responder inmediatamente o encolar la respuesta. Si todos
+los procesos me responden, puedo entrar a la sección crítica. Si entro, al
+salir respondo a todos los pedidos demorados.</p>
+<p>Respondo <code>SI</code> cuando:</p>
+<ul>
+<li>no estoy intentando entrar a la sección crítica</li>
+<li>quiero entrar, todavía no lo hice, y el <code>ts</code> del pedido que recibo es menor que el mío (el otro tiene prio).</li>
+</ul>
+<p>Si bien ahora requiero que todos conozcan a todos (antes sólo hace falta conocer a 2), no circulo mensajes si nadie quiere entrar a la sección crítica.</p>
+<pre><code class="language-admonish note title=&quot;Pseudocódigo&quot; collapsible=true">
+```rust
+fn procesar_solicitud(pid, ts) {
+  if not in_seccion_critica or ts &lt;= seccion_critica_ts {
+    responder_solicitud(pid, &quot;SI&quot;);
+  }
+}
+
+fn procesar_respuesta(pid) {
+  respuesta_procesos[pid] = true;
+  if all(respuesta_procesos) {
+    seccion_critica()
+    set_all(respuesta_procesos, false);
+    // el copy sería como sacar una foto.
+    // De esa manera mientras proceso esos 
+    // mensajes pueden entrar nuevos
+    for msg in cola_mensajes.clone() {
+      procesar_mensaje(msg);
+    }
+  }
+}
+
+fn procesar_mensaje(msg) {
+  case msg.tipo {
+    SOLICITUD =&gt; procesar_solicitud(msg.pid, msg.ts),
+    RESPUESTA =&gt; procesar_respuesta(msg.pid)
+  }
+}
+```
+</code></pre>
+<pre><code class="language-admonish warning title=&quot;Ojo&quot;">Notar que estamos asumiendo que:
+
+- No se pierden mensajes
+- Ningún proceso falla
+</code></pre>
+<h3 id="locks-distribuidos"><a class="header" href="#locks-distribuidos">Locks Distribuidos</a></h3>
+<p>Anteriormente vimos que tener un coordinador de locks centralizado venía con
+sus problemas (bottleneck en el coordinador, punto único de falla, etc.).
+Veamos ahora una versión distribuida: protocolo de mayoría.</p>
+<p>La idea es que queremos un lock para un objeto que está copiado en \( n \)
+lugares. Para obtener un lock, nos lo tiene que otorgar al menos \(
+\frac{n}{2} + 1 \) nodos. Cuando pedimos el lock nos pueden responder que nos
+otorgan el lock o que no. Además, cada copia del objeto viene con su número de
+versión. Si lo escribimos, tomamos el número más alto y lo incrementamos en 1.
+Para las lecturas también basta con leer la copia que tenga el número de
+versión más alto.</p>
+<p>La elección de la cantidad de aprobaciones que necesitamos es necesaria para
+asegurar que no se otorgan 2 locks a la vez. Sin embargo, pueden haber
+deadlocks. Y por eso hay que usar algoritmos de detección y resolución de esos
+deadlocks (un timeout por ejemplo).</p>
+<p>Otra cosa que podríamos preguntarnos es si puede ocurrir que lea una copia
+desactualizada. Para que eso ocurra, deberían existir \( k \geq \frac{n}{2} +
+1 \) locks cuya marca sea \( t \), y existir otra copia con timestamp mayor.
+Pero eso significa que el que escribió tenía menos de \( \frac{n}{2} + 1 \)
+&quot;permisos&quot;, lo cual no debería ocurrir.</p>
+<h2 id="elección-de-líder"><a class="header" href="#elección-de-líder">Elección de líder</a></h2>
+<p>Un conjunto de procesos debe elegir a uno como <em>líder</em> para algún tipo de tarea
+(por ejemplo, si quiero tener control centralizado de locks, pero quiero que el
+coordinador cambie de a ratos puedo usar esto donde &quot;lider&quot; = &quot;coordinador de
+locks&quot;). En una red sin fallas, es sencillo.</p>
+<p>Lo que hago es al igual que para el problema de la sección crítica organizar
+los procesos lógicamente en un anillo. Todos los procesos hacen circular un
+mensaje con su ID. Cuando un proceso recibe un mensaje, comparo con su ID y
+hace circular al mayor de los dos. Cuando el mensaje dio toda la vuelta es
+porque ya sabemos el lider, así que hago circular un mensaje de notificación
+indicando quién resultó líder (particularmente le va a tocar al lider).</p>
+<p>Si al que le toca el lider justo se cae no se entera, puede ser un problema.
+Pero para eso podemos armar elecciones periódicas y te bancás caídas de nodos.
+También otras cosas a considerar son posibles particiones en la red, o la
+posibilidad de tener varias elecciones simultáneas.</p>
+<h3 id="análisis-de-complejidad"><a class="header" href="#análisis-de-complejidad">Análisis de complejidad</a></h3>
+<ul>
+<li>Tiempo: \( \mathcal{O}(n) \)</li>
+<li>Comunicación: \( \mathcal{O}(n^2) \) (tenés n mensajes que &quot;dan toda la vuelta&quot;)
+<ul>
+<li>Existe cota inferior de \( \Omega(n log n) \)</li>
+</ul>
+</li>
+</ul>
+<h2 id="instantánea-global-consistente-sería-un-caso-de-ordenar-eventos"><a class="header" href="#instantánea-global-consistente-sería-un-caso-de-ordenar-eventos">Instantánea Global Consistente (sería un caso de ordenar eventos)</a></h2>
+<p>Tenemos un estado \( E = \sum E_i \) siendo \( E_i \) la parte del estado
+que le corresponde a \( P_i \). El estado se modifica únicamente mediante los
+mensajes que se mandan los procesos entre sí. Lo que quiero es poder en un
+momento dado, saber cuánto valían los \( E_i \) y qué mensajes había
+circulando en la red.</p>
+<p>Una posible solución es la siguiente:</p>
+<ul>
+<li>Cuando se quiere una instantánea, un proceso se manda a sí mismo un mensaje
+de <code>marca</code>.</li>
+<li>Cuando un proceso recibe un mensaje de <code>marca</code> por primera vez, guarda una
+copia de su estado y envía un mensaje de marca a los otros procesos. A partir
+de ese momento el proceso empieza a registrar todos los mensajes (puede ser
+cualquier mensaje, no sólo de marca) que recibe de cada vecino hasta que
+recibe <code>marca</code> de todos sus vecinos (requiere conocer la red).</li>
+<li>Al recibir la segunda <code>marca</code>, queda conformada la secuencia <code>recibidos_i_j</code>
+de los mensajes que recibe un proceso de otro antes de tomar la instantánea.</li>
+<li>El estado global es es que cada proceso está en el estado de la copia tomada
+y los mensajes son los que están en <code>recibidos</code> (si junto todos los
+<code>recibidos_i_j</code>)</li>
+</ul>
+<pre><code class="language-admonish note title=&quot;Pseudocódigo&quot; collapsible=true">```rust
+enum TipoMensaje {
+  Marca,
+  Mensaje
+}
+
+fn iniciar_instantánea() {
+  enviar_mensaje(pid, TipoMensaje::Marca)
+}
+
+fn recibir_mensaje(msg) {
+  if msg.tipo == TipoMensaje::Marca {
+    if registrando_mensajes {
+      marca_registrada[msg.pid] = true;
+      if all(marca_registrada) {
+        // Tengo la data necesaria para la instantánea
+        // Acá sólo broadcasteo pero habría que juntar toda la data
+        broadcastear_mensaje({pid, copia_estado, recibidos})
+      }
+    } else {
+      // PRIMER MENSAJE
+      copia_estado = estado_actual;
+      registrando_mensajes = true;
+      marca_registrada[msg.pid] = true;
+      for vecino in vecinos {
+        enviar_mensaje(vecino.pid, TipoMensaje::Marca);
+      }
+    }
+  } else {
+    if registrando_mensajes {
+      recibidos[msg.pid].append(msg)
+    }
+  }
+}
+```
+</code></pre>
+<h3 id="posibles-usos"><a class="header" href="#posibles-usos">Posibles usos</a></h3>
+<p>Este algoritmo se puede usar para:</p>
+<ul>
+<li>Detección de propiedades estables (propiedades que una vez verdaderas lo siguen siendo)</li>
+<li>Detección de terminación</li>
+<li>Debugging Distribuido</li>
+<li>Detección de Deadlocks</li>
+</ul>
+<h2 id="2pc-2-phase-commit"><a class="header" href="#2pc-2-phase-commit">2PC (2 Phase Commit)</a></h2>
+<p>La idea es realizar una transacción de forma atómica. Varios procesos se tienen
+que poner de acuerdo en que se realizó la transacción o no. Esto tiene mucho
+sentido por ejemplo en bases de datos distribuidas en donde varios nodos tienen
+que decidir si hacer <code>commit</code> o <code>abort</code> de una transacción.</p>
+<p>A grandes rasgos, el algoritmo funciona en dos fases: en la primera le
+preguntamos a todos si están de acuerdo. Si ahí ya es no entonces abortamos. Si
+no, anotamos los que dijeron que sí y vamos anotando los que dijeron sí. Además
+tenemos un timeout que nos hace abortar si faltan respuestas. Si recibimos
+todos los sí, recién ahí avisamos que quedó confirmada la transacción.</p>
+<h3 id="descripción-formal-del-problema-commit"><a class="header" href="#descripción-formal-del-problema-commit">Descripción &quot;Formal&quot; del problema COMMIT</a></h3>
+<ul>
+<li>Valores: \( V = \lbrace 0 \text{(abort)}, 1 \text{(commit)} \rbrace \)</li>
+<li>Acuerdo: \( \nexists i \neq j. \text{decide(i)} \neq \text{decide(j)} \)</li>
+<li>Validez:
+<ol>
+<li>\( \exists i. \text{init}(i) = 0 \implies \nexists i. \text{decide}(i) = 1\) (Si uno aborta todos abortan)</li>
+<li>\( \forall i. \text{init}(i) = 1 \land \text{no fallas} \implies \nexists i. \text{decide}(i) = 0\) (Si no hay fallas y todos querían commitear entonces se commitea)</li>
+</ol>
+</li>
+</ul>
+<p>Y tenemos dos versiones distintas del problema:</p>
+<ul>
+<li>con Terminación Débil: Si no hay fallas, todo proceso decide.</li>
+<li>con Terminación Fuerte: Todo proceso que no falla decide.</li>
+</ul>
+<pre><code class="language-admonish note title=&quot;Pseudocódigo 2PC&quot; collapsible=true">
+```rust
+fn fase_1() {
+  match pid {
+    1 =&gt; {
+      votes = receive_messages();
+      if all(votes) {
+        decide = init;
+      } else {
+        decide = 0;
+      }
+    }
+    _ =&gt; {
+      enviar_mensaje(1, init);
+      if init == 0 {
+        decided = true;
+        decide = 0
+      }
+    }
+  }
+}
+
+fn fase_2 {
+  match pid {
+    1 =&gt; {
+      broadcast(decide);
+    }
+    _ =&gt; {
+      if not decided {
+        decide = wait_for_message(1);
+      }
+    }
+  }
+}
+```
+
+![](./img/2pc.png#center)
+</code></pre>
+<pre><code class="language-admonish info title=&quot;Correctitud&quot;">**Teorema**: 2PC resuelve COMMIT con terminación débil.
+
+Sin embargo, no satisface terminación fuerte. Para eso se usa el algoritmo 3PC (Three Phase Commit).
+</code></pre>
+<h3 id="variantes-del-problema-de-consenso"><a class="header" href="#variantes-del-problema-de-consenso">Variantes del problema de consenso</a></h3>
+<ul>
+<li><em>k-agreement</em>: \( \text{decide}(i) \in W, \text{ tal que } |W| = k \)</li>
+<li>Aproximado: \( \forall i \neq j. |\text{decide}(i) - \text{decide}(j)| \leq \epsilon \)</li>
+<li>Probabilístico: \( Pr[\exists i \neq j. \text{decide}(i) \neq \text{decide}(j)] \leq \epsilon \)</li>
+</ul>
+<h2 id="miscelaneos-2"><a class="header" href="#miscelaneos-2">Miscelaneos</a></h2>
+<h3 id="3-phase-commit-3pc"><a class="header" href="#3-phase-commit-3pc">3 Phase Commit (3PC)</a></h3>
+<p><img src="./img/3pc.png#halffloating" alt="" /></p>
+<p>La idea del algoritmo es similar. Veamos cada ronda:</p>
+<ul>
+<li>ronda 1
+<ul>
+<li>para los procesos != 1 todo es igual.</li>
+<li>para el proceso 1, si todos votan 1 entonces <strong>pasa al estado ready</strong> pero no decide todavía a menos que alguno haya votado 0.</li>
+</ul>
+</li>
+<li>ronda 2
+<ul>
+<li>si el proceso 1 decidió 0 entonces avisa al resto, si no broadcastea el <strong>ready</strong>. Luego el proceso 1 decide si todavía no lo hizo.</li>
+<li>Los procesos que reciben <code>decide(0)</code> deciden 0, los otros (reciben <code>ready</code>) pasan al estado <strong>ready</strong>.</li>
+</ul>
+</li>
+<li>ronda 3
+<ul>
+<li>si el proceso decidió 1 broadcastea <code>decide(1)</code>.</li>
+<li>los procesos que reciben <code>decide(1)</code> deciden 1.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-admonish info title=&quot;Detalles&quot;">En realidad esto no alcanza para garantizar *strong termination*, garantiza que
+si el proceso 1 no falla entonces hay strong termination. Para garantizar
+*strong termination* hay que agregar \\( 3 * (n - 1)\\) rondas más, en donde el
+proceso 2 hace lo mismo que el 1, después el 3, 4, etc (sólo cambian de estado
+los que todavía no decidieron).
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="protección-y-seguridad"><a class="header" href="#protección-y-seguridad">Protección y Seguridad</a></h1>
+<h2 id="ojo-son-cosas-distintas"><a class="header" href="#ojo-son-cosas-distintas">Ojo, son cosas distintas...</a></h2>
+<p>Por un lado, protección se trata de los mecanismos para que nadie pueda tocar
+los datos de otro. O sea poder decidir qué usuario puede hacer cada cosa.</p>
+<p>Por otro lado, tenemos seguridad que trata de asegurarse que los usuarios sean
+quien dicen ser y de impedir la destrucción/adulteración de datos.</p>
+<p>De todos modos nosotros medio que lo tomamos en cuenta como lo mismo. Una definición más moderna de seguridad (de la información. No confundir con seguridad informática) es la preservación de las siguientes características:</p>
+<ul>
+<li>Confidencialidad</li>
+<li>Integridad -&gt; Datos no adulterados</li>
+<li>Disponibilidad</li>
+</ul>
+<h2 id="subsistema-de-seguridad-de-un-so"><a class="header" href="#subsistema-de-seguridad-de-un-so">Subsistema de seguridad de un SO</a></h2>
+<p>Los sistemas de seguridad suelen tener:</p>
+<ul>
+<li>Sujetos: usuarios, grupos de usuarios (roles), procesos (también podría contar como objeto)</li>
+<li>Objetos: archivos, dispositivos, pipes, etc.</li>
+<li>Acciones: leer, borrar, escribir, sobreescribir, propagar permisos</li>
+</ul>
+<p>La idea de un sistema de seguridad es determinar qué sujetos pueden realizar qué acciones sobre qué objetos.</p>
+<h3 id="las-tres-a-que-garantiza-el-sistema-de-seguridad"><a class="header" href="#las-tres-a-que-garantiza-el-sistema-de-seguridad">Las tres A que garantiza el sistema de seguridad</a></h3>
+<ul>
+<li>Autenticación (Authentication): ver que alguien sea quien dice ser. Se usan distintas técnicas por lo general combinadas con criptografía para lograr esto:
+<ul>
+<li>Contraseñas</li>
+<li>Datos biométricos (Huella digital, Patrón de circulación de sangre)</li>
+</ul>
+</li>
+<li>Autorización (Authorization): qué permisos tenés y qué te permiten hacer</li>
+<li>Auditoría (Accounting): dejar un registro de todo lo que sucedió / que hiciste</li>
+</ul>
+<h3 id="algo-sobre-criptografía"><a class="header" href="#algo-sobre-criptografía">Algo sobre criptografía</a></h3>
+<p>Tenemos dos ramas usualmente confundidas. En primer lugar, la <strong>Criptografía</strong> es
+la rama de las matemáticas e informática que se encarga de hacer que la info no
+sea accedible a terceros (encripción/cifrado y desenccripción/descifrado).</p>
+<p>Por otro lado está el criptoanálisis que se encarga del estudio de los métodos
+que rompen textos cifrados cuando no tengo la clave.</p>
+<p>Hasta 1970, la técnica que predominaba era la del uso de mecanísmos simétricos,
+o sea que tienen una única clave que se usa para encriptar y desencriptar. Por
+ejemplo: Cifrado Caesar, DES, Blowfish, AES.</p>
+<p>A partir del 1970, con el uso de <strong>mecanismos asimétricos</strong> como RSA esto
+cambió. Los mecanismos asimétricos a diferencia de sus contrapartes usan
+distintas claves: una para encriptar y otra para desencriptar. Una de las dos
+es una clave pública que todos conocen y la otra es la privada que sólo se
+supone que la conozca yo.</p>
+<p>Hoy en día también contamos con <strong>funciones de has one-way</strong>, como son MD5,
+SHA1, SHA-256, etc.</p>
+<p>Una constante que se ve en casi todos los casos es que en cada lugar hay que
+hacer un tradeoff entre qué tan seguro es el protocolo que aplico vs qué tan
+rápido es.</p>
+<h2 id="autenticación"><a class="header" href="#autenticación">Autenticación</a></h2>
+<h3 id="funciones-de-hash"><a class="header" href="#funciones-de-hash">Funciones de hash</a></h3>
+<p>Si bien ya conocemos las funciones de hash, en cripto se suelen usar funciones de hash especiales que aseguren:</p>
+<ul>
+<li>resistencia a la preimagen: es difícil encontrar alguna preimagen de un hash
+resultante.</li>
+<li>resistencia a la segunda preimagen. También tiene que ser difícil dado un
+valor, encontrar otro distinto cuyo hash sea el mismo (o sea encontrar una
+colisión)</li>
+</ul>
+<p>Por lo general son útiles para almacenar contraseñas (es raro que se guarde la
+contraseña en texto plano porque alguien que obtenga acceso obtiene las
+contraseñas), aunque se puede ir más allá y usar SALT. El uso de un SALT mitiga
+el uso de algunos ataques (hash tables y rainbow tables), y consiste en meter
+aleatoreidad al input de la función de hash. De esa forma puede parecer que dos
+inputs iguales tienen distinta función de hash. Por ejemplo, puedo generar un
+string random y appendearlo a la contraseña antes de calcular el hash. También
+puedo repetir el proceso de SALTeo varias veces para reducir la chance de que
+el salt sea el mismo para dos contraseñas. El salt se guarda en el servidor
+junto con el hash.</p>
+<p>Para más info, <a href="https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/">este post</a> de auth0 está muy bueno.</p>
+<h3 id="método-rsa"><a class="header" href="#método-rsa">Método RSA</a></h3>
+<ul>
+<li>tomo dos números de muchos dígitos, uno va a ser la clave pública y el otro
+la clave privada. No sólo eso si no también queremos que sean primos.</li>
+<li>para encriptar un mensaje, interpreto cada letra como si fuera un número y
+hago una cuenta que involucra a la clave pública.</li>
+<li>para desencriptar, necesito la clave privada y nuevamente hacer una cuenta.</li>
+</ul>
+<p>Veamos un poco de detalle:</p>
+<ul>
+<li>tenemos los números \( p \) y \( q \) mencionados anteriormente.</li>
+<li>definamos \( n = pq \) y \( n' = (p-1)(q-1) \)</li>
+<li>elijamos cualquier entero \( e \) entre \( 2 \) y \( n' - 1 \) que sea coprimo con \( n' \).</li>
+<li>calculamos \( d \) tal que \( de = 1 \text{ mod }n' \) (es fácil de hacer).</li>
+<li>encriptar(c): calculo el resto de dividir \( c^e \) por \( n \)</li>
+<li>desencriptar(c): calculo el resto de dividir \( c^d \) por \( n \)</li>
+</ul>
+<p>El método funciona en la práctica porque factorizar es difícil (problema NP), y
+no puedo encontrar el valor de la clave privada únicamente partiendo de la
+pública.</p>
+<p>Un detalle importante es que las operaciones de encripción y desencripción son
+inversas entre sí. O sea \(Enc(Dec(M)) = M = Dec(Enc(M))\). Esto permite como
+veremos más adelante hacer firmas digitales con mi clave privada.</p>
+<p>Para una explicación más a fondo recomiendo <a href="https://eli.thegreenplace.net/2019/rsa-theory-and-implementation/">este
+post</a>, que
+tiene desde la teoría hasta detalles de implementación y una implementación
+hecha en go.</p>
+<h3 id="usando-rsa-para-firmas-digitales"><a class="header" href="#usando-rsa-para-firmas-digitales">Usando RSA para firmas digitales</a></h3>
+<p>Situación: quiero enviar un archivo pero quiero que estén seguros de que fui yo y nadie más. Puedo usar RSA para eso:</p>
+<ol>
+<li>calculo un hash del documento que quiero firmar</li>
+<li>encripto con mi clave privada el hash</li>
+<li>Entrego el documento + el hash encriptado</li>
+<li>El receptor lo puede desencriptar con mi clave pública. Si efectivamente lo pudo desencriptar es porque yo fui el autor.</li>
+<li>Por último chequea que el hash coincida con el documento.</li>
+</ol>
+<p>Ventajas de usar firmas digitales:</p>
+<ul>
+<li>asegura integridad (lo que firmé no se adulteró en el proceso)</li>
+<li>asegura no repudio: es mi firma y no puedo decir que no lo es</li>
+</ul>
+<h2 id="autorización"><a class="header" href="#autorización">Autorización</a></h2>
+<h3 id="monitor-de-referencias"><a class="header" href="#monitor-de-referencias">Monitor de referencias</a></h3>
+<p>El monitor de referencias es el encargado de mediar sobre las solicitudes de
+acceso a objetos por parte de los usuarios. Se basan en algúna política de
+acceso.</p>
+<p><img src="./img/reference_monitor.png#center" alt="" /></p>
+<h3 id="representando-permisos"><a class="header" href="#representando-permisos">Representando permisos</a></h3>
+<p>La forma más sencilla de implementar la autorización es mediante una matriz de
+control de accesos, es una matriz indexada en Sujetos y Objetos y el contenido
+de las celdas tienen las acciones permitidas. Si algo no está en la celda no se
+puede hacer, basándonos en el principio del mínimo privilegio. Y se suelen
+tener definidos permisos por defecto para cuando se crea un objeto nuevo.
+También por lo general ese default cambia según el tipo de objeto.</p>
+<p>Se puede almacenar como una matriz centralizada, o separada por filas /
+columnas. Esto tiene sentido si pensamos que por ejemplo los archivos suelen
+guardar lo que el usuario puede hacer consigo mismos.</p>
+<h3 id="dac-vs-mac"><a class="header" href="#dac-vs-mac">DAC vs MAC</a></h3>
+<p>Hay dos esquemas posibles para tomar para nuestra política de acceso:</p>
+<ul>
+<li>Discretionary Access Control: se basa en que los atributos de seguridad se tienen que definir explícitamente. O sea que el dueño decide los permisos.</li>
+<li>Mandatory Access Control: 
+<ul>
+<li>En este caso cada sujeto tiene un grado.</li>
+<li>Los objetos creados heredan el agrado del último sujeto que los modifica.</li>
+<li>Un sujeto sólo puede acceder a objetos de grado menor o igual.</li>
+<li>suele implementarse en entornos de manejo de info sensible.</li>
+</ul>
+</li>
+</ul>
+<h3 id="dac-en-unix"><a class="header" href="#dac-en-unix">DAC en UNIX</a></h3>
+<p>El esquema usado en UNIX es el de DAC. Veamos un ejemplo de qué tipo de permisos existen:</p>
+<pre><code class="language-bash"># En particular sólo me interesa la columna de permisos
+&gt; ls -lh
+drwx------@ - -  -   -  - 
+drwxr-xr-x  - -  -   -  - 
+drwx------+ - -  -   -  - 
+drwx------+ - -  -   -  - 
+drwx------@ - -  -   -  - 
+drwx------@ - -  -   -  - 
+-rw-r--r--  - -  -   -  - 
+drwx------  - -  -   -  - 
+drwx------+ - -  -   -  - 
+drwx------+ - -  -   -  - 
+drwxr-xr-x+ - -  -   -  - 
+drwxr-xr-x  - -  -   -  - 
+drwxr-xr-x  - -  -   -  - 
+drwxr-xr-x  - -  -   -  - 
+drwxr-xr-x  - -  -   -  - 
+drwxr-xr-x  - -  -   -  - 
+</code></pre>
+<p>Qué significan esas letras y símbolos?</p>
+<p><img src="./img/basic_permissions_unix.png#center" alt="" /></p>
+<p>Uno de los ejemplos:</p>
+<ul>
+<li>permisos: <code>drwxr-xr-x</code></li>
+<li>permisos de dueño: <code>drwx</code> -&gt; es un directorio, el dueño puede leer, escribir y ejecutar</li>
+<li>permisos de grupo: <code>r-x</code> -&gt; el grupo puede leer y ejecutar pero no escribir</li>
+<li>permisos de usuarios: <code>r-x</code> -&gt; los usuarios pueden leer y ejecutar pero no escribir</li>
+</ul>
+<p>También por abajo los permisos se representan como una tira de bits así que uno
+podría decir que asignar 7 (<code>chmod 777</code>) para los permisos es asignar lectura,
+escritura y ejecución (en el ejemplo asigno esos permisos a los 3: owner, group
+y user).</p>
+<h3 id="setuid-y-setgid"><a class="header" href="#setuid-y-setgid">SETUID y SETGID</a></h3>
+<p>Son permisos de acceso que permiten a los usuarios del sistema ejecutar
+binarios con un nivel de privilegio mayor (temporalmente y sólo para esa tarea
+específica).</p>
+<p>Me doy cuenta porque el archivo tiene activado el bit de <code>SETUID</code>. El permiso
+que debería aparecer sería <code>-rws....</code>. Otro detalle es que el bit de execute
+también tiene que estar seteado para que haga efecto el <code>SETUID</code>. Para <code>SETGID</code>
+también se muestra la s pero sobre los permisos de grupo. Se pueden settear con
+<code>chmod &lt;nro_para_setuid_segid_stickybit&gt;&lt;nro_para_owner&gt;&lt;nro_para_group&gt;&lt;nro_para_user&gt;</code></p>
+<h3 id="sudo"><a class="header" href="#sudo">SUDO</a></h3>
+<p>Permite ejecutar comandos en nombre de otro. Está bueno porque puedo escalar
+privilegios con auditabilidad de por medio, porque los comandos se loguean.</p>
+<h3 id="los-procesos-y-permisos"><a class="header" href="#los-procesos-y-permisos">Los procesos y permisos</a></h3>
+<p>Estoy un día ahí, tranqui y tiro un comando en la terminal. Eso va a spawnear
+otro proceso para el ejecutable que quiero. Qué permisos tiene el proceso? En
+general, heredan los permisos del usuario que lo corre. Pero como vimos,
+también puede pasar que tenga el bit de <code>SETUID</code>. De esa forma uno puede correr
+el comando para cambiar la contraseña sin tener permisos de administrador.</p>
+<h2 id="seguridad-en-el-software"><a class="header" href="#seguridad-en-el-software">Seguridad en el software</a></h2>
+<p>Podemos diferenciar 3 momentos en donde se hace presente el análisis de la seguridad en nuestro software:</p>
+<ul>
+<li>Arquitectura/Diseño: cuando pensamos la aplicación.</li>
+<li>Implementación: Cuando estamos escribiendo el código de la aplicación.</li>
+<li>Operación: Cuando la aplicación ya está en producción.</li>
+</ul>
+<h3 id="errores-de-implementación"><a class="header" href="#errores-de-implementación">Errores de implementación</a></h3>
+<p>Suelen ser errores más fáciles de entender y solucionar que los de diseño (Un
+error de diseño cuando estás en prod puede ser carísimo). El grueso de los
+errores además vienen de hacer suposiciones que no están garantizadas. Por
+ejemplo, &quot;<em>el usuario va a ingresar una cantidad acotada de caracteres</em>&quot;.
+Dentro de la info &quot;de entrada&quot; que muchas veces no contemplamos están:</p>
+<ul>
+<li>Variables de ambiente.</li>
+<li>El input del programa.</li>
+<li>Software de terceros (?).</li>
+</ul>
+<h3 id="buffer-overflows"><a class="header" href="#buffer-overflows">Buffer Overflows</a></h3>
+<p>Hoy en día no son tan relevantes, pero es interesante aprenderlos para entender
+que hay que tener cuidado al programar y para conocer algunas técnicas que los
+OS proveen hoy en día para prevenir esto.</p>
+<p>La idea es que a veces hay funciones con vulnerabilidades de seguridad. En
+particular en el lenguaje C (podría ser algo de otro lenguaje pero nos vamos a
+concentrar en C), existen funciones como por ejemplo <code>strcpy</code>. <code>strcpy</code> recibe
+el puntero a donde hay que copiar la data y el origen de la data, no pide nunca
+el tamaño de la misma. Lo que hace es leer del origen hasta encontrar el
+caracter de fin de string y va copiándolo en el buffer destino. El problema de
+todo esto es que las variables locales tienen su espacio reservado en la pila.
+Si usamos una variable local como buffer para <code>strcpy</code> y el string tiene más
+caracteres que el buffer, voy a estar escribiendo por fuera del espacio
+reservado para la variable local y sobre la data que está en el stack... eso
+sólo puede salir mal.</p>
+<p>Veamos un ejemplo:</p>
+<pre><code class="language-c">void f(char, *origen) {
+  char buffer[16];
+  strcpy(buffer, origen);
+}
+
+void main(void) {
+  char grande[18]; // también podría leer un input del usuario arbitrariamente grande.
+  f(grande);
+}
+</code></pre>
+<p>Antes del <code>strcpy</code>:</p>
+<p><img src="./img/buffer_overflow_1.png#center" alt="" /></p>
+<p>Después del <code>strcpy</code> (notar que se pisa el IP):</p>
+<p><img src="./img/buffer_overflow_2.png#center" alt="" /></p>
+<p>Si bien esta versión es stack based, existen otros ataques que son heap based y se basan en la misma idea. Existen para ambos algunas formas de detectarlo e intentar prevenirlo:</p>
+<ul>
+<li>memoria no ejecutable</li>
+<li>canary</li>
+<li>randomizar el espacio de memoria (<a href="https://en.wikipedia.org/wiki/Address_space_layout_randomization">aslr</a>)</li>
+<li>control de parámetros</li>
+</ul>
+<h3 id="control-de-parámetros"><a class="header" href="#control-de-parámetros">Control de parámetros</a></h3>
+<p>Esto aplica tanto para buffer overflows como otros tipos de ataque. El
+principal problema es que asumimos como válido cualquier tipo de input y eso
+nos puede llevar a ejecutar código que estaba contenido en el input. Por
+ejemplo:</p>
+<pre><code class="language-bash">$direccion=argv[1]
+echo Felix Cumple | mail -subject='Felicitaciones' $direccion
+</code></pre>
+<p>El programa espera una dirección de mail, pero ponele que usamos el parámetro
+<code>asd@asd.uba.ar; rm -rf /</code>. Si el programa está corriendo en un servidor remoto
+(y con privilegios) esto literal les borra todo.</p>
+<p>Para este problema tenemos dos potenciales soluciones:</p>
+<ol>
+<li>Usar siempre el mínimo privilegio posible para correr los programas</li>
+<li>Validar los parámetros</li>
+<li>Tainted data: se parece al anterior pero es un poco más flexible. Consiste
+en marcar los datos que provienen de fuentes externas como &quot;manchados&quot;, y de
+la misma manera las cosas que se derivan de esa fuente, y las cosas que se
+derivan de esas cosas, etc. En el hipotético caso de que quiera ejecutar
+código con data manchada, recién ahí la tengo que desmanchar</li>
+</ol>
+<pre><code class="language-admonish note title=&quot;Esto pasa en bases de datos también&quot;">Este mismo concepto de no validar la data sucede frecuentemente con bases de
+datos. El ataque es conocido como *SQL injection*. Por ejemplo, si no sanitizan
+la entrada podría ocurrir que se ejecute lo siguiente (ej: en un buscador):
+
+```c
+db.execute(&quot;UPDATE alumnos SET aprobado=true WHERE lu='$1'&quot;, lu);
+```
+
+Y que el usuario ingrese `307/08'; DROP alumnos; SELECT '` tirándote toda la tabla de alumnos.
+</code></pre>
+<h3 id="aislando-a-los-usuarios"><a class="header" href="#aislando-a-los-usuarios">Aislando a los usuarios</a></h3>
+<p>Los OS modernos suelen proveer distintas formas de aislar usuarios y procesos. Se las conocen como <em>sandboxes</em>:</p>
+<ul>
+<li><code>chroot()</code>: te permite cambiar el directorio raíz. Por ejemplo si tengo:</li>
+</ul>
+<pre><code>- /
+  - foo
+    - file_1.txt
+    - file_2.txt
+  - bar
+    - file_3.png
+</code></pre>
+<p>Si hago <code>chroot foo</code> y después <code>ls /</code> obtengo:</p>
+<pre><code>- file_1.txt
+- file_2.txt
+</code></pre>
+<ul>
+<li><code>jail()</code></li>
+</ul>
+<h2 id="principios-generales"><a class="header" href="#principios-generales">Principios generales</a></h2>
+<ul>
+<li>Mínimo privilegio</li>
+<li>Simplicidad</li>
+<li>Validar todos los accesos a datos</li>
+<li>Separación de privilegios</li>
+<li>Minimizar nro. mecanismos compartidos</li>
+<li>Seguridad multicapa</li>
+<li>Facilitar el uso de las medidas de seguridad</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="virtualización"><a class="header" href="#virtualización">Virtualización</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="microkernels"><a class="header" href="#microkernels">Microkernels</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="miscelaneos-3"><a class="header" href="#miscelaneos-3">Miscelaneos</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="design-of-a-general-purpose-memory-allocator-for-the-43bsd-unix-kernel"><a class="header" href="#design-of-a-general-purpose-memory-allocator-for-the-43bsd-unix-kernel">Design of a General Purpose Memory Allocator for the 4.3BSD UNIX Kernel</a></h1>
+<h2 id="intro"><a class="header" href="#intro">Intro</a></h2>
+<p>Setea el contexto actual de los allocators de memoria en BSD. Hasta el
+momento venían armando un allocator custom para cada tipo de uso.
+Plantean que hay algunas cosas muy importantes que hay que priorizar:</p>
+<ul>
+<li>Tener un allocator de propósito general</li>
+<li>que preserve la misma interfaz de <code>malloc()</code> y <code>free()</code></li>
+<li>el <code>malloc()</code> tiene que recibir sólamente el tamaño del cacho del bloque pedido.</li>
+<li>el <code>free()</code> sólo tiene que recibir el puntero al inicio del bloque a liberar</li>
+</ul>
+<h2 id="criterios-para-un-allocator-de-memoria"><a class="header" href="#criterios-para-un-allocator-de-memoria">Criterios para un allocator de memoria</a></h2>
+<p>Evalúan la efectividad del algoritmo midiendo la utilización porcentual. Esto es calcular la cantidad de memoria necesaria para cubrir un conjunto de reservas de memoria en cualquier momento. Está dado por:</p>
+<p>\[
+\text{utilization} = \frac{requested}{required}
+\]</p>
+<p>Donde \( \text{requested} \) es la suma de la cantidad memoria reservada y todavía no liberada. Por required se refiere a la cantidad de memoria reservada para responder a esos pedidos de memoria (siempre se requiere un poco más para sopesar los problemas de fragmentación y para tener un buffer listo para nuevos pedidos de memoria).</p>
+<ul>
+<li>En la práctica una utilización del 50% es considerada buena</li>
+</ul>
+<p>También destaca algunos aspectos/requerimientos importantes de un buen algoritmo de reserva de memoria.</p>
+<ul>
+<li>Es más importante una buena utilización de memoria en el kernel vs en los procesos de usuario, principalmente porque la memoria de usuario es virtual y siempre podemos sacar páginas.</li>
+<li>El algoritmo tiene que ser <strong>rápido</strong>, debido a que es una operación utilizada frecuentemente. Un allocator lento degrada la performance de todo el OS y de lios procesos que corren en el mismo.
+<ul>
+<li>además un mal allocator va a incentivar a los desarrolladores a crear su propio allocator, reduciendo la efectividad del allocator de propíosito general.</li>
+</ul>
+</li>
+</ul>
+<h2 id="implementación-user-level"><a class="header" href="#implementación-user-level">Implementación User-Level</a></h2>
+<p>El user-level memory allocator de 4.2BSD mantiene un conjunto de
+listas ordenadas según cada potencia de 2 (O sea tengo listas de
+bloques de 1 byte, 2 bytes, 4 bytes, 8 bytes, etc. Para satisfacer un
+pedido de memoria, redondeo a la mínima potencia de 2 más grande que
+el tamaño pedido y le devuelvo ese bloque de memoria. De esa forma
+<code>free()</code> sólo tiene que devolver el bloque de memoria al arreglo
+correspondiente. Sólo cuando la lista sea vacía, hace un pedido de
+memoria posta (al kernel).</p>
+<h2 id="consideraciones-de-un-kernel-level-memory-allocator"><a class="header" href="#consideraciones-de-un-kernel-level-memory-allocator">Consideraciones de un Kernel-Level memory allocator</a></h2>
+<p>Se asumen algunas suposiciones:</p>
+<ul>
+<li>el tamaño máximo a reservar está acotado desde el momento del
+booteo.
+<ul>
+<li>de esa forma el kernel crea y mantiene un conjunto estático de
+estructuras para manejar la memoria dinámicamente reservada.</li>
+</ul>
+</li>
+<li>el allocator puede manejar su propio espacio de memoria como le
+plazca.
+<ul>
+<li>a diferencia de los user-space que sólo pueden reservar/liberar
+memoria para hacer crecer/achicar el heap.</li>
+</ul>
+</li>
+<li>otra suposición es la de conocer de antemano la distribución de los
+pedidos de memoria
+<ul>
+<li>según sus estimaciones, frecuentemente se pide poca memoria, y
+poco frecuentemente se pide mucha memoria. Entonces priorizo que
+sea rápido para porciones pequeñas de memoria.</li>
+</ul>
+</li>
+</ul>
+<h2 id="implementación-de-un-kernel-level-memory-allocator"><a class="header" href="#implementación-de-un-kernel-level-memory-allocator">Implementación de un kernel level memory allocator</a></h2>
+<ul>
+<li>para pedidos de poca memoria se usa la estrategia de potencias de 2.
+<ul>
+<li>cuando no hay espacio disponible recién ahí se llama al &quot;allocator
+real&quot;</li>
+</ul>
+</li>
+<li>para asegurarse que los pedidos grandes llaman al allocator las
+listas de las potencias de 2 grandes siempre están vacías.</li>
+<li>idea del allocator posta:
+<ul>
+<li>se redondea al múltiplo de <code>PAGE_SIZE</code> más cercano. Usa first-fit
+para encontrar los bloques.</li>
+</ul>
+</li>
+<li>otra pequeña optimización en pedidos chicos: me traigo una página
+entera aunque sobre, la divido y con los que sobran lleno la lista
+de potencias de 2 para acelerar pedidos futuros.</li>
+<li>Para bloques grandes se guardan en las páginas el tamaño del bloque (esto es necesario porque <code>free()</code> no recibe el tamaño del bloque a liberar).</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
