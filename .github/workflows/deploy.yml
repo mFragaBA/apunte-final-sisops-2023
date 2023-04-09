@@ -20,8 +20,8 @@ jobs:
         run: mdbook --version
       # - name: Show linkchecker version
       #   run: mdbook-linkcheck --version
-      - name: Show mermaid version
-        run: mdbook-mermaid --version
+      # - name: Show mermaid version
+        # run: mdbook-mermaid --version
       # - name: Show toc version
       #   run: mdbook-toc --version
       # - name: Show open-on-gh version
