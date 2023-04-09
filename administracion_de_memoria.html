@@ -269,23 +269,36 @@ granularidad de los bloques de memoria, lo cual no siempre se llevan bien.</p>
 registró en el array de interrupts. El SO ataja esa fault, y se encarga de
 sacar una página de memoria (si hace falta) y otorgarle el espacio a la página
 pedida. Es importante también la decisión de <strong>qué página sacar</strong>.</p>
-<pre><code class="language-admonish info title=&quot;swapping standard vs actual&quot;">La versión standard de swapping consiste en sacar de memoria **todo** el
+<div id="admonition-swapping-standard-vs-actual" class="admonition info">
+<div class="admonition-title">
+<p>swapping standard vs actual</p>
+<p><a class="admonition-anchor-link" href="#admonition-swapping-standard-vs-actual"></a></p>
+</div>
+<div>
+<p>La versión standard de swapping consiste en sacar de memoria <strong>todo</strong> el
 proceso, pero eso tiene un costo prohibitivo. Es por eso que hoy en día,
 sistemas como Linux y Windows usan una variante que consiste en sacar páginas
 de otros procesos pero no los procesos enteros, si no sacamos las páginas
 necesarias para liberar suficiente memoria. Es por eso que hoy en día
-*swapping* refiere a swapping standard y *paging/paginado* refiere a swapping +
-paging/paginado. La operación de **page out** consiste en mover una página de
-memoria a disco y **page in** de disco a memoria.
-</code></pre>
-<pre><code class="language-admonish warning title=&quot;swapping en dispositivos móviles&quot;">
-Los sistemas operativos como Android y IOS a diferencia de los que vimos no tienen ni usan ninguna forma de swapping. Esto es porque las memorias secundarias de estos dispositivos tienen restricciones respecto a la cantidad de escrituras que se le pueden hacer. Y swapping incurre en muchas escrituras. Es por eso que ante una situación en donde no tengo dónde ubicar nueva memoria se toman medidas como:
-
-- liberar páginas que sean read only (p. ej. de código)
-- las páginas escritas **siempre se mantienen en memoria**
-- matar procesos, y sólo guardar el estado en el que se cerraron las aplicaciones
-
-</code></pre>
+<em>swapping</em> refiere a swapping standard y <em>paging/paginado</em> refiere a swapping +
+paging/paginado. La operación de <strong>page out</strong> consiste en mover una página de
+memoria a disco y <strong>page in</strong> de disco a memoria.</p>
+</div>
+</div>
+<div id="admonition-swapping-en-dispositivos-móviles" class="admonition warning">
+<div class="admonition-title">
+<p>swapping en dispositivos móviles</p>
+<p><a class="admonition-anchor-link" href="#admonition-swapping-en-dispositivos-móviles"></a></p>
+</div>
+<div>
+<p>Los sistemas operativos como Android y IOS a diferencia de los que vimos no tienen ni usan ninguna forma de swapping. Esto es porque las memorias secundarias de estos dispositivos tienen restricciones respecto a la cantidad de escrituras que se le pueden hacer. Y swapping incurre en muchas escrituras. Es por eso que ante una situación en donde no tengo dónde ubicar nueva memoria se toman medidas como:</p>
+<ul>
+<li>liberar páginas que sean read only (p. ej. de código)</li>
+<li>las páginas escritas <strong>siempre se mantienen en memoria</strong></li>
+<li>matar procesos, y sólo guardar el estado en el que se cerraron las aplicaciones</li>
+</ul>
+</div>
+</div>
 <h3 id="mmu"><a class="header" href="#mmu">MMU</a></h3>
 <p>La MMU se organiza de forma tal que buscar páginas sea rápido pero que la tabla
 no ocupe mucho espacio. Si tengo una tabla sola para todo el espacio de memoria
@@ -300,21 +313,26 @@ correspondientes a las tareas que se estén usando.  (Eso sí, hay un mínimo
 extra de espacio que &quot;desperdicio&quot; que se nota a medida que tengo mayor
 utilización de la memoria)</p>
 <p><img src="./img/multilevel_mmu.png" alt="multilevel mmu" /></p>
-<pre><code class="language-admonish info title=&quot;Nota Grande como una casa&quot;">No tenemos una única tabla de páginas para todo, si no que **tenemos una tabla
-de páginas multinivel por proceso**. Las arquitecturas suelen incluir un
+<div id="admonition-nota-grande-como-una-casa" class="admonition info">
+<div class="admonition-title">
+<p>Nota Grande como una casa</p>
+<p><a class="admonition-anchor-link" href="#admonition-nota-grande-como-una-casa"></a></p>
+</div>
+<div>
+<p>No tenemos una única tabla de páginas para todo, si no que <strong>tenemos una tabla
+de páginas multinivel por proceso</strong>. Las arquitecturas suelen incluir un
 registro que hay que cargar con la dirección de la tabla de páginas (sorpresa
 sorpresa también tiene que ir en la PCB). Tener toda la tabla montada con
-registros sería muy rápido pero sólo es viable para tablas muy chicas. 
-
-Como veremos más adelante una optimización que sí se usa es la de mediante hw
+registros sería muy rápido pero sólo es viable para tablas muy chicas. </p>
+<p>Como veremos más adelante una optimización que sí se usa es la de mediante hw
 implementar una cache para ahorrarnos algunos pasos de la traducción de
-direcciones lógicas a físiscas.
-
-Además es común que se use un espacio de direcciones de memoria lógica común
+direcciones lógicas a físiscas.</p>
+<p>Además es común que se use un espacio de direcciones de memoria lógica común
 (por ejemplo, 0x8000 a 0x9FFF) y en ese caso si tuviésemos una única tabla de
 páginas se nos estarían pisando todas las páginas... todo el trabajo sería al
-pedo.
-</code></pre>
+pedo.</p>
+</div>
+</div>
 <h3 id="entrada-de-la-tabla-de-páginas"><a class="header" href="#entrada-de-la-tabla-de-páginas">Entrada de la tabla de páginas</a></h3>
 <p>En cada entrada de la tabla de páginas hay:</p>
 <ul>
@@ -337,11 +355,18 @@ pedo.
 </ul>
 </li>
 </ul>
-<pre><code class="language-admonish info title=&quot;ASIDs&quot;">Algunas TLBs guardan **address-space identifiers**, que identifican cada
+<div id="admonition-asids" class="admonition info">
+<div class="admonition-title">
+<p>ASIDs</p>
+<p><a class="admonition-anchor-link" href="#admonition-asids"></a></p>
+</div>
+<div>
+<p>Algunas TLBs guardan <strong>address-space identifiers</strong>, que identifican cada
 proceso y brindan protección por proceso. (dado que si no, como la TLB es parte
 del HW no tiene noción de procesos y esas y uno podría estar accediendo desde
-otro proceso a las páginas de mi proceso)
-</code></pre>
+otro proceso a las páginas de mi proceso)</p>
+</div>
+</div>
 <h3 id="reemplazo-de-páginas"><a class="header" href="#reemplazo-de-páginas">Reemplazo de páginas</a></h3>
 <p>Podemos hacer uso de los campos que nos provee la tabla de páginas:</p>
 <ul>

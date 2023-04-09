@@ -418,16 +418,20 @@ la misma manera las cosas que se derivan de esa fuente, y las cosas que se
 derivan de esas cosas, etc. En el hipotético caso de que quiera ejecutar
 código con data manchada, recién ahí la tengo que desmanchar</li>
 </ol>
-<pre><code class="language-admonish note title=&quot;Esto pasa en bases de datos también&quot;">Este mismo concepto de no validar la data sucede frecuentemente con bases de
-datos. El ataque es conocido como *SQL injection*. Por ejemplo, si no sanitizan
-la entrada podría ocurrir que se ejecute lo siguiente (ej: en un buscador):
-
-```c
-db.execute(&quot;UPDATE alumnos SET aprobado=true WHERE lu='$1'&quot;, lu);
-```
-
-Y que el usuario ingrese `307/08'; DROP alumnos; SELECT '` tirándote toda la tabla de alumnos.
+<div id="admonition-esto-pasa-en-bases-de-datos-también" class="admonition note">
+<div class="admonition-title">
+<p>Esto pasa en bases de datos también</p>
+<p><a class="admonition-anchor-link" href="#admonition-esto-pasa-en-bases-de-datos-también"></a></p>
+</div>
+<div>
+<p>Este mismo concepto de no validar la data sucede frecuentemente con bases de
+datos. El ataque es conocido como <em>SQL injection</em>. Por ejemplo, si no sanitizan
+la entrada podría ocurrir que se ejecute lo siguiente (ej: en un buscador):</p>
+<pre><code class="language-c">db.execute(&quot;UPDATE alumnos SET aprobado=true WHERE lu='$1'&quot;, lu);
 </code></pre>
+<p>Y que el usuario ingrese <code>307/08'; DROP alumnos; SELECT '</code> tirándote toda la tabla de alumnos.</p>
+</div>
+</div>
 <h3 id="aislando-a-los-usuarios"><a class="header" href="#aislando-a-los-usuarios">Aislando a los usuarios</a></h3>
 <p>Los OS modernos suelen proveer distintas formas de aislar usuarios y procesos. Se las conocen como <em>sandboxes</em>:</p>
 <ul>

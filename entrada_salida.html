@@ -225,25 +225,38 @@ usado y fundamental para el rendimiento general del sistema.</li>
 <p>Parte del objetivo del SO y la api de I/O es ocultar la mayor cantidad de
 detalles posibles y a la vez brindar acceso consistente a toda la fauna de
 dispositivos.</p>
-<pre><code class="language-admonish info title=&quot;Dispositivos en Linux&quot; collapsible=true">Los dispoistivos en linux están representados por archivos y se ubican en el directorio `/dev`. En el siguiente ejemplo, podemos ver que el archivo contiene información del tipo de archivo (c para char device, b para block device):
-
-```bash
-ls -lh /dev
+<details id="admonition-dispositivos-en-linux" class="admonition info">
+<summary class="admonition-title">
+<p>Dispositivos en Linux</p>
+<p><a class="admonition-anchor-link" href="#admonition-dispositivos-en-linux"></a></p>
+</summary>
+<div>
+<p>Los dispoistivos en linux están representados por archivos y se ubican en el directorio <code>/dev</code>. En el siguiente ejemplo, podemos ver que el archivo contiene información del tipo de archivo (c para char device, b para block device):</p>
+<pre><code class="language-bash">ls -lh /dev
 crw-rw-rw-  1 root    wheel        0x9000001 Mar  5 12:06 cu.wlan-debug
 brw-r-----  1 root    operator     0x1000000 Mar  5 12:06 disk0
 brw-r-----  1 root    operator     0x1000001 Mar  5 12:06 disk0s1
 brw-r-----  1 root    operator     0x1000002 Mar  5 12:06 disk0s2
 brw-r-----  1 root    operator     0x1000003 Mar  5 12:06 disk0s3
-```
 </code></pre>
-<pre><code class="language-admonish info title=&quot;API de I/O en linux&quot;">En el caso de linux, bajo la premisa de que *&quot;todo es un archivo&quot;* se proveen funciones de alto nivel para acceso a archivos:
-
-- `fopen()`, `fclose()`
-- `fread()`, `fwrite()`: modo bloque
-- `fgetc()`, `fputc()`: modo char
-- `fgets()`, `fputs()`: modo char stream (ej: con esto puedo escribir en consola)
-- `fscanf()`, `fprintf()`: modo char con formato
-</code></pre>
+</div>
+</details>
+<div id="admonition-api-de-io-en-linux" class="admonition info">
+<div class="admonition-title">
+<p>API de I/O en linux</p>
+<p><a class="admonition-anchor-link" href="#admonition-api-de-io-en-linux"></a></p>
+</div>
+<div>
+<p>En el caso de linux, bajo la premisa de que <em>&quot;todo es un archivo&quot;</em> se proveen funciones de alto nivel para acceso a archivos:</p>
+<ul>
+<li><code>fopen()</code>, <code>fclose()</code></li>
+<li><code>fread()</code>, <code>fwrite()</code>: modo bloque</li>
+<li><code>fgetc()</code>, <code>fputc()</code>: modo char</li>
+<li><code>fgets()</code>, <code>fputs()</code>: modo char stream (ej: con esto puedo escribir en consola)</li>
+<li><code>fscanf()</code>, <code>fprintf()</code>: modo char con formato</li>
+</ul>
+</div>
+</div>
 <h2 id="planificación-de-io"><a class="header" href="#planificación-de-io">Planificación de I/O</a></h2>
 <p>En el caso del disco, una de las claves para obtener un buen rendimiento es
 optimizar los accesos al mismo. Esto es porque el disco consiste de una cabeza
@@ -283,8 +296,15 @@ cabeza tardo muuuuucho.</li>
 <li><strong>C-Scan</strong>: igual a scan pero al llegar al final vuelve al principio sin
 atender otros pedidos (asume que el disco es una lista circular)</li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Nota&quot;">En la práctica ninguno de estos algoritmos se usan al 100%, suele ser una mezcla entre estos, prioridades, caches, etc.
-</code></pre>
+<div id="admonition-nota" class="admonition info">
+<div class="admonition-title">
+<p>Nota</p>
+<p><a class="admonition-anchor-link" href="#admonition-nota"></a></p>
+</div>
+<div>
+<p>En la práctica ninguno de estos algoritmos se usan al 100%, suele ser una mezcla entre estos, prioridades, caches, etc.</p>
+</div>
+</div>
 <h2 id="ssd"><a class="header" href="#ssd">SSD</a></h2>
 <p>Hoy en día prolifera el uso de discos de estado sólido (SSD). Si bien tienen notables ventajas (más resistentes, menor consumo, más silenciosos, mejor performance de lectura), también presenta sus propios problemas:</p>
 <ul>
@@ -323,8 +343,15 @@ impresora. Cuando uno imprime, en lugar de bloquearse el proceso hasta tener
 acceso, se encola el trabajo en una cola específica y se tiene un proceso que
 se encarga de desencolarla a medida que la impresora (o el dispositivo en otros
 casos) se libera.</p>
-<pre><code class="language-admonish info title=&quot;Nota&quot;">En el caso de spooling, el usuario es consciente de que ocurre pero el kernel no.
-</code></pre>
+<div id="admonition-nota-1" class="admonition info">
+<div class="admonition-title">
+<p>Nota</p>
+<p><a class="admonition-anchor-link" href="#admonition-nota-1"></a></p>
+</div>
+<div>
+<p>En el caso de spooling, el usuario es consciente de que ocurre pero el kernel no.</p>
+</div>
+</div>
 <h2 id="protección-de-la-información"><a class="header" href="#protección-de-la-información">Protección de la información</a></h2>
 <p>Vamos a ver algunas técnicas que podemos emplear para proteger nuestros datos.
 Muchas veces dependiendo del tipo de dato, del valor que le asignemos y el
@@ -336,13 +363,20 @@ y tengo que tener tolerancia a fallas, etc. Las dos técnicas que vamos a ver so
 <li>copias de seguridad</li>
 <li>redundancia</li>
 </ul>
-<pre><code class="language-admonish note">En particular **la redundancia no nos protege de la modificación/eliminación
-accidental de la información**. Es por eso que se suelen combinar ambas técnicas.
+<div id="admonition-note" class="admonition note">
+<div class="admonition-title">
+<p>Note</p>
+<p><a class="admonition-anchor-link" href="#admonition-note"></a></p>
+</div>
+<div>
+<p>En particular <strong>la redundancia no nos protege de la modificación/eliminación
+accidental de la información</strong>. Es por eso que se suelen combinar ambas técnicas.
 Hay casos sin embargo en donde ninguna de las técnicas nos salva (en algún
 momento corrompemos datos/archivos y nos damos cuenta tarde con varios backups
 encima). En esos casos los sistemas de archivos nos deberían brindar algunas
-protecciones para que eso no pase (o al menos no pase seguido).
-</code></pre>
+protecciones para que eso no pase (o al menos no pase seguido).</p>
+</div>
+</div>
 <h3 id="copias-de-seguridad"><a class="header" href="#copias-de-seguridad">Copias de seguridad</a></h3>
 <p>Hacer una <strong>copia de seguridad (backup)</strong> consiste en resguardar los datos
 (obviamente solo los importantes) en otro lado. Para grandes volúmenes de info,
@@ -496,17 +530,25 @@ inmediatamente. Si no, los pedidos se guardan en una cola de pendientes para
 ese disco. Como vimos antes, el scheduler de I/O puede ordenar esa cola con
 fines de mejorar la performance.</li>
 </ol>
-<pre><code class="language-admonish info">En el pasado, era necesario especificar el track y qué cabeza del HDD usar, y
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="#admonition-info"></a></p>
+</div>
+<div>
+<p>En el pasado, era necesario especificar el track y qué cabeza del HDD usar, y
 los algoritmos de scheduling de disco eran más complejos. Hoy en día mediante
 el uso de LBAs (Logical Block Addresses) incluso el SO es abstraido de lo que
 en realidad pasa en la memoria. Sin embargo, se sigue asumiendo que LBAs
 cercanas significan accesos cercanos (físicamente hablando). Por lo tanto sigue
-teniendo sentido tener consideraciones como:
-
-- lecturas/escrituras en bloque
-- fairness
-- timeliness
-</code></pre>
+teniendo sentido tener consideraciones como:</p>
+<ul>
+<li>lecturas/escrituras en bloque</li>
+<li>fairness</li>
+<li>timeliness</li>
+</ul>
+</div>
+</div>
 <h3 id="el-deadline-scheduler-de-linux"><a class="header" href="#el-deadline-scheduler-de-linux">El <strong>deadline scheduler</strong> de linux</a></h3>
 <p>Los algoritmos que vimos de scheduling de I/O tienen una desventaja muy grande,
 y es que pueden producir inanición. Linux para resolver esto implementó el

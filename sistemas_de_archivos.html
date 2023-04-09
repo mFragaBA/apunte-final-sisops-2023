@@ -272,11 +272,19 @@ que haya contención si quiero modificar el mismo archivo desde dos procesos
 distintos)</li>
 <li>Además el modelo es más consistente: sólo tengo cargada en memoria las cosas correspondientes a archivos abiertos.</li>
 </ul>
-<pre><code class="language-admonish note title=&quot;Observación&quot;">El uso de inodos introduce una nueva noción de tamaño, cosa que con FAT no pasaba. Ahora tenemos:
-
-- el tamaño de el archivo respecto a **cuántos datos tiene**
-- el tamaño del archivo respecto a **cuánto espacio en disco ocupa**
-</code></pre>
+<div id="admonition-observación" class="admonition note">
+<div class="admonition-title">
+<p>Observación</p>
+<p><a class="admonition-anchor-link" href="#admonition-observación"></a></p>
+</div>
+<div>
+<p>El uso de inodos introduce una nueva noción de tamaño, cosa que con FAT no pasaba. Ahora tenemos:</p>
+<ul>
+<li>el tamaño de el archivo respecto a <strong>cuántos datos tiene</strong></li>
+<li>el tamaño del archivo respecto a <strong>cuánto espacio en disco ocupa</strong></li>
+</ul>
+</div>
+</div>
 <h3 id="metadata"><a class="header" href="#metadata">Metadata</a></h3>
 <p>Cuando hablamos de metadata estamos incluyendo los inodos (o las estructuras que use el OS en su lugar) pero además otra info, por ejemplo:</p>
 <ul>
@@ -297,15 +305,21 @@ está pasando un archivo-ception donde tódo es un archivo. La respuesta es sí.
 Dentro del bloque se guarda la lista de pares de inodo y nombre del
 archivo/directorio (probar hacer <code>vim &lt;ruta a un directorio&gt;</code>,  qué nos
 muestra?)</p>
-<pre><code class="language-admonish note collapsible=true">También se puede implementar con una tabla de hash. Cuando computo el hash
+<details id="admonition-note" class="admonition note">
+<summary class="admonition-title">
+<p>Note</p>
+<p><a class="admonition-anchor-link" href="#admonition-note"></a></p>
+</summary>
+<div>
+<p>También se puede implementar con una tabla de hash. Cuando computo el hash
 sobre el nombre del archivo obtengo la entrada correspondiente al archivo. De
-esa forma se pueden optimizar los tiempos de búsqueda para archivos.
-
-El mayor problema de la tabla de hash es la dependencia de la función de hash y
+esa forma se pueden optimizar los tiempos de búsqueda para archivos.</p>
+<p>El mayor problema de la tabla de hash es la dependencia de la función de hash y
 el tamaño fijo de la misma. Para eso se puede optar también por la alternativa
 de tabla de hash que usa chaining, que si bien menos eficiente mejora los
-tiempos de búsqueda en comparación a la alternativa inicial. 
-</code></pre>
+tiempos de búsqueda en comparación a la alternativa inicial.</p>
+</div>
+</details>
 <h3 id="dónde-están-los-inodos-en-el-disco"><a class="header" href="#dónde-están-los-inodos-en-el-disco">Dónde están los inodos en el disco?</a></h3>
 <p><img src="./img/hdd_inodes.png#center" alt="" /></p>
 <h3 id="links"><a class="header" href="#links">Links</a></h3>
@@ -434,10 +448,17 @@ y Ext4, que incorporan journaling). Veamos cómo se guarda la info en disco. El 
 <li>data blocks, tamaño <em>n</em> bloques</li>
 </ul>
 <p><img src="./img/ext_2_fs.png#center" alt="" /></p>
-<pre><code class="language-admonish info">Por lo general, sólo se lee el superbloque del block group 0, pero el resto de
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="#admonition-info"></a></p>
+</div>
+<div>
+<p>Por lo general, sólo se lee el superbloque del block group 0, pero el resto de
 los block group tienen una copia para casos de corrupción de memoria. Ocurre lo
-mismo para los group descriptors.
-</code></pre>
+mismo para los group descriptors.</p>
+</div>
+</div>
 
                     </main>
 

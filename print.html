@@ -263,10 +263,24 @@ de asignara y retirar del cpu a los distintos procesos.</p>
 </ul>
 <p><img src="./img/arbol_de_procesos.png" alt="árbol de procesos" /></p>
 <p>Por ejemplo, cuando lanzamos un programa desde la shell, el proceso de la shell hace un llamado a <code>fork()</code> y el proceso hijo hace <code>exec()</code> del programa que se desea ejecutar. El proceso de la shell espera hasta que el proceso hijo termine.</p>
-<pre><code class="language-admonish warning title=&quot;Cuidado&quot;">Esto es una simplificación de lo que en realidad ocurre en una shell hoy en día
-</code></pre>
-<pre><code class="language-admonish info title=&quot;pstree&quot;">pstree es un comando que muestra los procesos actuales en forma de árbol. Si recibe un PID como parámetro, muestra el árbol a partir de ese proceso. Para más info `man pstree`
-</code></pre>
+<div id="admonition-cuidado" class="admonition warning">
+<div class="admonition-title">
+<p>Cuidado</p>
+<p><a class="admonition-anchor-link" href="procesos_y_api.html#admonition-cuidado"></a></p>
+</div>
+<div>
+<p>Esto es una simplificación de lo que en realidad ocurre en una shell hoy en día</p>
+</div>
+</div>
+<div id="admonition-pstree" class="admonition info">
+<div class="admonition-title">
+<p>pstree</p>
+<p><a class="admonition-anchor-link" href="procesos_y_api.html#admonition-pstree"></a></p>
+</div>
+<div>
+<p>pstree es un comando que muestra los procesos actuales en forma de árbol. Si recibe un PID como parámetro, muestra el árbol a partir de ese proceso. Para más info <code>man pstree</code></p>
+</div>
+</div>
 <h2 id="actividades-de-un-proceso"><a class="header" href="#actividades-de-un-proceso">Actividades de un proceso</a></h2>
 <p>Vimos los distintos estados que puede tener un proceso en ejecución. Cuando un proceso está en ejecución, puede:</p>
 <ul>
@@ -299,8 +313,15 @@ de asignara y retirar del cpu a los distintos procesos.</p>
 <li>poner el nuevo IP</li>
 <li>algunas cosas extra que se explican más adelante</li>
 </ol>
-<pre><code class="language-admonish info text=&quot;PCB y PCT&quot;">Para los pasos 1 y 2 usamos la PCB mencionada anteriormente, pero además tenemos una estructura más que es la PCT (Process Control Table), que en resumidas cuerntas es un diccionario / array de PCBs.
-</code></pre>
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="procesos_y_api.html#admonition-info"></a></p>
+</div>
+<div>
+<p>Para los pasos 1 y 2 usamos la PCB mencionada anteriormente, pero además tenemos una estructura más que es la PCT (Process Control Table), que en resumidas cuerntas es un diccionario / array de PCBs.</p>
+</div>
+</div>
 <p>Esta serie de pasos se la conoce como <em>cambio de contexto</em> o <strong>context switch</strong> y no es gratis, por lo que el scheduler tiene que optimizar el tiempo que está haciendo <em>context switch</em>.</p>
 <p><img src="./img/context_switch_1.png" alt="ejemplo de context switch" /></p>
 <h2 id="actividades-de-un-proceso---syscalls"><a class="header" href="#actividades-de-un-proceso---syscalls">Actividades de un proceso - syscalls</a></h2>
@@ -343,8 +364,15 @@ int main(int argc, char* argv[]) {
 </code></pre>
 <h2 id="api-del-so"><a class="header" href="#api-del-so">API del SO</a></h2>
 <p>Las syscalls proveen una interfaz a los servicios del OS, también conocido como API del OS.</p>
-<pre><code class="language-admonish info text=&quot;Syscalls&quot;">se pueden ver las llamadas al sistema operativo disponibles usando el comando `man syscalls`
-</code></pre>
+<div id="admonition-info-1" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="procesos_y_api.html#admonition-info-1"></a></p>
+</div>
+<div>
+<p>se pueden ver las llamadas al sistema operativo disponibles usando el comando <code>man syscalls</code></p>
+</div>
+</div>
 <p>Existe hoy en día un estándar para la API de los OS basados en unix, llamado <strong>POSIX</strong> (<strong>P</strong>ortable <strong>O</strong>perating <strong>S</strong>ystem <strong>I</strong>nfertace; <strong>X</strong>: UNIX). Define algunos servicios core que debe brindar el OS:</p>
 <ul>
 <li>Creación y manejo de procesos</li>
@@ -365,13 +393,20 @@ int main(int argc, char* argv[]) {
 <li><strong>interrupciones</strong>: cuando pedís I/O te saco y te vuelvo recién a meter cuando se completó la operación</li>
 <li>Otras que no vemos</li>
 </ul>
-<pre><code class="language-admonish info text=&quot;Multiprogramación desde el código&quot;">Además, podemos caracterizar en 2 el tipo de operaciones (aplica a I/O) pero puede ser en general:
-
-- **bloqueante**: hago el &quot;inicio de la operación&quot; (ya sea con una syscall o no) y el proceso no recibe de vuelta el control/ se bloquea hasta que la operación termina
-- **no bloqueante**: hago la syscall, y retorna de inmediato. Sin embargo, no significa que la operación terminó. Si no que tengo que enterarme de alguna manera que la operación terminó.
-
-En otros contextos también se usa la idea de bloqueante vs no bloqueante para esa idea de me bloqueo hasta que termina una operación vs. consulto yo a ver cuándo termina y mientras tanto hago algo más.
-</code></pre>
+<div id="admonition-info-2" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="procesos_y_api.html#admonition-info-2"></a></p>
+</div>
+<div>
+<p>Además, podemos caracterizar en 2 el tipo de operaciones (aplica a I/O) pero puede ser en general:</p>
+<ul>
+<li><strong>bloqueante</strong>: hago el &quot;inicio de la operación&quot; (ya sea con una syscall o no) y el proceso no recibe de vuelta el control/ se bloquea hasta que la operación termina</li>
+<li><strong>no bloqueante</strong>: hago la syscall, y retorna de inmediato. Sin embargo, no significa que la operación terminó. Si no que tengo que enterarme de alguna manera que la operación terminó.</li>
+</ul>
+<p>En otros contextos también se usa la idea de bloqueante vs no bloqueante para esa idea de me bloqueo hasta que termina una operación vs. consulto yo a ver cuándo termina y mientras tanto hago algo más.</p>
+</div>
+</div>
 <p>Si recordamos, en la PCB se guardaba el estado de un proceso. Pero además de eso también se guarda información relevante para el scheduler como la prioridad del proceso y la lista de recursos por los que está esperando.</p>
 <h2 id="señales"><a class="header" href="#señales">Señales</a></h2>
 <p>Es un mecanismo presente en los sistemas POSIX que permiten notificar a un proceso la ocurrencia de un evento. Un proceso tiene al igual que el SO, handlers para las distintas señales. Cuando recibe una, la ejecución del proceso se detiene y se ejecuta el handler correspondiente.
@@ -382,18 +417,23 @@ Algunas señales conocidas son <code>SIGINT</code>, <code>SIGKILL</code>, <code>
 <li>Mejorar la velocidad de procesamiento</li>
 <li>Modularizar funcionalidad (hoy en día el software es grande y complejo)</li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Arquitectura multiproceso en Chrome&quot;">Originalmente (e incluso hoy en día), los browsers tenían un único proceso. Esto trae algunos problemas, por ejemplo que si un sitio se &quot;cuelga&quot;, se te cuelga todo el browser.
-
-Chrome en cambio crea **3 tipos de procesos**:
-
-- Browser: administra UI, acceso a disco y a red.
-- Renderer: muestra las páginas, se encarga de procesar html y javascript. Se instancia un nuevo proceso Renderer por sitio.
-- Plug-in: Proceso para cada tipo de plugin.
-
-![Arquitectura Multiproceso en Chrome](./img/multiprocess_chrome.png)
-
-Más info en la [documentación de chromium](https://www.chromium.org/developers/design-documents/multi-process-architecture/)
-</code></pre>
+<div id="admonition-arquitectura-multiproceso-en-chrome" class="admonition info">
+<div class="admonition-title">
+<p>Arquitectura multiproceso en Chrome</p>
+<p><a class="admonition-anchor-link" href="ipc.html#admonition-arquitectura-multiproceso-en-chrome"></a></p>
+</div>
+<div>
+<p>Originalmente (e incluso hoy en día), los browsers tenían un único proceso. Esto trae algunos problemas, por ejemplo que si un sitio se &quot;cuelga&quot;, se te cuelga todo el browser.</p>
+<p>Chrome en cambio crea <strong>3 tipos de procesos</strong>:</p>
+<ul>
+<li>Browser: administra UI, acceso a disco y a red.</li>
+<li>Renderer: muestra las páginas, se encarga de procesar html y javascript. Se instancia un nuevo proceso Renderer por sitio.</li>
+<li>Plug-in: Proceso para cada tipo de plugin.</li>
+</ul>
+<p><img src="./img/multiprocess_chrome.png" alt="Arquitectura Multiproceso en Chrome" /></p>
+<p>Más info en la <a href="https://www.chromium.org/developers/design-documents/multi-process-architecture/">documentación de chromium</a></p>
+</div>
+</div>
 <h2 id="tipos-de-ipc"><a class="header" href="#tipos-de-ipc">Tipos de IPC</a></h2>
 <p>Hay distintas formas de realizar IPC:</p>
 <ul>
@@ -481,10 +521,16 @@ Más info en la [documentación de chromium](https://www.chromium.org/developers
 </ul>
 </li>
 </ul>
-<pre><code class="language-admonish info text=&quot;Otras Colas&quot;">Además de la ready queue, el OS tiene otras colas. Recordemos que podemos tener operaciones de I/O, o procesos a la espera de algún evento (ej: esperar a que un proceso hijo termine). En dichos casos, los procesos tienen que esperar a que esa operación termine (por lo general es mucho más lenta que el resto de las operaciones en CPU), entonces el scheduler puede mover el proceso a una **wait queue**
-
-![queue diagram](./img/queue_diagram.png)
-</code></pre>
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="scheduling.html#admonition-info"></a></p>
+</div>
+<div>
+<p>Además de la ready queue, el OS tiene otras colas. Recordemos que podemos tener operaciones de I/O, o procesos a la espera de algún evento (ej: esperar a que un proceso hijo termine). En dichos casos, los procesos tienen que esperar a que esa operación termine (por lo general es mucho más lenta que el resto de las operaciones en CPU), entonces el scheduler puede mover el proceso a una <strong>wait queue</strong></p>
+<p><img src="./img/queue_diagram.png" alt="queue diagram" /></p>
+</div>
+</div>
 <h2 id="múltiples-colas"><a class="header" href="#múltiples-colas">Múltiples colas</a></h2>
 <p>Esto extiende el modelo anterior. Cada cola representa el quantum que se le otorga a los procesos de dicha cola. Y las de menos quantum tienen mayor prioridad. Además, el scheduler puede decidir mover al proceso de cola.</p>
 <h2 id="scheduling-en-sistemas-batch"><a class="header" href="#scheduling-en-sistemas-batch">Scheduling en sistemas batch</a></h2>
@@ -514,13 +560,26 @@ Más info en la [documentación de chromium](https://www.chromium.org/developers
 <li>Decimos que la <strong>afinidad es dura</strong> si se tiene que respetar a rajatabla (siempre al mismo procesador).</li>
 <li>Si no es <strong>afinidad blanda</strong></li>
 </ul>
-<pre><code class="language-admonish info title=&quot;NUMA (Non Uniform Memory Access)&quot;">Nuevas arquitecturas permiten al CPU acceder a los espacios de memoria de otros CPUs. Sin embargo, esto tiene un costo extra por lo que sigue siendo mejor el acceso a la memoria local del CPU. También sigue existiendo el problema de la cache, con lo cual es una mejora pero no es una solución, si no una herramienta extra.
-
-![NUMA](./img/numa.png)
-</code></pre>
-<pre><code class="language-admonish info title=&quot;El scheduler en linux&quot;">En lugar de usar una cola, se tiene un ABB donde la clave es el tiempo en ejecución para la &quot;ready queue&quot;. Luego, en log #Procesos se puede obtener el siguiente a ejecutar.
-![Linux scheduling](./img/linux_scheduler.png)
-</code></pre>
+<div id="admonition-numa-non-uniform-memory-access" class="admonition info">
+<div class="admonition-title">
+<p>NUMA (Non Uniform Memory Access)</p>
+<p><a class="admonition-anchor-link" href="scheduling.html#admonition-numa-non-uniform-memory-access"></a></p>
+</div>
+<div>
+<p>Nuevas arquitecturas permiten al CPU acceder a los espacios de memoria de otros CPUs. Sin embargo, esto tiene un costo extra por lo que sigue siendo mejor el acceso a la memoria local del CPU. También sigue existiendo el problema de la cache, con lo cual es una mejora pero no es una solución, si no una herramienta extra.</p>
+<p><img src="./img/numa.png" alt="NUMA" /></p>
+</div>
+</div>
+<div id="admonition-el-scheduler-en-linux" class="admonition info">
+<div class="admonition-title">
+<p>El scheduler en linux</p>
+<p><a class="admonition-anchor-link" href="scheduling.html#admonition-el-scheduler-en-linux"></a></p>
+</div>
+<div>
+<p>En lugar de usar una cola, se tiene un ABB donde la clave es el tiempo en ejecución para la &quot;ready queue&quot;. Luego, en log #Procesos se puede obtener el siguiente a ejecutar.
+<img src="./img/linux_scheduler.png" alt="Linux scheduling" /></p>
+</div>
+</div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sincronización-entre-procesos"><a class="header" href="#sincronización-entre-procesos">Sincronización entre procesos</a></h1>
 <p>Intro bla bla... <a href="http://www.cs.columbia.edu/~junfeng/10fa-e6998/papers/concurrency-bugs.pdf">PAPER Shan Lu et al. Learning from Mistakes - A Comprehensive Study on Real World Concurrency Bug Characteristics. ASPLOS'08</a></p>
 <h2 id="sección-crítica-crit"><a class="header" href="#sección-crítica-crit">Sección Crítica (CRIT)</a></h2>
@@ -533,8 +592,15 @@ Más info en la [documentación de chromium](https://www.chromium.org/developers
 <p>A nivel código se implementa con dos llamados: uno para entrar y otro para salir de la CRIT. Si implementamos exitosamente secciones críticas, los procesos pueden compartir datos sin tosquearse.</p>
 <h2 id="implementando-secciones-críticas"><a class="header" href="#implementando-secciones-críticas">Implementando secciones críticas</a></h2>
 <p>Una alternativa es usar <strong>locks</strong>. Son como booleanos compartidos. Cuando entro a la CRIT lo pongo en 1, al salir en 0. Si está en 1 espero a que tenga un 0.</p>
-<pre><code class="language-admonish warning text=&quot;no todo es tan simple&quot;">El problema de que el scheduler nos cague puede seguir ocurriendo (primero checkeo el bool, después me suspenden el proceso). Por lo general nos remitimos a soluciones que usan el HW.
-</code></pre>
+<div id="admonition-warning" class="admonition warning">
+<div class="admonition-title">
+<p>Warning</p>
+<p><a class="admonition-anchor-link" href="sincro_entre_procesos.html#admonition-warning"></a></p>
+</div>
+<div>
+<p>El problema de que el scheduler nos cague puede seguir ocurriendo (primero checkeo el bool, después me suspenden el proceso). Por lo general nos remitimos a soluciones que usan el HW.</p>
+</div>
+</div>
 <h2 id="tas"><a class="header" href="#tas">TAS</a></h2>
 <p>El Hw suele proveer alguna instrucción que permite settear atómicamente el valor de un booleano/entero en 1. Nosotros la vamos a llamar <code>TestAndSet</code>.</p>
 <pre><code>fn TestAndSet(variable) {
@@ -544,8 +610,15 @@ Más info en la [documentación de chromium](https://www.chromium.org/developers
 }
 </code></pre>
 <p>Pero además toda la operación se realiza de forma atómica, o sea de forma indivisible sin importar que tengamos varias CPUs.</p>
-<pre><code class="language-admonish info title=&quot;TestAndSet en x86&quot;">En x86 tenés la operación `bts` que te permite settear el flag de carry y un bit de un registro. Y esa operación si se le agrega el prefijo `lock` hace que se ejecute de manera atómica. O sea `lock bts &lt;registro&gt; &lt;nro_de_bit&gt;`
-</code></pre>
+<div id="admonition-testandset-en-x86" class="admonition info">
+<div class="admonition-title">
+<p>TestAndSet en x86</p>
+<p><a class="admonition-anchor-link" href="sincro_entre_procesos.html#admonition-testandset-en-x86"></a></p>
+</div>
+<div>
+<p>En x86 tenés la operación <code>bts</code> que te permite settear el flag de carry y un bit de un registro. Y esa operación si se le agrega el prefijo <code>lock</code> hace que se ejecute de manera atómica. O sea <code>lock bts &lt;registro&gt; &lt;nro_de_bit&gt;</code></p>
+</div>
+</div>
 <h2 id="usando-tas"><a class="header" href="#usando-tas">Usando TAS</a></h2>
 <pre><code>boolean lock;
 
@@ -563,8 +636,15 @@ while(TRUE) {
   // acá puedo hacer todo lo que no tenga sección crítica
 }
 </code></pre>
-<pre><code class="language-admonish info title=&quot;Observación&quot;">Durante el while interno no hace nada, pero está comiendo \&lt;\&lt;MUCHO\&gt;\&gt; CPU (busy wait)
-</code></pre>
+<div id="admonition-observación" class="admonition info">
+<div class="admonition-title">
+<p>Observación</p>
+<p><a class="admonition-anchor-link" href="sincro_entre_procesos.html#admonition-observación"></a></p>
+</div>
+<div>
+<p>Durante el while interno no hace nada, pero está comiendo &lt;&lt;MUCHO&gt;&gt; CPU (busy wait)</p>
+</div>
+</div>
 <h2 id="alternativa-sleep"><a class="header" href="#alternativa-sleep">Alternativa: Sleep</a></h2>
 <p>Una alternativa podría ser agregar un sleep adentro del while. Y cuando falla el intento de obtener el lock suspender el proceso durante un tiempo. La cuestión es cuánto tiempo? </p>
 <ul>
@@ -604,59 +684,72 @@ sleep, y después haga el sleep. Si por ejemplo el buffer es de un
 <li>Ambas se implementan de forma tal que su ejecución sea atómica (sin interrupciones en realidad)</li>
 <li>Caso particular: <code>mutex = lock = semáforo inicializado en 1</code></li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Productor-Consumidor con semáforos&quot;">Una posible implementación del mismo problema anterior pero usando semáforos:
+<div id="admonition-productor-consumidor-con-semáforos" class="admonition info">
+<div class="admonition-title">
+<p>Productor-Consumidor con semáforos</p>
+<p><a class="admonition-anchor-link" href="sincro_entre_procesos.html#admonition-productor-consumidor-con-semáforos"></a></p>
+</div>
+<div>
+<p>Una posible implementación del mismo problema anterior pero usando semáforos:</p>
+<pre><code>semaforo mutex = 1;
+semaforo llenos = 0;
+semaforo vacios = N; // Capacidad del buffer
 
-    semaforo mutex = 1;
-    semaforo llenos = 0;
-    semaforo vacios = N; // Capacidad del buffer
+fn productor() {
+  while(true) {
+    item = producir_item();
 
-    fn productor() {
-      while(true) {
-        item = producir_item();
+    // Entrando a zona crítica
+    wait(vacios);
+    wait(mutex);
 
-        // Entrando a zona crítica
-        wait(vacios);
-        wait(mutex);
+    agregar(item, buffer);
+    cant++;
 
-        agregar(item, buffer);
-        cant++;
+    signal(mutex);
+    signal(llenos);
+  }    
+}
 
-        signal(mutex);
-        signal(llenos);
-      }    
+fn consumidor() {
+    while(true) {
+      wait(llenos); // espero a que &quot;me despierten&quot;
+
+      wait(mutex); // acceso exclusivo al buffer
+      item = sacar(buffer);
+      cant--;
+
+      signal(mutex); // libero el buffer
+      signal(vacios); // incremento la &quot;capacidad del bufer&quot; trackeada por el semáforo. si estaba lleno (vacios = -1) ahora pasa a 0 y despierta al productor
+      hacer_algo(item); // zona no crítica
     }
-
-    fn consumidor() {
-        while(true) {
-          wait(llenos); // espero a que &quot;me despierten&quot;
-
-          wait(mutex); // acceso exclusivo al buffer
-          item = sacar(buffer);
-          cant--;
-
-          signal(mutex); // libero el buffer
-          signal(vacios); // incremento la &quot;capacidad del bufer&quot; trackeada por el semáforo. si estaba lleno (vacios = -1) ahora pasa a 0 y despierta al productor
-          hacer_algo(item); // zona no crítica
-        }
-      }
+  }
 </code></pre>
-<pre><code class="language-admonish warning title=&quot;Cuidado&quot;">Esto está muy lindo, pero **ojo**. Tan sólo invertir el orden de los `wait`/`signal` puede resultar en una situación en la que ambos se quedan esperando. Por ejemplo, si consumidor se implementara de la siguiente manera:
+</div>
+</div>
+<div id="admonition-cuidado" class="admonition warning">
+<div class="admonition-title">
+<p>Cuidado</p>
+<p><a class="admonition-anchor-link" href="sincro_entre_procesos.html#admonition-cuidado"></a></p>
+</div>
+<div>
+<p>Esto está muy lindo, pero <strong>ojo</strong>. Tan sólo invertir el orden de los <code>wait</code>/<code>signal</code> puede resultar en una situación en la que ambos se quedan esperando. Por ejemplo, si consumidor se implementara de la siguiente manera:</p>
+<pre><code>fn consumidor() {
+  wait(mutex);
+  wait(llenos);
 
-    fn consumidor() {
-      wait(mutex);
-      wait(llenos);
-
-      // ... El resto igual
-    }  
-
-Imaginemos que :
-
-- el consumidor ejecuta primero y le toca hacer `wait(mutex)` (adquiere el mutex)
-- luego hace `wait(llenos);` y se queda esperando porque por ahora está en 0
-- luego ejecuta el productor, y hace `wait(vacios)` exitosamente pero al hacer `wait(mutex)` se va a quedar esperando porque el mutex ya estaba bloqueado por el consumidor.
-
-Esta situación en la que se da una dependencia de recursos cíclica entre procesos se llama **deadlock**, y es uno de los grandes problemas que surgen en la concurrencia manifestándose en todo tipo de sistemas.
+  // ... El resto igual
+}  
 </code></pre>
+<p>Imaginemos que :</p>
+<ul>
+<li>el consumidor ejecuta primero y le toca hacer <code>wait(mutex)</code> (adquiere el mutex)</li>
+<li>luego hace <code>wait(llenos);</code> y se queda esperando porque por ahora está en 0</li>
+<li>luego ejecuta el productor, y hace <code>wait(vacios)</code> exitosamente pero al hacer <code>wait(mutex)</code> se va a quedar esperando porque el mutex ya estaba bloqueado por el consumidor.</li>
+</ul>
+<p>Esta situación en la que se da una dependencia de recursos cíclica entre procesos se llama <strong>deadlock</strong>, y es uno de los grandes problemas que surgen en la concurrencia manifestándose en todo tipo de sistemas.</p>
+</div>
+</div>
 <h2 id="volviendo-al-siglo-21"><a class="header" href="#volviendo-al-siglo-21">Volviendo al siglo 21...</a></h2>
 <p>Hoy en día la mayoría de lenguajes de alto nivel proveen interfaces para implementar secciones críticas y manejo de concurrencia. Por ejemplo con:</p>
 <ul>
@@ -672,8 +765,15 @@ fn create() { reg.set(false); }
 fn lock() { while(reg.testAndSet()) {} }
 fn unlock() { reg.set(false); }
 </code></pre>
-<pre><code class="language-admonish warning title=&quot;Cuidado&quot;">`lock()` **no es atómico**
-</code></pre>
+<div id="admonition-cuidado-1" class="admonition warning">
+<div class="admonition-title">
+<p>Cuidado</p>
+<p><a class="admonition-anchor-link" href="sincro_entre_procesos.html#admonition-cuidado-1"></a></p>
+</div>
+<div>
+<p><code>lock()</code> <strong>no es atómico</strong></p>
+</div>
+</div>
 <p>Ejemplo de uso:</p>
 <pre><code>TasLock mutex;
 
@@ -891,10 +991,16 @@ fn P(i) {
 </ul>
 </li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Observaciones&quot;">Las propiedades de safety de alguna forma son &quot;opuestas&quot; a las de livenes. En qué sentido? Bueno, las propiedades de safety son algo que tienen que valer para toda ejecución, eso significa que cuando no se cumple es porque hay una ejecución en donde llego a que esa cosa mala ocurre. Eso a su vez implica que tengo **una** ejecución **finita**, o contraejemplo. Entonces si quiero probar que vale, asumo que no, obtengo un &quot;contraejemplo&quot; e intento llegar a un absurdo. Y si quiero probar que no vale alcanza con buscar el contraejemplo.
-
-Por otro lado las propiedades de safety ocurre al revez. Suponer que no vale significa que sin importar la ejecución siempre tengo un camino que no llega (o sea tengo potencialmente una cantidad infinita de ejecuciones &quot;infinitas&quot;). Acá es al revés, para trabajar con cosas finitas lo demuestro &quot;directo&quot;
-</code></pre>
+<div id="admonition-observaciones" class="admonition info">
+<div class="admonition-title">
+<p>Observaciones</p>
+<p><a class="admonition-anchor-link" href="sincronizacion.html#admonition-observaciones"></a></p>
+</div>
+<div>
+<p>Las propiedades de safety de alguna forma son &quot;opuestas&quot; a las de livenes. En qué sentido? Bueno, las propiedades de safety son algo que tienen que valer para toda ejecución, eso significa que cuando no se cumple es porque hay una ejecución en donde llego a que esa cosa mala ocurre. Eso a su vez implica que tengo <strong>una</strong> ejecución <strong>finita</strong>, o contraejemplo. Entonces si quiero probar que vale, asumo que no, obtengo un &quot;contraejemplo&quot; e intento llegar a un absurdo. Y si quiero probar que no vale alcanza con buscar el contraejemplo.</p>
+<p>Por otro lado las propiedades de safety ocurre al revez. Suponer que no vale significa que sin importar la ejecución siempre tengo un camino que no llega (o sea tengo potencialmente una cantidad infinita de ejecuciones &quot;infinitas&quot;). Acá es al revés, para trabajar con cosas finitas lo demuestro &quot;directo&quot;</p>
+</div>
+</div>
 <p>Una propiedad muy común es la de <strong>fairness</strong>. Se basa en la idea de que los procesos reciban su turno (para ejecutar, para ingresar a una sección crítica, etc.) con infinita frecuencia. En criollo, no ocurre que un proceso siempre quede postergado <em>ad infinitum</em>. Hay 3 tipos de fairness:</p>
 <ul>
 <li><strong>incondicional</strong>: el proceso se ejecuta regularmente si <strong>siempre está habilitado</strong>.</li>
@@ -983,12 +1089,18 @@ b(j) \text{ se ejecuta después de todos los } a(i)
 </ul>
 </li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Observación&quot;">Podemos reescribir &lt;span style=&quot;color:red&quot;&gt;WAIT-FREEDOM&lt;/span&gt; usando el predicado IN:
-
-\\[
-  \text{WAIT-FREEDOM} \equiv \forall i. \square \text{IN}(i)
-\\]
-</code></pre>
+<div id="admonition-observación" class="admonition info">
+<div class="admonition-title">
+<p>Observación</p>
+<p><a class="admonition-anchor-link" href="sincronizacion.html#admonition-observación"></a></p>
+</div>
+<div>
+<p>Podemos reescribir <span style="color:red">WAIT-FREEDOM</span> usando el predicado IN:</p>
+<p>\[
+\text{WAIT-FREEDOM} \equiv \forall i. \square \text{IN}(i)
+\]</p>
+</div>
+</div>
 <ul>
 <li>
 <p><span style="color:red">SCM</span> (sección crítica de a M procesos)</p>
@@ -1090,8 +1202,15 @@ fn reader(i) {
 </ul>
 </li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Nota sobre EAT&quot;">Uno podría preguntarse: &quot;Por qué tengo que definir &lt;span style=&quot;color:red&quot;&gt;EAT&lt;/span&gt;? Si no restrinjo nada claramente permito que varios filósofos puedan comer a la vez.&quot; Creo que la respuesta a eso es que tener definido &lt;span style=&quot;color:red&quot;&gt;EAT&lt;/span&gt; nos da información extra y es útil sobre todo para evaluar si nuestro algoritmo es correcto, ya que puedo ver el código y encontrar algún contraejemplo de que eso no se cumple. Si no tengo el predicado nunca tengo contra qué comparar.
-</code></pre>
+<div id="admonition-nota-sobre-eat" class="admonition info">
+<div class="admonition-title">
+<p>Nota sobre EAT</p>
+<p><a class="admonition-anchor-link" href="sincronizacion.html#admonition-nota-sobre-eat"></a></p>
+</div>
+<div>
+<p>Uno podría preguntarse: &quot;Por qué tengo que definir <span style="color:red">EAT</span>? Si no restrinjo nada claramente permito que varios filósofos puedan comer a la vez.&quot; Creo que la respuesta a eso es que tener definido <span style="color:red">EAT</span> nos da información extra y es útil sobre todo para evaluar si nuestro algoritmo es correcto, ya que puedo ver el código y encontrar algún contraejemplo de que eso no se cumple. Si no tengo el predicado nunca tengo contra qué comparar.</p>
+</div>
+</div>
 <ul>
 <li>El barbero
 <ul>
@@ -1235,23 +1354,36 @@ granularidad de los bloques de memoria, lo cual no siempre se llevan bien.</p>
 registró en el array de interrupts. El SO ataja esa fault, y se encarga de
 sacar una página de memoria (si hace falta) y otorgarle el espacio a la página
 pedida. Es importante también la decisión de <strong>qué página sacar</strong>.</p>
-<pre><code class="language-admonish info title=&quot;swapping standard vs actual&quot;">La versión standard de swapping consiste en sacar de memoria **todo** el
+<div id="admonition-swapping-standard-vs-actual" class="admonition info">
+<div class="admonition-title">
+<p>swapping standard vs actual</p>
+<p><a class="admonition-anchor-link" href="administracion_de_memoria.html#admonition-swapping-standard-vs-actual"></a></p>
+</div>
+<div>
+<p>La versión standard de swapping consiste en sacar de memoria <strong>todo</strong> el
 proceso, pero eso tiene un costo prohibitivo. Es por eso que hoy en día,
 sistemas como Linux y Windows usan una variante que consiste en sacar páginas
 de otros procesos pero no los procesos enteros, si no sacamos las páginas
 necesarias para liberar suficiente memoria. Es por eso que hoy en día
-*swapping* refiere a swapping standard y *paging/paginado* refiere a swapping +
-paging/paginado. La operación de **page out** consiste en mover una página de
-memoria a disco y **page in** de disco a memoria.
-</code></pre>
-<pre><code class="language-admonish warning title=&quot;swapping en dispositivos móviles&quot;">
-Los sistemas operativos como Android y IOS a diferencia de los que vimos no tienen ni usan ninguna forma de swapping. Esto es porque las memorias secundarias de estos dispositivos tienen restricciones respecto a la cantidad de escrituras que se le pueden hacer. Y swapping incurre en muchas escrituras. Es por eso que ante una situación en donde no tengo dónde ubicar nueva memoria se toman medidas como:
-
-- liberar páginas que sean read only (p. ej. de código)
-- las páginas escritas **siempre se mantienen en memoria**
-- matar procesos, y sólo guardar el estado en el que se cerraron las aplicaciones
-
-</code></pre>
+<em>swapping</em> refiere a swapping standard y <em>paging/paginado</em> refiere a swapping +
+paging/paginado. La operación de <strong>page out</strong> consiste en mover una página de
+memoria a disco y <strong>page in</strong> de disco a memoria.</p>
+</div>
+</div>
+<div id="admonition-swapping-en-dispositivos-móviles" class="admonition warning">
+<div class="admonition-title">
+<p>swapping en dispositivos móviles</p>
+<p><a class="admonition-anchor-link" href="administracion_de_memoria.html#admonition-swapping-en-dispositivos-móviles"></a></p>
+</div>
+<div>
+<p>Los sistemas operativos como Android y IOS a diferencia de los que vimos no tienen ni usan ninguna forma de swapping. Esto es porque las memorias secundarias de estos dispositivos tienen restricciones respecto a la cantidad de escrituras que se le pueden hacer. Y swapping incurre en muchas escrituras. Es por eso que ante una situación en donde no tengo dónde ubicar nueva memoria se toman medidas como:</p>
+<ul>
+<li>liberar páginas que sean read only (p. ej. de código)</li>
+<li>las páginas escritas <strong>siempre se mantienen en memoria</strong></li>
+<li>matar procesos, y sólo guardar el estado en el que se cerraron las aplicaciones</li>
+</ul>
+</div>
+</div>
 <h3 id="mmu"><a class="header" href="#mmu">MMU</a></h3>
 <p>La MMU se organiza de forma tal que buscar páginas sea rápido pero que la tabla
 no ocupe mucho espacio. Si tengo una tabla sola para todo el espacio de memoria
@@ -1266,21 +1398,26 @@ correspondientes a las tareas que se estén usando.  (Eso sí, hay un mínimo
 extra de espacio que &quot;desperdicio&quot; que se nota a medida que tengo mayor
 utilización de la memoria)</p>
 <p><img src="./img/multilevel_mmu.png" alt="multilevel mmu" /></p>
-<pre><code class="language-admonish info title=&quot;Nota Grande como una casa&quot;">No tenemos una única tabla de páginas para todo, si no que **tenemos una tabla
-de páginas multinivel por proceso**. Las arquitecturas suelen incluir un
+<div id="admonition-nota-grande-como-una-casa" class="admonition info">
+<div class="admonition-title">
+<p>Nota Grande como una casa</p>
+<p><a class="admonition-anchor-link" href="administracion_de_memoria.html#admonition-nota-grande-como-una-casa"></a></p>
+</div>
+<div>
+<p>No tenemos una única tabla de páginas para todo, si no que <strong>tenemos una tabla
+de páginas multinivel por proceso</strong>. Las arquitecturas suelen incluir un
 registro que hay que cargar con la dirección de la tabla de páginas (sorpresa
 sorpresa también tiene que ir en la PCB). Tener toda la tabla montada con
-registros sería muy rápido pero sólo es viable para tablas muy chicas. 
-
-Como veremos más adelante una optimización que sí se usa es la de mediante hw
+registros sería muy rápido pero sólo es viable para tablas muy chicas. </p>
+<p>Como veremos más adelante una optimización que sí se usa es la de mediante hw
 implementar una cache para ahorrarnos algunos pasos de la traducción de
-direcciones lógicas a físiscas.
-
-Además es común que se use un espacio de direcciones de memoria lógica común
+direcciones lógicas a físiscas.</p>
+<p>Además es común que se use un espacio de direcciones de memoria lógica común
 (por ejemplo, 0x8000 a 0x9FFF) y en ese caso si tuviésemos una única tabla de
 páginas se nos estarían pisando todas las páginas... todo el trabajo sería al
-pedo.
-</code></pre>
+pedo.</p>
+</div>
+</div>
 <h3 id="entrada-de-la-tabla-de-páginas"><a class="header" href="#entrada-de-la-tabla-de-páginas">Entrada de la tabla de páginas</a></h3>
 <p>En cada entrada de la tabla de páginas hay:</p>
 <ul>
@@ -1303,11 +1440,18 @@ pedo.
 </ul>
 </li>
 </ul>
-<pre><code class="language-admonish info title=&quot;ASIDs&quot;">Algunas TLBs guardan **address-space identifiers**, que identifican cada
+<div id="admonition-asids" class="admonition info">
+<div class="admonition-title">
+<p>ASIDs</p>
+<p><a class="admonition-anchor-link" href="administracion_de_memoria.html#admonition-asids"></a></p>
+</div>
+<div>
+<p>Algunas TLBs guardan <strong>address-space identifiers</strong>, que identifican cada
 proceso y brindan protección por proceso. (dado que si no, como la TLB es parte
 del HW no tiene noción de procesos y esas y uno podría estar accediendo desde
-otro proceso a las páginas de mi proceso)
-</code></pre>
+otro proceso a las páginas de mi proceso)</p>
+</div>
+</div>
 <h3 id="reemplazo-de-páginas"><a class="header" href="#reemplazo-de-páginas">Reemplazo de páginas</a></h3>
 <p>Podemos hacer uso de los campos que nos provee la tabla de páginas:</p>
 <ul>
@@ -1518,25 +1662,38 @@ usado y fundamental para el rendimiento general del sistema.</li>
 <p>Parte del objetivo del SO y la api de I/O es ocultar la mayor cantidad de
 detalles posibles y a la vez brindar acceso consistente a toda la fauna de
 dispositivos.</p>
-<pre><code class="language-admonish info title=&quot;Dispositivos en Linux&quot; collapsible=true">Los dispoistivos en linux están representados por archivos y se ubican en el directorio `/dev`. En el siguiente ejemplo, podemos ver que el archivo contiene información del tipo de archivo (c para char device, b para block device):
-
-```bash
-ls -lh /dev
+<details id="admonition-dispositivos-en-linux" class="admonition info">
+<summary class="admonition-title">
+<p>Dispositivos en Linux</p>
+<p><a class="admonition-anchor-link" href="entrada_salida.html#admonition-dispositivos-en-linux"></a></p>
+</summary>
+<div>
+<p>Los dispoistivos en linux están representados por archivos y se ubican en el directorio <code>/dev</code>. En el siguiente ejemplo, podemos ver que el archivo contiene información del tipo de archivo (c para char device, b para block device):</p>
+<pre><code class="language-bash">ls -lh /dev
 crw-rw-rw-  1 root    wheel        0x9000001 Mar  5 12:06 cu.wlan-debug
 brw-r-----  1 root    operator     0x1000000 Mar  5 12:06 disk0
 brw-r-----  1 root    operator     0x1000001 Mar  5 12:06 disk0s1
 brw-r-----  1 root    operator     0x1000002 Mar  5 12:06 disk0s2
 brw-r-----  1 root    operator     0x1000003 Mar  5 12:06 disk0s3
-```
 </code></pre>
-<pre><code class="language-admonish info title=&quot;API de I/O en linux&quot;">En el caso de linux, bajo la premisa de que *&quot;todo es un archivo&quot;* se proveen funciones de alto nivel para acceso a archivos:
-
-- `fopen()`, `fclose()`
-- `fread()`, `fwrite()`: modo bloque
-- `fgetc()`, `fputc()`: modo char
-- `fgets()`, `fputs()`: modo char stream (ej: con esto puedo escribir en consola)
-- `fscanf()`, `fprintf()`: modo char con formato
-</code></pre>
+</div>
+</details>
+<div id="admonition-api-de-io-en-linux" class="admonition info">
+<div class="admonition-title">
+<p>API de I/O en linux</p>
+<p><a class="admonition-anchor-link" href="entrada_salida.html#admonition-api-de-io-en-linux"></a></p>
+</div>
+<div>
+<p>En el caso de linux, bajo la premisa de que <em>&quot;todo es un archivo&quot;</em> se proveen funciones de alto nivel para acceso a archivos:</p>
+<ul>
+<li><code>fopen()</code>, <code>fclose()</code></li>
+<li><code>fread()</code>, <code>fwrite()</code>: modo bloque</li>
+<li><code>fgetc()</code>, <code>fputc()</code>: modo char</li>
+<li><code>fgets()</code>, <code>fputs()</code>: modo char stream (ej: con esto puedo escribir en consola)</li>
+<li><code>fscanf()</code>, <code>fprintf()</code>: modo char con formato</li>
+</ul>
+</div>
+</div>
 <h2 id="planificación-de-io"><a class="header" href="#planificación-de-io">Planificación de I/O</a></h2>
 <p>En el caso del disco, una de las claves para obtener un buen rendimiento es
 optimizar los accesos al mismo. Esto es porque el disco consiste de una cabeza
@@ -1576,8 +1733,15 @@ cabeza tardo muuuuucho.</li>
 <li><strong>C-Scan</strong>: igual a scan pero al llegar al final vuelve al principio sin
 atender otros pedidos (asume que el disco es una lista circular)</li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Nota&quot;">En la práctica ninguno de estos algoritmos se usan al 100%, suele ser una mezcla entre estos, prioridades, caches, etc.
-</code></pre>
+<div id="admonition-nota" class="admonition info">
+<div class="admonition-title">
+<p>Nota</p>
+<p><a class="admonition-anchor-link" href="entrada_salida.html#admonition-nota"></a></p>
+</div>
+<div>
+<p>En la práctica ninguno de estos algoritmos se usan al 100%, suele ser una mezcla entre estos, prioridades, caches, etc.</p>
+</div>
+</div>
 <h2 id="ssd"><a class="header" href="#ssd">SSD</a></h2>
 <p>Hoy en día prolifera el uso de discos de estado sólido (SSD). Si bien tienen notables ventajas (más resistentes, menor consumo, más silenciosos, mejor performance de lectura), también presenta sus propios problemas:</p>
 <ul>
@@ -1616,8 +1780,15 @@ impresora. Cuando uno imprime, en lugar de bloquearse el proceso hasta tener
 acceso, se encola el trabajo en una cola específica y se tiene un proceso que
 se encarga de desencolarla a medida que la impresora (o el dispositivo en otros
 casos) se libera.</p>
-<pre><code class="language-admonish info title=&quot;Nota&quot;">En el caso de spooling, el usuario es consciente de que ocurre pero el kernel no.
-</code></pre>
+<div id="admonition-nota-1" class="admonition info">
+<div class="admonition-title">
+<p>Nota</p>
+<p><a class="admonition-anchor-link" href="entrada_salida.html#admonition-nota-1"></a></p>
+</div>
+<div>
+<p>En el caso de spooling, el usuario es consciente de que ocurre pero el kernel no.</p>
+</div>
+</div>
 <h2 id="protección-de-la-información"><a class="header" href="#protección-de-la-información">Protección de la información</a></h2>
 <p>Vamos a ver algunas técnicas que podemos emplear para proteger nuestros datos.
 Muchas veces dependiendo del tipo de dato, del valor que le asignemos y el
@@ -1629,13 +1800,20 @@ y tengo que tener tolerancia a fallas, etc. Las dos técnicas que vamos a ver so
 <li>copias de seguridad</li>
 <li>redundancia</li>
 </ul>
-<pre><code class="language-admonish note">En particular **la redundancia no nos protege de la modificación/eliminación
-accidental de la información**. Es por eso que se suelen combinar ambas técnicas.
+<div id="admonition-note" class="admonition note">
+<div class="admonition-title">
+<p>Note</p>
+<p><a class="admonition-anchor-link" href="entrada_salida.html#admonition-note"></a></p>
+</div>
+<div>
+<p>En particular <strong>la redundancia no nos protege de la modificación/eliminación
+accidental de la información</strong>. Es por eso que se suelen combinar ambas técnicas.
 Hay casos sin embargo en donde ninguna de las técnicas nos salva (en algún
 momento corrompemos datos/archivos y nos damos cuenta tarde con varios backups
 encima). En esos casos los sistemas de archivos nos deberían brindar algunas
-protecciones para que eso no pase (o al menos no pase seguido).
-</code></pre>
+protecciones para que eso no pase (o al menos no pase seguido).</p>
+</div>
+</div>
 <h3 id="copias-de-seguridad"><a class="header" href="#copias-de-seguridad">Copias de seguridad</a></h3>
 <p>Hacer una <strong>copia de seguridad (backup)</strong> consiste en resguardar los datos
 (obviamente solo los importantes) en otro lado. Para grandes volúmenes de info,
@@ -1789,17 +1967,25 @@ inmediatamente. Si no, los pedidos se guardan en una cola de pendientes para
 ese disco. Como vimos antes, el scheduler de I/O puede ordenar esa cola con
 fines de mejorar la performance.</li>
 </ol>
-<pre><code class="language-admonish info">En el pasado, era necesario especificar el track y qué cabeza del HDD usar, y
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="entrada_salida.html#admonition-info"></a></p>
+</div>
+<div>
+<p>En el pasado, era necesario especificar el track y qué cabeza del HDD usar, y
 los algoritmos de scheduling de disco eran más complejos. Hoy en día mediante
 el uso de LBAs (Logical Block Addresses) incluso el SO es abstraido de lo que
 en realidad pasa en la memoria. Sin embargo, se sigue asumiendo que LBAs
 cercanas significan accesos cercanos (físicamente hablando). Por lo tanto sigue
-teniendo sentido tener consideraciones como:
-
-- lecturas/escrituras en bloque
-- fairness
-- timeliness
-</code></pre>
+teniendo sentido tener consideraciones como:</p>
+<ul>
+<li>lecturas/escrituras en bloque</li>
+<li>fairness</li>
+<li>timeliness</li>
+</ul>
+</div>
+</div>
 <h3 id="el-deadline-scheduler-de-linux"><a class="header" href="#el-deadline-scheduler-de-linux">El <strong>deadline scheduler</strong> de linux</a></h3>
 <p>Los algoritmos que vimos de scheduling de I/O tienen una desventaja muy grande,
 y es que pueden producir inanición. Linux para resolver esto implementó el
@@ -1931,11 +2117,19 @@ que haya contención si quiero modificar el mismo archivo desde dos procesos
 distintos)</li>
 <li>Además el modelo es más consistente: sólo tengo cargada en memoria las cosas correspondientes a archivos abiertos.</li>
 </ul>
-<pre><code class="language-admonish note title=&quot;Observación&quot;">El uso de inodos introduce una nueva noción de tamaño, cosa que con FAT no pasaba. Ahora tenemos:
-
-- el tamaño de el archivo respecto a **cuántos datos tiene**
-- el tamaño del archivo respecto a **cuánto espacio en disco ocupa**
-</code></pre>
+<div id="admonition-observación" class="admonition note">
+<div class="admonition-title">
+<p>Observación</p>
+<p><a class="admonition-anchor-link" href="sistemas_de_archivos.html#admonition-observación"></a></p>
+</div>
+<div>
+<p>El uso de inodos introduce una nueva noción de tamaño, cosa que con FAT no pasaba. Ahora tenemos:</p>
+<ul>
+<li>el tamaño de el archivo respecto a <strong>cuántos datos tiene</strong></li>
+<li>el tamaño del archivo respecto a <strong>cuánto espacio en disco ocupa</strong></li>
+</ul>
+</div>
+</div>
 <h3 id="metadata"><a class="header" href="#metadata">Metadata</a></h3>
 <p>Cuando hablamos de metadata estamos incluyendo los inodos (o las estructuras que use el OS en su lugar) pero además otra info, por ejemplo:</p>
 <ul>
@@ -1956,15 +2150,21 @@ está pasando un archivo-ception donde tódo es un archivo. La respuesta es sí.
 Dentro del bloque se guarda la lista de pares de inodo y nombre del
 archivo/directorio (probar hacer <code>vim &lt;ruta a un directorio&gt;</code>,  qué nos
 muestra?)</p>
-<pre><code class="language-admonish note collapsible=true">También se puede implementar con una tabla de hash. Cuando computo el hash
+<details id="admonition-note" class="admonition note">
+<summary class="admonition-title">
+<p>Note</p>
+<p><a class="admonition-anchor-link" href="sistemas_de_archivos.html#admonition-note"></a></p>
+</summary>
+<div>
+<p>También se puede implementar con una tabla de hash. Cuando computo el hash
 sobre el nombre del archivo obtengo la entrada correspondiente al archivo. De
-esa forma se pueden optimizar los tiempos de búsqueda para archivos.
-
-El mayor problema de la tabla de hash es la dependencia de la función de hash y
+esa forma se pueden optimizar los tiempos de búsqueda para archivos.</p>
+<p>El mayor problema de la tabla de hash es la dependencia de la función de hash y
 el tamaño fijo de la misma. Para eso se puede optar también por la alternativa
 de tabla de hash que usa chaining, que si bien menos eficiente mejora los
-tiempos de búsqueda en comparación a la alternativa inicial. 
-</code></pre>
+tiempos de búsqueda en comparación a la alternativa inicial.</p>
+</div>
+</details>
 <h3 id="dónde-están-los-inodos-en-el-disco"><a class="header" href="#dónde-están-los-inodos-en-el-disco">Dónde están los inodos en el disco?</a></h3>
 <p><img src="./img/hdd_inodes.png#center" alt="" /></p>
 <h3 id="links"><a class="header" href="#links">Links</a></h3>
@@ -2093,10 +2293,17 @@ y Ext4, que incorporan journaling). Veamos cómo se guarda la info en disco. El 
 <li>data blocks, tamaño <em>n</em> bloques</li>
 </ul>
 <p><img src="./img/ext_2_fs.png#center" alt="" /></p>
-<pre><code class="language-admonish info">Por lo general, sólo se lee el superbloque del block group 0, pero el resto de
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="sistemas_de_archivos.html#admonition-info"></a></p>
+</div>
+<div>
+<p>Por lo general, sólo se lee el superbloque del block group 0, pero el resto de
 los block group tienen una copia para casos de corrupción de memoria. Ocurre lo
-mismo para los group descriptors.
-</code></pre>
+mismo para los group descriptors.</p>
+</div>
+</div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sistemas-distribuidos"><a class="header" href="#sistemas-distribuidos">Sistemas Distribuidos</a></h1>
 <p>A los ojos de la materia, un sistema distribuido es un conjunto de recursos conectados que interactúan. Esto puede ser:</p>
 <ul>
@@ -2197,14 +2404,20 @@ serie de problemas a considerar:</p>
 </ul>
 <p>Los últimos dos problemas los vamos a ignorar pero son mucho muy reales llevado a la práctica.</p>
 <p>Aparece también la noción de <strong>complejidad medida sobre la cantidad de mensajes que intercambian</strong>.</p>
-<pre><code class="language-admonish info title=&quot;Conjetura de Brewer&quot;">En un entorno distribuido no se puede tener a la vez consistencia,
+<div id="admonition-conjetura-de-brewer" class="admonition info">
+<div class="admonition-title">
+<p>Conjetura de Brewer</p>
+<p><a class="admonition-anchor-link" href="sistemas_distribuidos.html#admonition-conjetura-de-brewer"></a></p>
+</div>
+<div>
+<p>En un entorno distribuido no se puede tener a la vez consistencia,
 disponibilidad y tolerancia a fallas todas al mismo tiempo. A lo sumo 2 de las
-3.
-
-Esto de hecho fue demostrado en 2002 por Seth Gilbert y Nancy Lynch con lo cual
+3.</p>
+<p>Esto de hecho fue demostrado en 2002 por Seth Gilbert y Nancy Lynch con lo cual
 es un teorema más que una conjetura, pero como teorema se lo conoce como el CAP
-theorem.
-</code></pre>
+theorem.</p>
+</div>
+</div>
 <h2 id="locks-en-entornos-distribuidos"><a class="header" href="#locks-en-entornos-distribuidos">Locks en entornos distribuidos</a></h2>
 <p>En entornos distribuidos no tenemos un <code>TestAndSet</code> atómico. Es por eso que tenemos que buscar alternativas. Podemos distinguir a grandes rasgos dos enfoques:</p>
 <ul>
@@ -2269,8 +2482,15 @@ en ese caso el otro no puede estar seguro de que éste recibió el mensaje.</p>
 <li>Validez: Existe algún \( i \) tal que \( \text{decide}(i) = \text{init}(i) \)</li>
 <li>Terminación: Todo \( i \) termina en un número finito de transiciones (WAIT-FREEDOM)</li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Teorema&quot;">Teorema: No existe ningún algoritmo para resolver el problema de consenso en este escenario
-</code></pre>
+<div id="admonition-teorema" class="admonition info">
+<div class="admonition-title">
+<p>Teorema</p>
+<p><a class="admonition-anchor-link" href="sistemas_distribuidos.html#admonition-teorema"></a></p>
+</div>
+<div>
+<p>Teorema: No existe ningún algoritmo para resolver el problema de consenso en este escenario</p>
+</div>
+</div>
 <h3 id="variante-1"><a class="header" href="#variante-1">Variante #1</a></h3>
 <p>No hay errores de comunicación, pero los procesos pueden dejar de funcionar. En este caso pedimos que los procesos que no fallen terminen en un número finito de transiciones. En ese caso consenso se puede resolver con \( \mathcal{O}((k + 1) * N^2) \) mensajes.</p>
 <h3 id="variante-2"><a class="header" href="#variante-2">Variante #2</a></h3>
@@ -2356,9 +2576,15 @@ salir respondo a todos los pedidos demorados.</p>
 <li>quiero entrar, todavía no lo hice, y el <code>ts</code> del pedido que recibo es menor que el mío (el otro tiene prio).</li>
 </ul>
 <p>Si bien ahora requiero que todos conozcan a todos (antes sólo hace falta conocer a 2), no circulo mensajes si nadie quiere entrar a la sección crítica.</p>
-<pre><code class="language-admonish note title=&quot;Pseudocódigo&quot; collapsible=true">
-```rust
-fn procesar_solicitud(pid, ts) {
+<details id="admonition-pseudocódigo" class="admonition note">
+<summary class="admonition-title">
+<p>Pseudocódigo</p>
+<p><a class="admonition-anchor-link" href="sistemas_distribuidos_II.html#admonition-pseudocódigo"></a></p>
+</summary>
+<div>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn procesar_solicitud(pid, ts) {
   if not in_seccion_critica or ts &lt;= seccion_critica_ts {
     responder_solicitud(pid, &quot;SI&quot;);
   }
@@ -2384,13 +2610,22 @@ fn procesar_mensaje(msg) {
     RESPUESTA =&gt; procesar_respuesta(msg.pid)
   }
 }
-```
-</code></pre>
-<pre><code class="language-admonish warning title=&quot;Ojo&quot;">Notar que estamos asumiendo que:
-
-- No se pierden mensajes
-- Ningún proceso falla
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
+</div>
+</details>
+<div id="admonition-ojo" class="admonition warning">
+<div class="admonition-title">
+<p>Ojo</p>
+<p><a class="admonition-anchor-link" href="sistemas_distribuidos_II.html#admonition-ojo"></a></p>
+</div>
+<div>
+<p>Notar que estamos asumiendo que:</p>
+<ul>
+<li>No se pierden mensajes</li>
+<li>Ningún proceso falla</li>
+</ul>
+</div>
+</div>
 <h3 id="locks-distribuidos"><a class="header" href="#locks-distribuidos">Locks Distribuidos</a></h3>
 <p>Anteriormente vimos que tener un coordinador de locks centralizado venía con
 sus problemas (bottleneck en el coordinador, punto único de falla, etc.).
@@ -2456,8 +2691,15 @@ de los mensajes que recibe un proceso de otro antes de tomar la instantánea.</l
 y los mensajes son los que están en <code>recibidos</code> (si junto todos los
 <code>recibidos_i_j</code>)</li>
 </ul>
-<pre><code class="language-admonish note title=&quot;Pseudocódigo&quot; collapsible=true">```rust
-enum TipoMensaje {
+<details id="admonition-pseudocódigo-1" class="admonition note">
+<summary class="admonition-title">
+<p>Pseudocódigo</p>
+<p><a class="admonition-anchor-link" href="sistemas_distribuidos_II.html#admonition-pseudocódigo-1"></a></p>
+</summary>
+<div>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum TipoMensaje {
   Marca,
   Mensaje
 }
@@ -2490,8 +2732,9 @@ fn recibir_mensaje(msg) {
     }
   }
 }
-```
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
+</div>
+</details>
 <h3 id="posibles-usos"><a class="header" href="#posibles-usos">Posibles usos</a></h3>
 <p>Este algoritmo se puede usar para:</p>
 <ul>
@@ -2526,9 +2769,15 @@ todos los sí, recién ahí avisamos que quedó confirmada la transacción.</p>
 <li>con Terminación Débil: Si no hay fallas, todo proceso decide.</li>
 <li>con Terminación Fuerte: Todo proceso que no falla decide.</li>
 </ul>
-<pre><code class="language-admonish note title=&quot;Pseudocódigo 2PC&quot; collapsible=true">
-```rust
-fn fase_1() {
+<details id="admonition-pseudocódigo-2pc" class="admonition note">
+<summary class="admonition-title">
+<p>Pseudocódigo 2PC</p>
+<p><a class="admonition-anchor-link" href="sistemas_distribuidos_II.html#admonition-pseudocódigo-2pc"></a></p>
+</summary>
+<div>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn fase_1() {
   match pid {
     1 =&gt; {
       votes = receive_messages();
@@ -2560,14 +2809,20 @@ fn fase_2 {
     }
   }
 }
-```
-
-![](./img/2pc.png#center)
-</code></pre>
-<pre><code class="language-admonish info title=&quot;Correctitud&quot;">**Teorema**: 2PC resuelve COMMIT con terminación débil.
-
-Sin embargo, no satisface terminación fuerte. Para eso se usa el algoritmo 3PC (Three Phase Commit).
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
+<p><img src="./img/2pc.png#center" alt="" /></p>
+</div>
+</details>
+<div id="admonition-correctitud" class="admonition info">
+<div class="admonition-title">
+<p>Correctitud</p>
+<p><a class="admonition-anchor-link" href="sistemas_distribuidos_II.html#admonition-correctitud"></a></p>
+</div>
+<div>
+<p><strong>Teorema</strong>: 2PC resuelve COMMIT con terminación débil.</p>
+<p>Sin embargo, no satisface terminación fuerte. Para eso se usa el algoritmo 3PC (Three Phase Commit).</p>
+</div>
+</div>
 <h3 id="variantes-del-problema-de-consenso"><a class="header" href="#variantes-del-problema-de-consenso">Variantes del problema de consenso</a></h3>
 <ul>
 <li><em>k-agreement</em>: \( \text{decide}(i) \in W, \text{ tal que } |W| = k \)</li>
@@ -2598,12 +2853,19 @@ Sin embargo, no satisface terminación fuerte. Para eso se usa el algoritmo 3PC 
 </ul>
 </li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Detalles&quot;">En realidad esto no alcanza para garantizar *strong termination*, garantiza que
+<div id="admonition-detalles" class="admonition info">
+<div class="admonition-title">
+<p>Detalles</p>
+<p><a class="admonition-anchor-link" href="sistemas_distribuidos_II.html#admonition-detalles"></a></p>
+</div>
+<div>
+<p>En realidad esto no alcanza para garantizar <em>strong termination</em>, garantiza que
 si el proceso 1 no falla entonces hay strong termination. Para garantizar
-*strong termination* hay que agregar \\( 3 * (n - 1)\\) rondas más, en donde el
+<em>strong termination</em> hay que agregar \( 3 * (n - 1)\) rondas más, en donde el
 proceso 2 hace lo mismo que el 1, después el 3, 4, etc (sólo cambian de estado
-los que todavía no decidieron).
-</code></pre>
+los que todavía no decidieron).</p>
+</div>
+</div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="protección-y-seguridad"><a class="header" href="#protección-y-seguridad">Protección y Seguridad</a></h1>
 <h2 id="ojo-son-cosas-distintas"><a class="header" href="#ojo-son-cosas-distintas">Ojo, son cosas distintas...</a></h2>
 <p>Por un lado, protección se trata de los mecanismos para que nadie pueda tocar
@@ -2873,16 +3135,20 @@ la misma manera las cosas que se derivan de esa fuente, y las cosas que se
 derivan de esas cosas, etc. En el hipotético caso de que quiera ejecutar
 código con data manchada, recién ahí la tengo que desmanchar</li>
 </ol>
-<pre><code class="language-admonish note title=&quot;Esto pasa en bases de datos también&quot;">Este mismo concepto de no validar la data sucede frecuentemente con bases de
-datos. El ataque es conocido como *SQL injection*. Por ejemplo, si no sanitizan
-la entrada podría ocurrir que se ejecute lo siguiente (ej: en un buscador):
-
-```c
-db.execute(&quot;UPDATE alumnos SET aprobado=true WHERE lu='$1'&quot;, lu);
-```
-
-Y que el usuario ingrese `307/08'; DROP alumnos; SELECT '` tirándote toda la tabla de alumnos.
+<div id="admonition-esto-pasa-en-bases-de-datos-también" class="admonition note">
+<div class="admonition-title">
+<p>Esto pasa en bases de datos también</p>
+<p><a class="admonition-anchor-link" href="proteccion_y_seguridad.html#admonition-esto-pasa-en-bases-de-datos-también"></a></p>
+</div>
+<div>
+<p>Este mismo concepto de no validar la data sucede frecuentemente con bases de
+datos. El ataque es conocido como <em>SQL injection</em>. Por ejemplo, si no sanitizan
+la entrada podría ocurrir que se ejecute lo siguiente (ej: en un buscador):</p>
+<pre><code class="language-c">db.execute(&quot;UPDATE alumnos SET aprobado=true WHERE lu='$1'&quot;, lu);
 </code></pre>
+<p>Y que el usuario ingrese <code>307/08'; DROP alumnos; SELECT '</code> tirándote toda la tabla de alumnos.</p>
+</div>
+</div>
 <h3 id="aislando-a-los-usuarios"><a class="header" href="#aislando-a-los-usuarios">Aislando a los usuarios</a></h3>
 <p>Los OS modernos suelen proveer distintas formas de aislar usuarios y procesos. Se las conocen como <em>sandboxes</em>:</p>
 <ul>

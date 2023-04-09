@@ -161,8 +161,15 @@
 <p>A nivel código se implementa con dos llamados: uno para entrar y otro para salir de la CRIT. Si implementamos exitosamente secciones críticas, los procesos pueden compartir datos sin tosquearse.</p>
 <h2 id="implementando-secciones-críticas"><a class="header" href="#implementando-secciones-críticas">Implementando secciones críticas</a></h2>
 <p>Una alternativa es usar <strong>locks</strong>. Son como booleanos compartidos. Cuando entro a la CRIT lo pongo en 1, al salir en 0. Si está en 1 espero a que tenga un 0.</p>
-<pre><code class="language-admonish warning text=&quot;no todo es tan simple&quot;">El problema de que el scheduler nos cague puede seguir ocurriendo (primero checkeo el bool, después me suspenden el proceso). Por lo general nos remitimos a soluciones que usan el HW.
-</code></pre>
+<div id="admonition-warning" class="admonition warning">
+<div class="admonition-title">
+<p>Warning</p>
+<p><a class="admonition-anchor-link" href="#admonition-warning"></a></p>
+</div>
+<div>
+<p>El problema de que el scheduler nos cague puede seguir ocurriendo (primero checkeo el bool, después me suspenden el proceso). Por lo general nos remitimos a soluciones que usan el HW.</p>
+</div>
+</div>
 <h2 id="tas"><a class="header" href="#tas">TAS</a></h2>
 <p>El Hw suele proveer alguna instrucción que permite settear atómicamente el valor de un booleano/entero en 1. Nosotros la vamos a llamar <code>TestAndSet</code>.</p>
 <pre><code>fn TestAndSet(variable) {
@@ -172,8 +179,15 @@
 }
 </code></pre>
 <p>Pero además toda la operación se realiza de forma atómica, o sea de forma indivisible sin importar que tengamos varias CPUs.</p>
-<pre><code class="language-admonish info title=&quot;TestAndSet en x86&quot;">En x86 tenés la operación `bts` que te permite settear el flag de carry y un bit de un registro. Y esa operación si se le agrega el prefijo `lock` hace que se ejecute de manera atómica. O sea `lock bts &lt;registro&gt; &lt;nro_de_bit&gt;`
-</code></pre>
+<div id="admonition-testandset-en-x86" class="admonition info">
+<div class="admonition-title">
+<p>TestAndSet en x86</p>
+<p><a class="admonition-anchor-link" href="#admonition-testandset-en-x86"></a></p>
+</div>
+<div>
+<p>En x86 tenés la operación <code>bts</code> que te permite settear el flag de carry y un bit de un registro. Y esa operación si se le agrega el prefijo <code>lock</code> hace que se ejecute de manera atómica. O sea <code>lock bts &lt;registro&gt; &lt;nro_de_bit&gt;</code></p>
+</div>
+</div>
 <h2 id="usando-tas"><a class="header" href="#usando-tas">Usando TAS</a></h2>
 <pre><code>boolean lock;
 
@@ -191,8 +205,15 @@ while(TRUE) {
   // acá puedo hacer todo lo que no tenga sección crítica
 }
 </code></pre>
-<pre><code class="language-admonish info title=&quot;Observación&quot;">Durante el while interno no hace nada, pero está comiendo \&lt;\&lt;MUCHO\&gt;\&gt; CPU (busy wait)
-</code></pre>
+<div id="admonition-observación" class="admonition info">
+<div class="admonition-title">
+<p>Observación</p>
+<p><a class="admonition-anchor-link" href="#admonition-observación"></a></p>
+</div>
+<div>
+<p>Durante el while interno no hace nada, pero está comiendo &lt;&lt;MUCHO&gt;&gt; CPU (busy wait)</p>
+</div>
+</div>
 <h2 id="alternativa-sleep"><a class="header" href="#alternativa-sleep">Alternativa: Sleep</a></h2>
 <p>Una alternativa podría ser agregar un sleep adentro del while. Y cuando falla el intento de obtener el lock suspender el proceso durante un tiempo. La cuestión es cuánto tiempo? </p>
 <ul>
@@ -232,59 +253,72 @@ sleep, y después haga el sleep. Si por ejemplo el buffer es de un
 <li>Ambas se implementan de forma tal que su ejecución sea atómica (sin interrupciones en realidad)</li>
 <li>Caso particular: <code>mutex = lock = semáforo inicializado en 1</code></li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Productor-Consumidor con semáforos&quot;">Una posible implementación del mismo problema anterior pero usando semáforos:
+<div id="admonition-productor-consumidor-con-semáforos" class="admonition info">
+<div class="admonition-title">
+<p>Productor-Consumidor con semáforos</p>
+<p><a class="admonition-anchor-link" href="#admonition-productor-consumidor-con-semáforos"></a></p>
+</div>
+<div>
+<p>Una posible implementación del mismo problema anterior pero usando semáforos:</p>
+<pre><code>semaforo mutex = 1;
+semaforo llenos = 0;
+semaforo vacios = N; // Capacidad del buffer
 
-    semaforo mutex = 1;
-    semaforo llenos = 0;
-    semaforo vacios = N; // Capacidad del buffer
+fn productor() {
+  while(true) {
+    item = producir_item();
 
-    fn productor() {
-      while(true) {
-        item = producir_item();
+    // Entrando a zona crítica
+    wait(vacios);
+    wait(mutex);
 
-        // Entrando a zona crítica
-        wait(vacios);
-        wait(mutex);
+    agregar(item, buffer);
+    cant++;
 
-        agregar(item, buffer);
-        cant++;
+    signal(mutex);
+    signal(llenos);
+  }    
+}
 
-        signal(mutex);
-        signal(llenos);
-      }    
+fn consumidor() {
+    while(true) {
+      wait(llenos); // espero a que &quot;me despierten&quot;
+
+      wait(mutex); // acceso exclusivo al buffer
+      item = sacar(buffer);
+      cant--;
+
+      signal(mutex); // libero el buffer
+      signal(vacios); // incremento la &quot;capacidad del bufer&quot; trackeada por el semáforo. si estaba lleno (vacios = -1) ahora pasa a 0 y despierta al productor
+      hacer_algo(item); // zona no crítica
     }
-
-    fn consumidor() {
-        while(true) {
-          wait(llenos); // espero a que &quot;me despierten&quot;
-
-          wait(mutex); // acceso exclusivo al buffer
-          item = sacar(buffer);
-          cant--;
-
-          signal(mutex); // libero el buffer
-          signal(vacios); // incremento la &quot;capacidad del bufer&quot; trackeada por el semáforo. si estaba lleno (vacios = -1) ahora pasa a 0 y despierta al productor
-          hacer_algo(item); // zona no crítica
-        }
-      }
+  }
 </code></pre>
-<pre><code class="language-admonish warning title=&quot;Cuidado&quot;">Esto está muy lindo, pero **ojo**. Tan sólo invertir el orden de los `wait`/`signal` puede resultar en una situación en la que ambos se quedan esperando. Por ejemplo, si consumidor se implementara de la siguiente manera:
+</div>
+</div>
+<div id="admonition-cuidado" class="admonition warning">
+<div class="admonition-title">
+<p>Cuidado</p>
+<p><a class="admonition-anchor-link" href="#admonition-cuidado"></a></p>
+</div>
+<div>
+<p>Esto está muy lindo, pero <strong>ojo</strong>. Tan sólo invertir el orden de los <code>wait</code>/<code>signal</code> puede resultar en una situación en la que ambos se quedan esperando. Por ejemplo, si consumidor se implementara de la siguiente manera:</p>
+<pre><code>fn consumidor() {
+  wait(mutex);
+  wait(llenos);
 
-    fn consumidor() {
-      wait(mutex);
-      wait(llenos);
-
-      // ... El resto igual
-    }  
-
-Imaginemos que :
-
-- el consumidor ejecuta primero y le toca hacer `wait(mutex)` (adquiere el mutex)
-- luego hace `wait(llenos);` y se queda esperando porque por ahora está en 0
-- luego ejecuta el productor, y hace `wait(vacios)` exitosamente pero al hacer `wait(mutex)` se va a quedar esperando porque el mutex ya estaba bloqueado por el consumidor.
-
-Esta situación en la que se da una dependencia de recursos cíclica entre procesos se llama **deadlock**, y es uno de los grandes problemas que surgen en la concurrencia manifestándose en todo tipo de sistemas.
+  // ... El resto igual
+}  
 </code></pre>
+<p>Imaginemos que :</p>
+<ul>
+<li>el consumidor ejecuta primero y le toca hacer <code>wait(mutex)</code> (adquiere el mutex)</li>
+<li>luego hace <code>wait(llenos);</code> y se queda esperando porque por ahora está en 0</li>
+<li>luego ejecuta el productor, y hace <code>wait(vacios)</code> exitosamente pero al hacer <code>wait(mutex)</code> se va a quedar esperando porque el mutex ya estaba bloqueado por el consumidor.</li>
+</ul>
+<p>Esta situación en la que se da una dependencia de recursos cíclica entre procesos se llama <strong>deadlock</strong>, y es uno de los grandes problemas que surgen en la concurrencia manifestándose en todo tipo de sistemas.</p>
+</div>
+</div>
 <h2 id="volviendo-al-siglo-21"><a class="header" href="#volviendo-al-siglo-21">Volviendo al siglo 21...</a></h2>
 <p>Hoy en día la mayoría de lenguajes de alto nivel proveen interfaces para implementar secciones críticas y manejo de concurrencia. Por ejemplo con:</p>
 <ul>
@@ -300,8 +334,15 @@ fn create() { reg.set(false); }
 fn lock() { while(reg.testAndSet()) {} }
 fn unlock() { reg.set(false); }
 </code></pre>
-<pre><code class="language-admonish warning title=&quot;Cuidado&quot;">`lock()` **no es atómico**
-</code></pre>
+<div id="admonition-cuidado-1" class="admonition warning">
+<div class="admonition-title">
+<p>Cuidado</p>
+<p><a class="admonition-anchor-link" href="#admonition-cuidado-1"></a></p>
+</div>
+<div>
+<p><code>lock()</code> <strong>no es atómico</strong></p>
+</div>
+</div>
 <p>Ejemplo de uso:</p>
 <pre><code>TasLock mutex;
 

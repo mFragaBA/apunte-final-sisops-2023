@@ -189,10 +189,16 @@
 </ul>
 </li>
 </ul>
-<pre><code class="language-admonish info text=&quot;Otras Colas&quot;">Además de la ready queue, el OS tiene otras colas. Recordemos que podemos tener operaciones de I/O, o procesos a la espera de algún evento (ej: esperar a que un proceso hijo termine). En dichos casos, los procesos tienen que esperar a que esa operación termine (por lo general es mucho más lenta que el resto de las operaciones en CPU), entonces el scheduler puede mover el proceso a una **wait queue**
-
-![queue diagram](./img/queue_diagram.png)
-</code></pre>
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="#admonition-info"></a></p>
+</div>
+<div>
+<p>Además de la ready queue, el OS tiene otras colas. Recordemos que podemos tener operaciones de I/O, o procesos a la espera de algún evento (ej: esperar a que un proceso hijo termine). En dichos casos, los procesos tienen que esperar a que esa operación termine (por lo general es mucho más lenta que el resto de las operaciones en CPU), entonces el scheduler puede mover el proceso a una <strong>wait queue</strong></p>
+<p><img src="./img/queue_diagram.png" alt="queue diagram" /></p>
+</div>
+</div>
 <h2 id="múltiples-colas"><a class="header" href="#múltiples-colas">Múltiples colas</a></h2>
 <p>Esto extiende el modelo anterior. Cada cola representa el quantum que se le otorga a los procesos de dicha cola. Y las de menos quantum tienen mayor prioridad. Además, el scheduler puede decidir mover al proceso de cola.</p>
 <h2 id="scheduling-en-sistemas-batch"><a class="header" href="#scheduling-en-sistemas-batch">Scheduling en sistemas batch</a></h2>
@@ -222,13 +228,26 @@
 <li>Decimos que la <strong>afinidad es dura</strong> si se tiene que respetar a rajatabla (siempre al mismo procesador).</li>
 <li>Si no es <strong>afinidad blanda</strong></li>
 </ul>
-<pre><code class="language-admonish info title=&quot;NUMA (Non Uniform Memory Access)&quot;">Nuevas arquitecturas permiten al CPU acceder a los espacios de memoria de otros CPUs. Sin embargo, esto tiene un costo extra por lo que sigue siendo mejor el acceso a la memoria local del CPU. También sigue existiendo el problema de la cache, con lo cual es una mejora pero no es una solución, si no una herramienta extra.
-
-![NUMA](./img/numa.png)
-</code></pre>
-<pre><code class="language-admonish info title=&quot;El scheduler en linux&quot;">En lugar de usar una cola, se tiene un ABB donde la clave es el tiempo en ejecución para la &quot;ready queue&quot;. Luego, en log #Procesos se puede obtener el siguiente a ejecutar.
-![Linux scheduling](./img/linux_scheduler.png)
-</code></pre>
+<div id="admonition-numa-non-uniform-memory-access" class="admonition info">
+<div class="admonition-title">
+<p>NUMA (Non Uniform Memory Access)</p>
+<p><a class="admonition-anchor-link" href="#admonition-numa-non-uniform-memory-access"></a></p>
+</div>
+<div>
+<p>Nuevas arquitecturas permiten al CPU acceder a los espacios de memoria de otros CPUs. Sin embargo, esto tiene un costo extra por lo que sigue siendo mejor el acceso a la memoria local del CPU. También sigue existiendo el problema de la cache, con lo cual es una mejora pero no es una solución, si no una herramienta extra.</p>
+<p><img src="./img/numa.png" alt="NUMA" /></p>
+</div>
+</div>
+<div id="admonition-el-scheduler-en-linux" class="admonition info">
+<div class="admonition-title">
+<p>El scheduler en linux</p>
+<p><a class="admonition-anchor-link" href="#admonition-el-scheduler-en-linux"></a></p>
+</div>
+<div>
+<p>En lugar de usar una cola, se tiene un ABB donde la clave es el tiempo en ejecución para la &quot;ready queue&quot;. Luego, en log #Procesos se puede obtener el siguiente a ejecutar.
+<img src="./img/linux_scheduler.png" alt="Linux scheduling" /></p>
+</div>
+</div>
 
                     </main>
 

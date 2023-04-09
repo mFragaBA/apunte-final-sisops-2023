@@ -155,18 +155,23 @@
 <li>Mejorar la velocidad de procesamiento</li>
 <li>Modularizar funcionalidad (hoy en día el software es grande y complejo)</li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Arquitectura multiproceso en Chrome&quot;">Originalmente (e incluso hoy en día), los browsers tenían un único proceso. Esto trae algunos problemas, por ejemplo que si un sitio se &quot;cuelga&quot;, se te cuelga todo el browser.
-
-Chrome en cambio crea **3 tipos de procesos**:
-
-- Browser: administra UI, acceso a disco y a red.
-- Renderer: muestra las páginas, se encarga de procesar html y javascript. Se instancia un nuevo proceso Renderer por sitio.
-- Plug-in: Proceso para cada tipo de plugin.
-
-![Arquitectura Multiproceso en Chrome](./img/multiprocess_chrome.png)
-
-Más info en la [documentación de chromium](https://www.chromium.org/developers/design-documents/multi-process-architecture/)
-</code></pre>
+<div id="admonition-arquitectura-multiproceso-en-chrome" class="admonition info">
+<div class="admonition-title">
+<p>Arquitectura multiproceso en Chrome</p>
+<p><a class="admonition-anchor-link" href="#admonition-arquitectura-multiproceso-en-chrome"></a></p>
+</div>
+<div>
+<p>Originalmente (e incluso hoy en día), los browsers tenían un único proceso. Esto trae algunos problemas, por ejemplo que si un sitio se &quot;cuelga&quot;, se te cuelga todo el browser.</p>
+<p>Chrome en cambio crea <strong>3 tipos de procesos</strong>:</p>
+<ul>
+<li>Browser: administra UI, acceso a disco y a red.</li>
+<li>Renderer: muestra las páginas, se encarga de procesar html y javascript. Se instancia un nuevo proceso Renderer por sitio.</li>
+<li>Plug-in: Proceso para cada tipo de plugin.</li>
+</ul>
+<p><img src="./img/multiprocess_chrome.png" alt="Arquitectura Multiproceso en Chrome" /></p>
+<p>Más info en la <a href="https://www.chromium.org/developers/design-documents/multi-process-architecture/">documentación de chromium</a></p>
+</div>
+</div>
 <h2 id="tipos-de-ipc"><a class="header" href="#tipos-de-ipc">Tipos de IPC</a></h2>
 <p>Hay distintas formas de realizar IPC:</p>
 <ul>

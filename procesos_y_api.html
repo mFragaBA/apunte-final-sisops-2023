@@ -215,10 +215,24 @@ de asignara y retirar del cpu a los distintos procesos.</p>
 </ul>
 <p><img src="./img/arbol_de_procesos.png" alt="árbol de procesos" /></p>
 <p>Por ejemplo, cuando lanzamos un programa desde la shell, el proceso de la shell hace un llamado a <code>fork()</code> y el proceso hijo hace <code>exec()</code> del programa que se desea ejecutar. El proceso de la shell espera hasta que el proceso hijo termine.</p>
-<pre><code class="language-admonish warning title=&quot;Cuidado&quot;">Esto es una simplificación de lo que en realidad ocurre en una shell hoy en día
-</code></pre>
-<pre><code class="language-admonish info title=&quot;pstree&quot;">pstree es un comando que muestra los procesos actuales en forma de árbol. Si recibe un PID como parámetro, muestra el árbol a partir de ese proceso. Para más info `man pstree`
-</code></pre>
+<div id="admonition-cuidado" class="admonition warning">
+<div class="admonition-title">
+<p>Cuidado</p>
+<p><a class="admonition-anchor-link" href="#admonition-cuidado"></a></p>
+</div>
+<div>
+<p>Esto es una simplificación de lo que en realidad ocurre en una shell hoy en día</p>
+</div>
+</div>
+<div id="admonition-pstree" class="admonition info">
+<div class="admonition-title">
+<p>pstree</p>
+<p><a class="admonition-anchor-link" href="#admonition-pstree"></a></p>
+</div>
+<div>
+<p>pstree es un comando que muestra los procesos actuales en forma de árbol. Si recibe un PID como parámetro, muestra el árbol a partir de ese proceso. Para más info <code>man pstree</code></p>
+</div>
+</div>
 <h2 id="actividades-de-un-proceso"><a class="header" href="#actividades-de-un-proceso">Actividades de un proceso</a></h2>
 <p>Vimos los distintos estados que puede tener un proceso en ejecución. Cuando un proceso está en ejecución, puede:</p>
 <ul>
@@ -251,8 +265,15 @@ de asignara y retirar del cpu a los distintos procesos.</p>
 <li>poner el nuevo IP</li>
 <li>algunas cosas extra que se explican más adelante</li>
 </ol>
-<pre><code class="language-admonish info text=&quot;PCB y PCT&quot;">Para los pasos 1 y 2 usamos la PCB mencionada anteriormente, pero además tenemos una estructura más que es la PCT (Process Control Table), que en resumidas cuerntas es un diccionario / array de PCBs.
-</code></pre>
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="#admonition-info"></a></p>
+</div>
+<div>
+<p>Para los pasos 1 y 2 usamos la PCB mencionada anteriormente, pero además tenemos una estructura más que es la PCT (Process Control Table), que en resumidas cuerntas es un diccionario / array de PCBs.</p>
+</div>
+</div>
 <p>Esta serie de pasos se la conoce como <em>cambio de contexto</em> o <strong>context switch</strong> y no es gratis, por lo que el scheduler tiene que optimizar el tiempo que está haciendo <em>context switch</em>.</p>
 <p><img src="./img/context_switch_1.png" alt="ejemplo de context switch" /></p>
 <h2 id="actividades-de-un-proceso---syscalls"><a class="header" href="#actividades-de-un-proceso---syscalls">Actividades de un proceso - syscalls</a></h2>
@@ -295,8 +316,15 @@ int main(int argc, char* argv[]) {
 </code></pre>
 <h2 id="api-del-so"><a class="header" href="#api-del-so">API del SO</a></h2>
 <p>Las syscalls proveen una interfaz a los servicios del OS, también conocido como API del OS.</p>
-<pre><code class="language-admonish info text=&quot;Syscalls&quot;">se pueden ver las llamadas al sistema operativo disponibles usando el comando `man syscalls`
-</code></pre>
+<div id="admonition-info-1" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="#admonition-info-1"></a></p>
+</div>
+<div>
+<p>se pueden ver las llamadas al sistema operativo disponibles usando el comando <code>man syscalls</code></p>
+</div>
+</div>
 <p>Existe hoy en día un estándar para la API de los OS basados en unix, llamado <strong>POSIX</strong> (<strong>P</strong>ortable <strong>O</strong>perating <strong>S</strong>ystem <strong>I</strong>nfertace; <strong>X</strong>: UNIX). Define algunos servicios core que debe brindar el OS:</p>
 <ul>
 <li>Creación y manejo de procesos</li>
@@ -317,13 +345,20 @@ int main(int argc, char* argv[]) {
 <li><strong>interrupciones</strong>: cuando pedís I/O te saco y te vuelvo recién a meter cuando se completó la operación</li>
 <li>Otras que no vemos</li>
 </ul>
-<pre><code class="language-admonish info text=&quot;Multiprogramación desde el código&quot;">Además, podemos caracterizar en 2 el tipo de operaciones (aplica a I/O) pero puede ser en general:
-
-- **bloqueante**: hago el &quot;inicio de la operación&quot; (ya sea con una syscall o no) y el proceso no recibe de vuelta el control/ se bloquea hasta que la operación termina
-- **no bloqueante**: hago la syscall, y retorna de inmediato. Sin embargo, no significa que la operación terminó. Si no que tengo que enterarme de alguna manera que la operación terminó.
-
-En otros contextos también se usa la idea de bloqueante vs no bloqueante para esa idea de me bloqueo hasta que termina una operación vs. consulto yo a ver cuándo termina y mientras tanto hago algo más.
-</code></pre>
+<div id="admonition-info-2" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="#admonition-info-2"></a></p>
+</div>
+<div>
+<p>Además, podemos caracterizar en 2 el tipo de operaciones (aplica a I/O) pero puede ser en general:</p>
+<ul>
+<li><strong>bloqueante</strong>: hago el &quot;inicio de la operación&quot; (ya sea con una syscall o no) y el proceso no recibe de vuelta el control/ se bloquea hasta que la operación termina</li>
+<li><strong>no bloqueante</strong>: hago la syscall, y retorna de inmediato. Sin embargo, no significa que la operación terminó. Si no que tengo que enterarme de alguna manera que la operación terminó.</li>
+</ul>
+<p>En otros contextos también se usa la idea de bloqueante vs no bloqueante para esa idea de me bloqueo hasta que termina una operación vs. consulto yo a ver cuándo termina y mientras tanto hago algo más.</p>
+</div>
+</div>
 <p>Si recordamos, en la PCB se guardaba el estado de un proceso. Pero además de eso también se guarda información relevante para el scheduler como la prioridad del proceso y la lista de recursos por los que está esperando.</p>
 <h2 id="señales"><a class="header" href="#señales">Señales</a></h2>
 <p>Es un mecanismo presente en los sistemas POSIX que permiten notificar a un proceso la ocurrencia de un evento. Un proceso tiene al igual que el SO, handlers para las distintas señales. Cuando recibe una, la ejecución del proceso se detiene y se ejecuta el handler correspondiente.

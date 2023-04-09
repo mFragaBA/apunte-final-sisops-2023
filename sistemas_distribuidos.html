@@ -249,14 +249,20 @@ serie de problemas a considerar:</p>
 </ul>
 <p>Los últimos dos problemas los vamos a ignorar pero son mucho muy reales llevado a la práctica.</p>
 <p>Aparece también la noción de <strong>complejidad medida sobre la cantidad de mensajes que intercambian</strong>.</p>
-<pre><code class="language-admonish info title=&quot;Conjetura de Brewer&quot;">En un entorno distribuido no se puede tener a la vez consistencia,
+<div id="admonition-conjetura-de-brewer" class="admonition info">
+<div class="admonition-title">
+<p>Conjetura de Brewer</p>
+<p><a class="admonition-anchor-link" href="#admonition-conjetura-de-brewer"></a></p>
+</div>
+<div>
+<p>En un entorno distribuido no se puede tener a la vez consistencia,
 disponibilidad y tolerancia a fallas todas al mismo tiempo. A lo sumo 2 de las
-3.
-
-Esto de hecho fue demostrado en 2002 por Seth Gilbert y Nancy Lynch con lo cual
+3.</p>
+<p>Esto de hecho fue demostrado en 2002 por Seth Gilbert y Nancy Lynch con lo cual
 es un teorema más que una conjetura, pero como teorema se lo conoce como el CAP
-theorem.
-</code></pre>
+theorem.</p>
+</div>
+</div>
 <h2 id="locks-en-entornos-distribuidos"><a class="header" href="#locks-en-entornos-distribuidos">Locks en entornos distribuidos</a></h2>
 <p>En entornos distribuidos no tenemos un <code>TestAndSet</code> atómico. Es por eso que tenemos que buscar alternativas. Podemos distinguir a grandes rasgos dos enfoques:</p>
 <ul>
@@ -321,8 +327,15 @@ en ese caso el otro no puede estar seguro de que éste recibió el mensaje.</p>
 <li>Validez: Existe algún \( i \) tal que \( \text{decide}(i) = \text{init}(i) \)</li>
 <li>Terminación: Todo \( i \) termina en un número finito de transiciones (WAIT-FREEDOM)</li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Teorema&quot;">Teorema: No existe ningún algoritmo para resolver el problema de consenso en este escenario
-</code></pre>
+<div id="admonition-teorema" class="admonition info">
+<div class="admonition-title">
+<p>Teorema</p>
+<p><a class="admonition-anchor-link" href="#admonition-teorema"></a></p>
+</div>
+<div>
+<p>Teorema: No existe ningún algoritmo para resolver el problema de consenso en este escenario</p>
+</div>
+</div>
 <h3 id="variante-1"><a class="header" href="#variante-1">Variante #1</a></h3>
 <p>No hay errores de comunicación, pero los procesos pueden dejar de funcionar. En este caso pedimos que los procesos que no fallen terminen en un número finito de transiciones. En ese caso consenso se puede resolver con \( \mathcal{O}((k + 1) * N^2) \) mensajes.</p>
 <h3 id="variante-2"><a class="header" href="#variante-2">Variante #2</a></h3>

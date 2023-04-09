@@ -201,10 +201,16 @@ fn P(i) {
 </ul>
 </li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Observaciones&quot;">Las propiedades de safety de alguna forma son &quot;opuestas&quot; a las de livenes. En qué sentido? Bueno, las propiedades de safety son algo que tienen que valer para toda ejecución, eso significa que cuando no se cumple es porque hay una ejecución en donde llego a que esa cosa mala ocurre. Eso a su vez implica que tengo **una** ejecución **finita**, o contraejemplo. Entonces si quiero probar que vale, asumo que no, obtengo un &quot;contraejemplo&quot; e intento llegar a un absurdo. Y si quiero probar que no vale alcanza con buscar el contraejemplo.
-
-Por otro lado las propiedades de safety ocurre al revez. Suponer que no vale significa que sin importar la ejecución siempre tengo un camino que no llega (o sea tengo potencialmente una cantidad infinita de ejecuciones &quot;infinitas&quot;). Acá es al revés, para trabajar con cosas finitas lo demuestro &quot;directo&quot;
-</code></pre>
+<div id="admonition-observaciones" class="admonition info">
+<div class="admonition-title">
+<p>Observaciones</p>
+<p><a class="admonition-anchor-link" href="#admonition-observaciones"></a></p>
+</div>
+<div>
+<p>Las propiedades de safety de alguna forma son &quot;opuestas&quot; a las de livenes. En qué sentido? Bueno, las propiedades de safety son algo que tienen que valer para toda ejecución, eso significa que cuando no se cumple es porque hay una ejecución en donde llego a que esa cosa mala ocurre. Eso a su vez implica que tengo <strong>una</strong> ejecución <strong>finita</strong>, o contraejemplo. Entonces si quiero probar que vale, asumo que no, obtengo un &quot;contraejemplo&quot; e intento llegar a un absurdo. Y si quiero probar que no vale alcanza con buscar el contraejemplo.</p>
+<p>Por otro lado las propiedades de safety ocurre al revez. Suponer que no vale significa que sin importar la ejecución siempre tengo un camino que no llega (o sea tengo potencialmente una cantidad infinita de ejecuciones &quot;infinitas&quot;). Acá es al revés, para trabajar con cosas finitas lo demuestro &quot;directo&quot;</p>
+</div>
+</div>
 <p>Una propiedad muy común es la de <strong>fairness</strong>. Se basa en la idea de que los procesos reciban su turno (para ejecutar, para ingresar a una sección crítica, etc.) con infinita frecuencia. En criollo, no ocurre que un proceso siempre quede postergado <em>ad infinitum</em>. Hay 3 tipos de fairness:</p>
 <ul>
 <li><strong>incondicional</strong>: el proceso se ejecuta regularmente si <strong>siempre está habilitado</strong>.</li>
@@ -293,12 +299,18 @@ b(j) \text{ se ejecuta después de todos los } a(i)
 </ul>
 </li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Observación&quot;">Podemos reescribir &lt;span style=&quot;color:red&quot;&gt;WAIT-FREEDOM&lt;/span&gt; usando el predicado IN:
-
-\\[
-  \text{WAIT-FREEDOM} \equiv \forall i. \square \text{IN}(i)
-\\]
-</code></pre>
+<div id="admonition-observación" class="admonition info">
+<div class="admonition-title">
+<p>Observación</p>
+<p><a class="admonition-anchor-link" href="#admonition-observación"></a></p>
+</div>
+<div>
+<p>Podemos reescribir <span style="color:red">WAIT-FREEDOM</span> usando el predicado IN:</p>
+<p>\[
+\text{WAIT-FREEDOM} \equiv \forall i. \square \text{IN}(i)
+\]</p>
+</div>
+</div>
 <ul>
 <li>
 <p><span style="color:red">SCM</span> (sección crítica de a M procesos)</p>
@@ -400,8 +412,15 @@ fn reader(i) {
 </ul>
 </li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Nota sobre EAT&quot;">Uno podría preguntarse: &quot;Por qué tengo que definir &lt;span style=&quot;color:red&quot;&gt;EAT&lt;/span&gt;? Si no restrinjo nada claramente permito que varios filósofos puedan comer a la vez.&quot; Creo que la respuesta a eso es que tener definido &lt;span style=&quot;color:red&quot;&gt;EAT&lt;/span&gt; nos da información extra y es útil sobre todo para evaluar si nuestro algoritmo es correcto, ya que puedo ver el código y encontrar algún contraejemplo de que eso no se cumple. Si no tengo el predicado nunca tengo contra qué comparar.
-</code></pre>
+<div id="admonition-nota-sobre-eat" class="admonition info">
+<div class="admonition-title">
+<p>Nota sobre EAT</p>
+<p><a class="admonition-anchor-link" href="#admonition-nota-sobre-eat"></a></p>
+</div>
+<div>
+<p>Uno podría preguntarse: &quot;Por qué tengo que definir <span style="color:red">EAT</span>? Si no restrinjo nada claramente permito que varios filósofos puedan comer a la vez.&quot; Creo que la respuesta a eso es que tener definido <span style="color:red">EAT</span> nos da información extra y es útil sobre todo para evaluar si nuestro algoritmo es correcto, ya que puedo ver el código y encontrar algún contraejemplo de que eso no se cumple. Si no tengo el predicado nunca tengo contra qué comparar.</p>
+</div>
+</div>
 <ul>
 <li>El barbero
 <ul>

@@ -209,9 +209,15 @@ salir respondo a todos los pedidos demorados.</p>
 <li>quiero entrar, todavía no lo hice, y el <code>ts</code> del pedido que recibo es menor que el mío (el otro tiene prio).</li>
 </ul>
 <p>Si bien ahora requiero que todos conozcan a todos (antes sólo hace falta conocer a 2), no circulo mensajes si nadie quiere entrar a la sección crítica.</p>
-<pre><code class="language-admonish note title=&quot;Pseudocódigo&quot; collapsible=true">
-```rust
-fn procesar_solicitud(pid, ts) {
+<details id="admonition-pseudocódigo" class="admonition note">
+<summary class="admonition-title">
+<p>Pseudocódigo</p>
+<p><a class="admonition-anchor-link" href="#admonition-pseudocódigo"></a></p>
+</summary>
+<div>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn procesar_solicitud(pid, ts) {
   if not in_seccion_critica or ts &lt;= seccion_critica_ts {
     responder_solicitud(pid, &quot;SI&quot;);
   }
@@ -237,13 +243,22 @@ fn procesar_mensaje(msg) {
     RESPUESTA =&gt; procesar_respuesta(msg.pid)
   }
 }
-```
-</code></pre>
-<pre><code class="language-admonish warning title=&quot;Ojo&quot;">Notar que estamos asumiendo que:
-
-- No se pierden mensajes
-- Ningún proceso falla
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
+</div>
+</details>
+<div id="admonition-ojo" class="admonition warning">
+<div class="admonition-title">
+<p>Ojo</p>
+<p><a class="admonition-anchor-link" href="#admonition-ojo"></a></p>
+</div>
+<div>
+<p>Notar que estamos asumiendo que:</p>
+<ul>
+<li>No se pierden mensajes</li>
+<li>Ningún proceso falla</li>
+</ul>
+</div>
+</div>
 <h3 id="locks-distribuidos"><a class="header" href="#locks-distribuidos">Locks Distribuidos</a></h3>
 <p>Anteriormente vimos que tener un coordinador de locks centralizado venía con
 sus problemas (bottleneck en el coordinador, punto único de falla, etc.).
@@ -309,8 +324,15 @@ de los mensajes que recibe un proceso de otro antes de tomar la instantánea.</l
 y los mensajes son los que están en <code>recibidos</code> (si junto todos los
 <code>recibidos_i_j</code>)</li>
 </ul>
-<pre><code class="language-admonish note title=&quot;Pseudocódigo&quot; collapsible=true">```rust
-enum TipoMensaje {
+<details id="admonition-pseudocódigo-1" class="admonition note">
+<summary class="admonition-title">
+<p>Pseudocódigo</p>
+<p><a class="admonition-anchor-link" href="#admonition-pseudocódigo-1"></a></p>
+</summary>
+<div>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum TipoMensaje {
   Marca,
   Mensaje
 }
@@ -343,8 +365,9 @@ fn recibir_mensaje(msg) {
     }
   }
 }
-```
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
+</div>
+</details>
 <h3 id="posibles-usos"><a class="header" href="#posibles-usos">Posibles usos</a></h3>
 <p>Este algoritmo se puede usar para:</p>
 <ul>
@@ -379,9 +402,15 @@ todos los sí, recién ahí avisamos que quedó confirmada la transacción.</p>
 <li>con Terminación Débil: Si no hay fallas, todo proceso decide.</li>
 <li>con Terminación Fuerte: Todo proceso que no falla decide.</li>
 </ul>
-<pre><code class="language-admonish note title=&quot;Pseudocódigo 2PC&quot; collapsible=true">
-```rust
-fn fase_1() {
+<details id="admonition-pseudocódigo-2pc" class="admonition note">
+<summary class="admonition-title">
+<p>Pseudocódigo 2PC</p>
+<p><a class="admonition-anchor-link" href="#admonition-pseudocódigo-2pc"></a></p>
+</summary>
+<div>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn fase_1() {
   match pid {
     1 =&gt; {
       votes = receive_messages();
@@ -413,14 +442,20 @@ fn fase_2 {
     }
   }
 }
-```
-
-![](./img/2pc.png#center)
-</code></pre>
-<pre><code class="language-admonish info title=&quot;Correctitud&quot;">**Teorema**: 2PC resuelve COMMIT con terminación débil.
-
-Sin embargo, no satisface terminación fuerte. Para eso se usa el algoritmo 3PC (Three Phase Commit).
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
+<p><img src="./img/2pc.png#center" alt="" /></p>
+</div>
+</details>
+<div id="admonition-correctitud" class="admonition info">
+<div class="admonition-title">
+<p>Correctitud</p>
+<p><a class="admonition-anchor-link" href="#admonition-correctitud"></a></p>
+</div>
+<div>
+<p><strong>Teorema</strong>: 2PC resuelve COMMIT con terminación débil.</p>
+<p>Sin embargo, no satisface terminación fuerte. Para eso se usa el algoritmo 3PC (Three Phase Commit).</p>
+</div>
+</div>
 <h3 id="variantes-del-problema-de-consenso"><a class="header" href="#variantes-del-problema-de-consenso">Variantes del problema de consenso</a></h3>
 <ul>
 <li><em>k-agreement</em>: \( \text{decide}(i) \in W, \text{ tal que } |W| = k \)</li>
@@ -451,12 +486,19 @@ Sin embargo, no satisface terminación fuerte. Para eso se usa el algoritmo 3PC 
 </ul>
 </li>
 </ul>
-<pre><code class="language-admonish info title=&quot;Detalles&quot;">En realidad esto no alcanza para garantizar *strong termination*, garantiza que
+<div id="admonition-detalles" class="admonition info">
+<div class="admonition-title">
+<p>Detalles</p>
+<p><a class="admonition-anchor-link" href="#admonition-detalles"></a></p>
+</div>
+<div>
+<p>En realidad esto no alcanza para garantizar <em>strong termination</em>, garantiza que
 si el proceso 1 no falla entonces hay strong termination. Para garantizar
-*strong termination* hay que agregar \\( 3 * (n - 1)\\) rondas más, en donde el
+<em>strong termination</em> hay que agregar \( 3 * (n - 1)\) rondas más, en donde el
 proceso 2 hace lo mismo que el 1, después el 3, 4, etc (sólo cambian de estado
-los que todavía no decidieron).
-</code></pre>
+los que todavía no decidieron).</p>
+</div>
+</div>
 
                     </main>
 
