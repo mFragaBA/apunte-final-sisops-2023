@@ -1,7 +1,6 @@
 # Summary
 
 - [Introducción](./introduccion.md)
-- [Sistema Operativo](./sistema_operativo.md)
 - [Procesos y API del SO](./procesos_y_api.md)
 - [Intercomunicación Entre Procesos](./ipc.md)
 - [Scheduling](./scheduling.md)
