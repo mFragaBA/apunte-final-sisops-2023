@@ -16,6 +16,7 @@ jobs:
           # Optional Plugins have to be enabled
           #use-linkcheck: true
           #use-mermaid: true
+          use-admonish: true
           #use-toc: true
           #use-opengh: true
       - name: Show mdbook version
@@ -25,6 +26,8 @@ jobs:
       # - name: Show mermaid version
         # run: mdbook-mermaid --version
       # - name: Show toc version
+      - name: Show admonish version
+        run: mdbook-admonish --version
       #   run: mdbook-toc --version
       # - name: Show open-on-gh version
       #   run: mdbook-open-on-gh --version
