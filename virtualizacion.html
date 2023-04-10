@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduccion.html"><strong aria-hidden="true">1.</strong> Introducción</a></li><li class="chapter-item expanded "><a href="sistema_operativo.html"><strong aria-hidden="true">2.</strong> Sistema Operativo</a></li><li class="chapter-item expanded "><a href="procesos_y_api.html"><strong aria-hidden="true">3.</strong> Procesos y API del SO</a></li><li class="chapter-item expanded "><a href="ipc.html"><strong aria-hidden="true">4.</strong> Intercomunicación Entre Procesos</a></li><li class="chapter-item expanded "><a href="scheduling.html"><strong aria-hidden="true">5.</strong> Scheduling</a></li><li class="chapter-item expanded "><a href="sincro_entre_procesos.html"><strong aria-hidden="true">6.</strong> Sincronización entre procesos</a></li><li class="chapter-item expanded "><a href="sincronizacion.html"><strong aria-hidden="true">7.</strong> Sincronización</a></li><li class="chapter-item expanded "><a href="administracion_de_memoria.html"><strong aria-hidden="true">8.</strong> Administración de Memoria</a></li><li class="chapter-item expanded "><a href="entrada_salida.html"><strong aria-hidden="true">9.</strong> Entrada/Salida</a></li><li class="chapter-item expanded "><a href="sistemas_de_archivos.html"><strong aria-hidden="true">10.</strong> Sistemas de Archivos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos.html"><strong aria-hidden="true">11.</strong> Sistemas Distribuidos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos_II.html"><strong aria-hidden="true">12.</strong> Sistemas Distribuidos - parte II</a></li><li class="chapter-item expanded "><a href="proteccion_y_seguridad.html"><strong aria-hidden="true">13.</strong> Protección y Seguridad</a></li><li class="chapter-item expanded "><a href="virtualizacion.html" class="active"><strong aria-hidden="true">14.</strong> Virtualización</a></li><li class="chapter-item expanded "><a href="microkernels.html"><strong aria-hidden="true">15.</strong> Microkernels</a></li><li class="chapter-item expanded "><a href="misc.html"><strong aria-hidden="true">16.</strong> Miscelaneos</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory_allocator_bsd.html"><strong aria-hidden="true">16.1.</strong> Design of a General Purpose Memory Allocator for the 4.3BSD UNIX Kernel</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduccion.html"><strong aria-hidden="true">1.</strong> Introducción</a></li><li class="chapter-item expanded "><a href="procesos_y_api.html"><strong aria-hidden="true">2.</strong> Procesos y API del SO</a></li><li class="chapter-item expanded "><a href="ipc.html"><strong aria-hidden="true">3.</strong> Intercomunicación Entre Procesos</a></li><li class="chapter-item expanded "><a href="scheduling.html"><strong aria-hidden="true">4.</strong> Scheduling</a></li><li class="chapter-item expanded "><a href="sincro_entre_procesos.html"><strong aria-hidden="true">5.</strong> Sincronización entre procesos</a></li><li class="chapter-item expanded "><a href="sincronizacion.html"><strong aria-hidden="true">6.</strong> Sincronización</a></li><li class="chapter-item expanded "><a href="administracion_de_memoria.html"><strong aria-hidden="true">7.</strong> Administración de Memoria</a></li><li class="chapter-item expanded "><a href="entrada_salida.html"><strong aria-hidden="true">8.</strong> Entrada/Salida</a></li><li class="chapter-item expanded "><a href="sistemas_de_archivos.html"><strong aria-hidden="true">9.</strong> Sistemas de Archivos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos.html"><strong aria-hidden="true">10.</strong> Sistemas Distribuidos</a></li><li class="chapter-item expanded "><a href="sistemas_distribuidos_II.html"><strong aria-hidden="true">11.</strong> Sistemas Distribuidos - parte II</a></li><li class="chapter-item expanded "><a href="proteccion_y_seguridad.html"><strong aria-hidden="true">12.</strong> Protección y Seguridad</a></li><li class="chapter-item expanded "><a href="virtualizacion.html" class="active"><strong aria-hidden="true">13.</strong> Virtualización</a></li><li class="chapter-item expanded "><a href="microkernels.html"><strong aria-hidden="true">14.</strong> Microkernels</a></li><li class="chapter-item expanded "><a href="misc.html"><strong aria-hidden="true">15.</strong> Miscelaneos</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory_allocator_bsd.html"><strong aria-hidden="true">15.1.</strong> Design of a General Purpose Memory Allocator for the 4.3BSD UNIX Kernel</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -150,6 +150,88 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="virtualización"><a class="header" href="#virtualización">Virtualización</a></h1>
+<p>Virtualización es hacer que recursos físicos se vean como varios recursos lógicos. Por ejemplo, una computadora haciendo el trabajo de varias.</p>
+<p>Desde los 60 que se viene investigando el uso de máquinas virtuales por diversos motivos:</p>
+<ul>
+<li>Portabilidad (como la JVM)</li>
+<li>Simulación/testing</li>
+<li>Aislamiento (como vimos con chroot)</li>
+<li>Particionamiento de HW</li>
+<li>Agrupamiento de funciones</li>
+<li>Protección ante fallas de HW (migración de HW, por ejemplo ante fallas o aumento de tráfico)</li>
+<li>Migración de HW sin pérdida de servicio</li>
+</ul>
+<p><img src="./img/virtualization.png" alt="" /></p>
+<h2 id="cómo-podemos-virtualizar"><a class="header" href="#cómo-podemos-virtualizar">Cómo podemos virtualizar?</a></h2>
+<p>Hay 2 técnicas:</p>
+<ul>
+<li>Simulación</li>
+<li>Leo código máquina y traduzco a la mía</li>
+<li>El problema es que puede ser muy lento. Más aún, cómo simulo interrupciones, DMA, concurrencia, etc. No sería muy complejo, borderline imposible?</li>
+<li>Emulación</li>
+<li>Acá el sistema emulado se ejecuta directamente sobre la CPU del anfitrión</li>
+<li>Lo que se emulan son los componentes de HW</li>
+<li>El grueso del código se corre mediante traducción binaria</li>
+<li>Cómo logro separar privilegios? Toda VM corre en modo usuario.</li>
+<li>qué pasa con la velocidad de acceso a dispositivos?</li>
+</ul>
+<h2 id="virtualización-asistida-por-hw"><a class="header" href="#virtualización-asistida-por-hw">Virtualización asistida por HW</a></h2>
+<p>En ese contexto surge la virtualización asistida por HW, sobre todo para evitar los problemas de (Nombres de Intel):</p>
+<ul>
+<li>Ring aliassing: programas escritos en modo kernel, pero como vimos se ejecutarían en modo usuario</li>
+<li>Address-space compression: cómo aislo la memoria de la VM respecto del resto de mi host device?</li>
+<li>Non-faulting access to privileged state: quiero simular instrucciones privilegiadas, y hay algunas que levantan un trap que puedo simular. Pero qué hago con las que no?</li>
+<li>Interrupt virtualization
+<ul>
+<li>hay que simular interrupciones en el host huésped</li>
+</ul>
+</li>
+<li>Access to hidden state
+<ul>
+<li>No todo el estado del procesador es controlable por SW.</li>
+</ul>
+</li>
+<li>Ring compression
+<ul>
+<li>Como tanto kernel virtualizado como sus programas corren todos en modo usuario, no hay protección entre espacio del kernel y espacio de usuario.</li>
+</ul>
+</li>
+<li>Frequent access to privileged resources
+<ul>
+<li>se puede generar un cuello de botella en el controlador de máquinas virtuales cuando hay un acceso frecuente a un recurso que se quiere bloquear.</li>
+</ul>
+</li>
+</ul>
+<p>Para eso se empezó a agregar soporte de fábrica para la virtualización en el HW. Potr ejemplo, intel agregó las extensiones VT-x que tienen 2 modos:</p>
+<ul>
+<li>Modo VMX root: es igual que antes + extensiones (anfitrión)</li>
+<li>Modo VMX non-root: es el mismo set de instrucciones pero con instrucciones restringidas (huésped).</li>
+</ul>
+<p>También agregaron la Virtual Machine Control Structure (en memoria), que soporta guardar campos de control, estado del huésped y del anfitrión. Cuando el huésped intenta realizar alguna acción restringida, el controlador de la máquina virtual recibe el control y emula, ignora y la termina a esa acción (en modo VMX root).</p>
+<h2 id="otros-desafíos--problemas"><a class="header" href="#otros-desafíos--problemas">Otros desafíos / problemas</a></h2>
+<ul>
+<li>Qué pasa con las optimizaciones del kernel y el FS para acceder eficientemente a disco?</li>
+<li>hay un punto único de falla: al tener un único HW, si algo falla caen todas las VMs.</li>
+</ul>
+<h2 id="casos-de-uso"><a class="header" href="#casos-de-uso">Casos de uso</a></h2>
+<ul>
+<li>correr sistemas viejos</li>
+<li>desarrollo / testing / debugging / reproducibilidad</li>
+<li>abaratamiento de costos</li>
+<li>escalado horizontal / vertical / autoscaling</li>
+</ul>
+<h2 id="containers"><a class="header" href="#containers">Containers</a></h2>
+<p><img src="./img/containers.png" alt="" /></p>
+<p>Algunas de las herramientas del kernel para implementar containers:</p>
+<p><img src="./img/docker.png" alt="" /></p>
+<ul>
+<li>Cgroups (Control Groups): limita lo que se puede usar (Memoria, CPU, I/O, etc.)</li>
+<li>Namespaces: Provee a los procesos una visión propia de los recursos del kernel.</li>
+<li>Netfilter: filtrado de paquetes</li>
+<li>Netlink: comunicación entre el kernel y procesos de usuario</li>
+<li>Capabilities: permite asignar selectivamente privilegios de admin</li>
+<li>SELinux y AppArmor: son módulos de seguridad que implementan MAC. SELinux es más versátil pero más complejo de configurar.</li>
+</ul>
 
                     </main>
 
